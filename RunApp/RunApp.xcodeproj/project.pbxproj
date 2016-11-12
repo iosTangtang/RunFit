@@ -11,6 +11,20 @@
 		66085DBB1DCF3A6D00F3E867 /* RUNViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085DB91DCF3A6D00F3E867 /* RUNViewController.m */; };
 		66085DC31DCF3C0F00F3E867 /* RUNNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085DC21DCF3C0F00F3E867 /* RUNNavigationViewController.m */; };
 		66085DC61DCF3C2500F3E867 /* RUNTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085DC51DCF3C2500F3E867 /* RUNTabBarViewController.m */; };
+		66085E351DD075F500F3E867 /* RUNHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085E341DD075F500F3E867 /* RUNHomeViewController.m */; };
+		66085E461DD079F500F3E867 /* RUNAnalazyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085E451DD079F500F3E867 /* RUNAnalazyViewController.m */; };
+		66085E491DD07A0700F3E867 /* RUNUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085E481DD07A0700F3E867 /* RUNUserViewController.m */; };
+		66085E4C1DD0939200F3E867 /* RUNCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085E4B1DD0939200F3E867 /* RUNCircleView.m */; };
+		66085E501DD0DA1700F3E867 /* RUNTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085E4F1DD0DA1700F3E867 /* RUNTextView.m */; };
+		66162D901DD489A6002AEC37 /* YXLBaseChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D871DD489A6002AEC37 /* YXLBaseChart.m */; };
+		66162D911DD489A6002AEC37 /* YXLChartsFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D891DD489A6002AEC37 /* YXLChartsFactory.m */; };
+		66162D921DD489A6002AEC37 /* YXLColumChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D8B1DD489A6002AEC37 /* YXLColumChart.m */; };
+		66162D931DD489A6002AEC37 /* YXLLineChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D8D1DD489A6002AEC37 /* YXLLineChart.m */; };
+		66162D971DD63063002AEC37 /* RUNShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D961DD63063002AEC37 /* RUNShareViewController.m */; };
+		66162D9A1DD6309C002AEC37 /* RUNMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D991DD6309C002AEC37 /* RUNMapViewController.m */; };
+		66162DA31DD633F6002AEC37 /* RUNFuncViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162DA21DD633F6002AEC37 /* RUNFuncViewController.m */; };
+		66162DEE1DD72646002AEC37 /* RUNCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162DED1DD72646002AEC37 /* RUNCalendarViewController.m */; };
+		66162DFC1DD7294C002AEC37 /* RUNTransitionAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162DFB1DD7294C002AEC37 /* RUNTransitionAnimation.m */; };
 		66B17DFC1DCB11CD00AE4C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B17DFB1DCB11CD00AE4C49 /* main.m */; };
 		66B17E051DCB11CD00AE4C49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66B17E031DCB11CD00AE4C49 /* Main.storyboard */; };
 		66B17E071DCB11CD00AE4C49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66B17E061DCB11CD00AE4C49 /* Assets.xcassets */; };
@@ -18,6 +32,7 @@
 		66B17E151DCB11CD00AE4C49 /* RunAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B17E141DCB11CD00AE4C49 /* RunAppTests.m */; };
 		66B17E201DCB11CD00AE4C49 /* RunAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B17E1F1DCB11CD00AE4C49 /* RunAppUITests.m */; };
 		66B17E301DCB11EC00AE4C49 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66B17E2F1DCB11EC00AE4C49 /* HealthKit.framework */; };
+		F5D304D459C13C777157AED5 /* Pods_RunApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF3E40822659E5F42A1D5E2C /* Pods_RunApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E338C058CE596B899BF95FF /* Pods-RunApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RunApp/Pods-RunApp.debug.xcconfig"; sourceTree = "<group>"; };
 		66085DB61DCF3A6D00F3E867 /* RUNAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNAppDelegate.h; sourceTree = "<group>"; };
 		66085DB71DCF3A6D00F3E867 /* RUNAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNAppDelegate.m; sourceTree = "<group>"; };
 		66085DB81DCF3A6D00F3E867 /* RUNViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNViewController.h; sourceTree = "<group>"; };
@@ -46,6 +62,35 @@
 		66085DC21DCF3C0F00F3E867 /* RUNNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNNavigationViewController.m; sourceTree = "<group>"; };
 		66085DC41DCF3C2500F3E867 /* RUNTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNTabBarViewController.h; sourceTree = "<group>"; };
 		66085DC51DCF3C2500F3E867 /* RUNTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNTabBarViewController.m; sourceTree = "<group>"; };
+		66085E331DD075F500F3E867 /* RUNHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNHomeViewController.h; sourceTree = "<group>"; };
+		66085E341DD075F500F3E867 /* RUNHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNHomeViewController.m; sourceTree = "<group>"; };
+		66085E441DD079F500F3E867 /* RUNAnalazyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNAnalazyViewController.h; sourceTree = "<group>"; };
+		66085E451DD079F500F3E867 /* RUNAnalazyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNAnalazyViewController.m; sourceTree = "<group>"; };
+		66085E471DD07A0700F3E867 /* RUNUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNUserViewController.h; sourceTree = "<group>"; };
+		66085E481DD07A0700F3E867 /* RUNUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNUserViewController.m; sourceTree = "<group>"; };
+		66085E4A1DD0939200F3E867 /* RUNCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNCircleView.h; sourceTree = "<group>"; };
+		66085E4B1DD0939200F3E867 /* RUNCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNCircleView.m; sourceTree = "<group>"; };
+		66085E4D1DD09F9900F3E867 /* RunHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RunHeader.pch; sourceTree = "<group>"; };
+		66085E4E1DD0DA1700F3E867 /* RUNTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNTextView.h; sourceTree = "<group>"; };
+		66085E4F1DD0DA1700F3E867 /* RUNTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNTextView.m; sourceTree = "<group>"; };
+		66162D861DD489A6002AEC37 /* YXLBaseChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLBaseChart.h; sourceTree = "<group>"; };
+		66162D871DD489A6002AEC37 /* YXLBaseChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXLBaseChart.m; sourceTree = "<group>"; };
+		66162D881DD489A6002AEC37 /* YXLChartsFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLChartsFactory.h; sourceTree = "<group>"; };
+		66162D891DD489A6002AEC37 /* YXLChartsFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXLChartsFactory.m; sourceTree = "<group>"; };
+		66162D8A1DD489A6002AEC37 /* YXLColumChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLColumChart.h; sourceTree = "<group>"; };
+		66162D8B1DD489A6002AEC37 /* YXLColumChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXLColumChart.m; sourceTree = "<group>"; };
+		66162D8C1DD489A6002AEC37 /* YXLLineChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLLineChart.h; sourceTree = "<group>"; };
+		66162D8D1DD489A6002AEC37 /* YXLLineChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXLLineChart.m; sourceTree = "<group>"; };
+		66162D951DD63063002AEC37 /* RUNShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNShareViewController.h; sourceTree = "<group>"; };
+		66162D961DD63063002AEC37 /* RUNShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNShareViewController.m; sourceTree = "<group>"; };
+		66162D981DD6309C002AEC37 /* RUNMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNMapViewController.h; sourceTree = "<group>"; };
+		66162D991DD6309C002AEC37 /* RUNMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNMapViewController.m; sourceTree = "<group>"; };
+		66162DA11DD633F6002AEC37 /* RUNFuncViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNFuncViewController.h; sourceTree = "<group>"; };
+		66162DA21DD633F6002AEC37 /* RUNFuncViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNFuncViewController.m; sourceTree = "<group>"; };
+		66162DEC1DD72646002AEC37 /* RUNCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNCalendarViewController.h; sourceTree = "<group>"; };
+		66162DED1DD72646002AEC37 /* RUNCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNCalendarViewController.m; sourceTree = "<group>"; };
+		66162DFA1DD7294C002AEC37 /* RUNTransitionAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNTransitionAnimation.h; sourceTree = "<group>"; };
+		66162DFB1DD7294C002AEC37 /* RUNTransitionAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNTransitionAnimation.m; sourceTree = "<group>"; };
 		66B17DF71DCB11CD00AE4C49 /* RunApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66B17DFB1DCB11CD00AE4C49 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		66B17E041DCB11CD00AE4C49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -60,6 +105,8 @@
 		66B17E211DCB11CD00AE4C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66B17E2D1DCB11EC00AE4C49 /* RunApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunApp.entitlements; sourceTree = "<group>"; };
 		66B17E2F1DCB11EC00AE4C49 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		6C9B1A89F85AE1870431A140 /* Pods-RunApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-RunApp/Pods-RunApp.release.xcconfig"; sourceTree = "<group>"; };
+		EF3E40822659E5F42A1D5E2C /* Pods_RunApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66B17E301DCB11EC00AE4C49 /* HealthKit.framework in Frameworks */,
+				F5D304D459C13C777157AED5 /* Pods_RunApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +136,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D939B1F728DF07E29EB0A23 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1E338C058CE596B899BF95FF /* Pods-RunApp.debug.xcconfig */,
+				6C9B1A89F85AE1870431A140 /* Pods-RunApp.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		66085DB01DCF39A100F3E867 /* RUNClasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +193,8 @@
 		66085DB41DCF39EA00F3E867 /* RUNTools */ = {
 			isa = PBXGroup;
 			children = (
+				66162DF31DD726DB002AEC37 /* TransitionAnimation */,
+				66162D851DD489A6002AEC37 /* Charts */,
 			);
 			path = RUNTools;
 			sourceTree = "<group>";
@@ -150,6 +209,9 @@
 		66085DBC1DCF3B7E00F3E867 /* RUNHomeItem */ = {
 			isa = PBXGroup;
 			children = (
+				66085E321DD075EA00F3E867 /* HomeModel */,
+				66085E311DD075E200F3E867 /* HomeView */,
+				66085E301DD075D700F3E867 /* HomeController */,
 			);
 			path = RUNHomeItem;
 			sourceTree = "<group>";
@@ -157,6 +219,9 @@
 		66085DBD1DCF3B9800F3E867 /* RUNAnalazyItem */ = {
 			isa = PBXGroup;
 			children = (
+				66085E381DD0762F00F3E867 /* AnalazyModel */,
+				66085E371DD0762700F3E867 /* AnalazyView */,
+				66085E361DD0761D00F3E867 /* AnalazyController */,
 			);
 			path = RUNAnalazyItem;
 			sourceTree = "<group>";
@@ -164,6 +229,9 @@
 		66085DBE1DCF3BAB00F3E867 /* RUNUserItem */ = {
 			isa = PBXGroup;
 			children = (
+				66085E3B1DD0764A00F3E867 /* UserModel */,
+				66085E3A1DD0764300F3E867 /* UserView */,
+				66085E391DD0763C00F3E867 /* UserController */,
 			);
 			path = RUNUserItem;
 			sourceTree = "<group>";
@@ -171,6 +239,9 @@
 		66085DBF1DCF3BC400F3E867 /* RUNMapItem */ = {
 			isa = PBXGroup;
 			children = (
+				66085E3E1DD0766A00F3E867 /* MapModel */,
+				66085E3D1DD0766000F3E867 /* MapView */,
+				66085E3C1DD0765900F3E867 /* MapController */,
 			);
 			path = RUNMapItem;
 			sourceTree = "<group>";
@@ -178,8 +249,158 @@
 		66085DC01DCF3BCF00F3E867 /* RUNShareItem */ = {
 			isa = PBXGroup;
 			children = (
+				66085E411DD0768B00F3E867 /* ShareModel */,
+				66085E401DD0768100F3E867 /* ShareView */,
+				66085E3F1DD0767900F3E867 /* ShareController */,
 			);
 			path = RUNShareItem;
+			sourceTree = "<group>";
+		};
+		66085E301DD075D700F3E867 /* HomeController */ = {
+			isa = PBXGroup;
+			children = (
+				66085E331DD075F500F3E867 /* RUNHomeViewController.h */,
+				66085E341DD075F500F3E867 /* RUNHomeViewController.m */,
+				66162DA11DD633F6002AEC37 /* RUNFuncViewController.h */,
+				66162DA21DD633F6002AEC37 /* RUNFuncViewController.m */,
+				66162DEC1DD72646002AEC37 /* RUNCalendarViewController.h */,
+				66162DED1DD72646002AEC37 /* RUNCalendarViewController.m */,
+			);
+			path = HomeController;
+			sourceTree = "<group>";
+		};
+		66085E311DD075E200F3E867 /* HomeView */ = {
+			isa = PBXGroup;
+			children = (
+				66085E4A1DD0939200F3E867 /* RUNCircleView.h */,
+				66085E4B1DD0939200F3E867 /* RUNCircleView.m */,
+				66085E4E1DD0DA1700F3E867 /* RUNTextView.h */,
+				66085E4F1DD0DA1700F3E867 /* RUNTextView.m */,
+			);
+			path = HomeView;
+			sourceTree = "<group>";
+		};
+		66085E321DD075EA00F3E867 /* HomeModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = HomeModel;
+			sourceTree = "<group>";
+		};
+		66085E361DD0761D00F3E867 /* AnalazyController */ = {
+			isa = PBXGroup;
+			children = (
+				66085E441DD079F500F3E867 /* RUNAnalazyViewController.h */,
+				66085E451DD079F500F3E867 /* RUNAnalazyViewController.m */,
+			);
+			path = AnalazyController;
+			sourceTree = "<group>";
+		};
+		66085E371DD0762700F3E867 /* AnalazyView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AnalazyView;
+			sourceTree = "<group>";
+		};
+		66085E381DD0762F00F3E867 /* AnalazyModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AnalazyModel;
+			sourceTree = "<group>";
+		};
+		66085E391DD0763C00F3E867 /* UserController */ = {
+			isa = PBXGroup;
+			children = (
+				66085E471DD07A0700F3E867 /* RUNUserViewController.h */,
+				66085E481DD07A0700F3E867 /* RUNUserViewController.m */,
+			);
+			path = UserController;
+			sourceTree = "<group>";
+		};
+		66085E3A1DD0764300F3E867 /* UserView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UserView;
+			sourceTree = "<group>";
+		};
+		66085E3B1DD0764A00F3E867 /* UserModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UserModel;
+			sourceTree = "<group>";
+		};
+		66085E3C1DD0765900F3E867 /* MapController */ = {
+			isa = PBXGroup;
+			children = (
+				66162D981DD6309C002AEC37 /* RUNMapViewController.h */,
+				66162D991DD6309C002AEC37 /* RUNMapViewController.m */,
+			);
+			path = MapController;
+			sourceTree = "<group>";
+		};
+		66085E3D1DD0766000F3E867 /* MapView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MapView;
+			sourceTree = "<group>";
+		};
+		66085E3E1DD0766A00F3E867 /* MapModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MapModel;
+			sourceTree = "<group>";
+		};
+		66085E3F1DD0767900F3E867 /* ShareController */ = {
+			isa = PBXGroup;
+			children = (
+				66162D951DD63063002AEC37 /* RUNShareViewController.h */,
+				66162D961DD63063002AEC37 /* RUNShareViewController.m */,
+			);
+			path = ShareController;
+			sourceTree = "<group>";
+		};
+		66085E401DD0768100F3E867 /* ShareView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ShareView;
+			sourceTree = "<group>";
+		};
+		66085E411DD0768B00F3E867 /* ShareModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ShareModel;
+			sourceTree = "<group>";
+		};
+		66162D851DD489A6002AEC37 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				66162D861DD489A6002AEC37 /* YXLBaseChart.h */,
+				66162D871DD489A6002AEC37 /* YXLBaseChart.m */,
+				66162D881DD489A6002AEC37 /* YXLChartsFactory.h */,
+				66162D891DD489A6002AEC37 /* YXLChartsFactory.m */,
+				66162D8A1DD489A6002AEC37 /* YXLColumChart.h */,
+				66162D8B1DD489A6002AEC37 /* YXLColumChart.m */,
+				66162D8C1DD489A6002AEC37 /* YXLLineChart.h */,
+				66162D8D1DD489A6002AEC37 /* YXLLineChart.m */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		66162DF31DD726DB002AEC37 /* TransitionAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				66162DFA1DD7294C002AEC37 /* RUNTransitionAnimation.h */,
+				66162DFB1DD7294C002AEC37 /* RUNTransitionAnimation.m */,
+			);
+			path = TransitionAnimation;
 			sourceTree = "<group>";
 		};
 		66B17DEE1DCB11CD00AE4C49 = {
@@ -190,6 +411,7 @@
 				66B17E1E1DCB11CD00AE4C49 /* RunAppUITests */,
 				66B17DF81DCB11CD00AE4C49 /* Products */,
 				66B17E2E1DCB11EC00AE4C49 /* Frameworks */,
+				2D939B1F728DF07E29EB0A23 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -222,6 +444,7 @@
 				66B17E081DCB11CD00AE4C49 /* LaunchScreen.storyboard */,
 				66B17E0B1DCB11CD00AE4C49 /* Info.plist */,
 				66B17DFB1DCB11CD00AE4C49 /* main.m */,
+				66085E4D1DD09F9900F3E867 /* RunHeader.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -248,6 +471,7 @@
 			isa = PBXGroup;
 			children = (
 				66B17E2F1DCB11EC00AE4C49 /* HealthKit.framework */,
+				EF3E40822659E5F42A1D5E2C /* Pods_RunApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -259,9 +483,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 66B17E241DCB11CD00AE4C49 /* Build configuration list for PBXNativeTarget "RunApp" */;
 			buildPhases = (
+				B7573014CEDEF85E8670A0C4 /* Check Pods Manifest.lock */,
 				66B17DF31DCB11CD00AE4C49 /* Sources */,
 				66B17DF41DCB11CD00AE4C49 /* Frameworks */,
 				66B17DF51DCB11CD00AE4C49 /* Resources */,
+				3FC37E2E935E09DE4FE6B61C /* Embed Pods Frameworks */,
+				D4D6BDBF5D78F69668F611E6 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -386,16 +613,78 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3FC37E2E935E09DE4FE6B61C /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RunApp/Pods-RunApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B7573014CEDEF85E8670A0C4 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D4D6BDBF5D78F69668F611E6 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RunApp/Pods-RunApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		66B17DF31DCB11CD00AE4C49 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66085E4C1DD0939200F3E867 /* RUNCircleView.m in Sources */,
+				66085E501DD0DA1700F3E867 /* RUNTextView.m in Sources */,
+				66162D921DD489A6002AEC37 /* YXLColumChart.m in Sources */,
+				66162D9A1DD6309C002AEC37 /* RUNMapViewController.m in Sources */,
+				66085E461DD079F500F3E867 /* RUNAnalazyViewController.m in Sources */,
 				66085DC31DCF3C0F00F3E867 /* RUNNavigationViewController.m in Sources */,
 				66085DBB1DCF3A6D00F3E867 /* RUNViewController.m in Sources */,
 				66085DC61DCF3C2500F3E867 /* RUNTabBarViewController.m in Sources */,
+				66162D971DD63063002AEC37 /* RUNShareViewController.m in Sources */,
+				66085E351DD075F500F3E867 /* RUNHomeViewController.m in Sources */,
+				66162DEE1DD72646002AEC37 /* RUNCalendarViewController.m in Sources */,
+				66162D901DD489A6002AEC37 /* YXLBaseChart.m in Sources */,
+				66162DA31DD633F6002AEC37 /* RUNFuncViewController.m in Sources */,
+				66085E491DD07A0700F3E867 /* RUNUserViewController.m in Sources */,
 				66085DBA1DCF3A6D00F3E867 /* RUNAppDelegate.m in Sources */,
 				66B17DFC1DCB11CD00AE4C49 /* main.m in Sources */,
+				66162D931DD489A6002AEC37 /* YXLLineChart.m in Sources */,
+				66162D911DD489A6002AEC37 /* YXLChartsFactory.m in Sources */,
+				66162DFC1DD7294C002AEC37 /* RUNTransitionAnimation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,29 +831,35 @@
 		};
 		66B17E251DCB11CD00AE4C49 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E338C058CE596B899BF95FF /* Pods-RunApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RunApp/RunApp.entitlements;
 				DEVELOPMENT_TEAM = UHCLK74DHB;
+				GCC_PREFIX_HEADER = RunApp/RunHeader.pch;
 				INFOPLIST_FILE = RunApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = tang.RunApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Debug;
 		};
 		66B17E261DCB11CD00AE4C49 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C9B1A89F85AE1870431A140 /* Pods-RunApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RunApp/RunApp.entitlements;
 				DEVELOPMENT_TEAM = UHCLK74DHB;
+				GCC_PREFIX_HEADER = RunApp/RunHeader.pch;
 				INFOPLIST_FILE = RunApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = tang.RunApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Release;
 		};

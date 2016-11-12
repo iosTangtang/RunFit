@@ -1,0 +1,13 @@
+PODS:
+  - Masonry (0.6.3)
+  - UICountingLabel (1.2.0)
+
+DEPENDENCIES:
+  - Masonry (~> 0.6.3)
+  - UICountingLabel (~> 1.2.0)
+
+SPEC CHECKSUMS:
+  Masonry: ff105a956abcd19a618b2028b121cb638d7a8e2f
+  UICountingLabel: 1db4e7d023e1762171eb226d6dff47a7a84f27aa
+
+COCOAPODS: 0.39.0

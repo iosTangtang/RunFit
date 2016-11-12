@@ -21,6 +21,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+}
+
+- (IBAction)healthButton:(id)sender {
     //判断设备是否支持HealthKit，iPad不支持
     if (![HKHealthStore isHealthDataAvailable]) {
         NSLog(@"设备不支持healthKit");
@@ -43,8 +47,6 @@
             NSLog(@"获取步数权限失败");
         }
     }];
-    
-    
 }
 
 - (void)readStepCount {
