@@ -15,26 +15,45 @@
 #import "RUNMapViewController.h"
 #import "RUNFuncViewController.h"
 #import "RUNCalendarViewController.h"
+#import "RUNFAQViewController.h"
 
 static CGFloat const animationDuration = 1.f;
 
-@interface RUNHomeViewController () <UIPopoverPresentationControllerDelegate>
+@interface RUNHomeViewController () {
+    NSArray *_descs;
+    NSArray *_colors;
+}
 
 @property (nonatomic, strong) RUNCircleView                     *circleView;
 @property (nonatomic, strong) YXLBaseChart                      *barChart;
-@property (nonatomic, strong) UIPopoverPresentationController   *popVC;
+@property (nonatomic, strong) NSDate                            *currentDate;
+@property (nonatomic, strong) NSMutableArray                    *datas;
 
 @end
 
 @implementation RUNHomeViewController
+
+// 获取当地的Date
+- (NSDate *)currentDate {
+    if (!_currentDate) {
+        _currentDate = [NSDate date];
+    }
+    return _currentDate;
+}
+
+- (NSMutableArray *)datas {
+    if (!_datas) {
+        _datas = [[NSMutableArray alloc] initWithArray:@[@"147", @"82", @"3.2"]];
+    }
+    return _datas;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popOverWithRow:) name:RUNFUNCNOTIFICATION object:nil];
-    
+    [self p_initilaze];
     [self p_setNavigation];
     [self p_drawCircle];
     [self p_addMessageText];
@@ -42,15 +61,33 @@ static CGFloat const animationDuration = 1.f;
     [self p_addButton];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popOverWithRow:) name:RUNFUNCNOTIFICATION object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RUNFUNCNOTIFICATION object:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     
 }
 
+#pragma mark - Init
+- (void)p_initilaze {
+    _descs = @[@"千卡", @"活跃时间(分)", @"公里"];
+    _colors = @[[UIColor colorWithRed:234 / 255.0 green:98 / 255.0 blue:86 / 255.0 alpha:1],
+                [UIColor colorWithRed:245 / 255.0 green:166 / 255.0 blue:35 / 255.0 alpha:1],
+                [UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1]];
+}
+
 #pragma mark - Navigation Item
 - (void)p_setNavigation {
     //单独设置Navigation的title
-    self.navigationItem.title = @"11月30日";
+    self.navigationItem.title = [self p_stringFromDate:self.currentDate];
     
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"calendar"]
                                                                    style:UIBarButtonItemStyleDone
@@ -86,56 +123,30 @@ static CGFloat const animationDuration = 1.f;
 
 #pragma mark - Add MessageText
 - (void)p_addMessageText {
-    RUNTextView *energyView = [[RUNTextView alloc] initWithFrame:CGRectZero];
-    energyView.mainTitle = @"147";
-    energyView.title = @"千卡";
-    energyView.animationDuration = animationDuration;
-    energyView.titleColor = [UIColor colorWithRed:234 / 255.0 green:98 / 255.0 blue:86 / 255.0 alpha:1];
-    energyView.format = @"%d";
-    [self.view addSubview:energyView];
     
-    [energyView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.circleView.bottom).offset(30);
-        make.left.equalTo(self.view.left).offset(0);
-        make.width.equalTo(ViewWidth / 3.0);
-        make.height.equalTo(ViewHeight / 10.0);
-    }];
-    
-    [energyView setLabels];
-    
-    RUNTextView *timeView = [[RUNTextView alloc] initWithFrame:CGRectZero];
-    timeView.mainTitle = @"82";
-    timeView.title = @"活跃时间(分)";
-    timeView.animationDuration = animationDuration;
-    timeView.titleColor = [UIColor colorWithRed:245 / 255.0 green:166 / 255.0 blue:35 / 255.0 alpha:1];
-    timeView.format = @"%d";
-    [self.view addSubview:timeView];
-    
-    [timeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.circleView.bottom).offset(30);
-        make.left.equalTo(energyView.right);
-        make.width.equalTo(ViewWidth / 3.0);
-        make.height.equalTo(ViewHeight / 10.0);
-    }];
-    
-    [timeView setLabels];
-    
-    RUNTextView *koilView = [[RUNTextView alloc] initWithFrame:CGRectZero];
-    koilView.mainTitle = @"3.2";
-    koilView.title = @"公里";
-    koilView.animationDuration = animationDuration;
-    koilView.titleColor = [UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1];
-    koilView.format = @"%.1f";
-    [self.view addSubview:koilView];
-    
-    [koilView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.circleView.bottom).offset(30);
-        make.left.equalTo(timeView.right);
-        make.width.equalTo(ViewWidth / 3.0);
-        make.height.equalTo(ViewHeight / 10.0);
-    }];
-    
-    [koilView setLabels];
+    for (int index = 0; index < 3; index++) {
+        RUNTextView *energyView = [[RUNTextView alloc] initWithFrame:CGRectZero];
+        energyView.mainTitle = self.datas[index];
+        energyView.title = _descs[index];
+        energyView.mainTitleFont = [UIFont fontWithName:@"Helvetica" size:ViewHeight / 20.f];
+        energyView.titleFont = [UIFont systemFontOfSize:12.f];
+        energyView.animationDuration = animationDuration;
+        energyView.mainTitleColor = _colors[index];
+        energyView.titleColor = [UIColor colorWithRed:158 / 255.0 green:158 / 255.0 blue:158 / 255.0 alpha:1];
+        energyView.format = @"%d";
+        if (index == 2) {
+            energyView.format = @"%.1f";
+        }
+        [self.view addSubview:energyView];
+        
+        [energyView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.circleView.bottom).offset(30);
+            make.left.equalTo(self.view.left).offset(ViewWidth / 3.0 * (index % 3));
+            make.width.equalTo(ViewWidth / 3.0);
+            make.height.equalTo(ViewHeight / 10.0);
+        }];
+        [energyView setLabelAnimation];
+    }
     
 }
 
@@ -177,9 +188,6 @@ static CGFloat const animationDuration = 1.f;
     [shotScreenButton setTitle:@"SHARE" forState:UIControlStateNormal];
     shotScreenButton.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17.f];
     [shotScreenButton setTitleColor:[UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1] forState:UIControlStateNormal];
-//    [shotScreenButton setImage:[UIImage imageNamed:@"fa-camera"] forState:UIControlStateNormal];
-//    shotScreenButton.adjustsImageWhenHighlighted = NO;
-//    shotScreenButton.imageEdgeInsets = UIEdgeInsetsMake(-5, 10, -5, 10);
     
     [shotScreenButton addTarget:self action:@selector(shotScreenButton:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -199,9 +207,6 @@ static CGFloat const animationDuration = 1.f;
     [runButton setTitle:@"RUN" forState:UIControlStateNormal];
     runButton.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17.f];
     [runButton setTitleColor:[UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1] forState:UIControlStateNormal];
-//    [runButton setImage:[UIImage imageNamed:@"run"] forState:UIControlStateNormal];
-//    runButton.adjustsImageWhenHighlighted = NO;
-//    runButton.imageEdgeInsets = UIEdgeInsetsMake(-5, 10, -5, 10);
     [runButton addTarget:self action:@selector(runButton:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:runButton];
@@ -217,6 +222,12 @@ static CGFloat const animationDuration = 1.f;
 #pragma mark - Bar Item Action
 - (void)leftBarItemAction:(UIBarButtonItem *)button {
     RUNCalendarViewController *caleVC = [[RUNCalendarViewController alloc] init];
+    caleVC.currentDate = self.currentDate;
+    __weak typeof(self) weakSelf = self;
+    caleVC.calendarBlock = ^(NSString *dateMessage) {
+        weakSelf.navigationItem.title = dateMessage;
+        weakSelf.currentDate = [weakSelf p_dateFromString:dateMessage];
+    };
     [self presentViewController:caleVC animated:YES completion:nil];
 }
 
@@ -245,13 +256,25 @@ static CGFloat const animationDuration = 1.f;
     if (row == 0) {
         RUNMapViewController *mapVC = [[RUNMapViewController alloc] init];
         [self presentViewController:mapVC animated:YES completion:nil];
+    } else if (row == 3) {
+        RUNFAQViewController *faqVC = [[RUNFAQViewController alloc] init];
+        faqVC.title = @"帮助";
+        faqVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:faqVC animated:YES];
     }
 }
 
-#pragma mark - UIPopoverPresentationControllerDelegate
--(UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller {
-    return UIModalPresentationNone;
+#pragma mark - DateFormater
+- (NSString *)p_stringFromDate:(NSDate *)date {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy年MM月dd日";
+    return [formatter stringFromDate:date];
 }
 
+- (NSDate *)p_dateFromString:(NSString *)string {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy年MM月dd日";
+    return [formatter dateFromString:string];
+}
 
 @end

@@ -13,8 +13,8 @@
 }
 
 @property (nonatomic, strong) UIView            *gradientView;
-@property (nonatomic, strong) CAGradientLayer   *gradientLayer;
 @property (nonatomic, strong) CAShapeLayer      *shapeLayer;
+@property (nonatomic, strong) CAShapeLayer      *maskLayer;
 @property (nonatomic, strong) UIBezierPath      *path;
 @property (nonatomic, assign) int               maxData;
 @property (nonatomic, assign) int               total;
@@ -27,7 +27,7 @@
 
 - (UIView *)gradientView {
     if (!_gradientView) {
-        _gradientView = [[UIView alloc] initWithFrame:CGRectMake(confineX, 0, self.bounds.size.width - confineX,
+        _gradientView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width,
                                                                  self.bounds.size.height - confineY)];
         [self addSubview:_gradientView];
     }
@@ -69,17 +69,22 @@
 - (void)p_createDataX {
     NSUInteger number = self.heightXDatas.count;
     for (int index = 0; index < number; index++) {
-        UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.bounds.size.width - _maxLabelWidth) / number * index + _maxLabelWidth,
-                                                                        self.bounds.size.height - confineY / 2.0,
-                                                                        (self.bounds.size.width - _maxLabelWidth) / number - 5, confineY / 2.0)];
-        monthLabel.tag = 1000 + (index + 1);
+        UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width / number * index,
+                                                                        self.bounds.size.height - confineY / 3.0,
+                                                                        self.bounds.size.width / number, confineY / 2.0)];
         monthLabel.textAlignment = NSTextAlignmentCenter;
         monthLabel.font = self.labelFont;
-        monthLabel.textColor = self.labelColor;
         monthLabel.text = self.heightXDatas[index];
+        monthLabel.textColor = self.labelColor;
         [self addSubview:monthLabel];
+    }
+    
+    if (number <= 3 && number > 1) {
+        UILabel *firstLabel = [self.labels firstObject];
+        firstLabel.textAlignment = NSTextAlignmentLeft;
         
-        [self.labels addObject:monthLabel];
+        UILabel *lastLabel = [self.labels lastObject];
+        lastLabel.textAlignment = NSTextAlignmentRight;
     }
 }
 
@@ -88,10 +93,16 @@
     int dis = self.maxData % standardData;
     int count = (dis == 0) ? self.maxData / standardData: self.maxData / standardData + 1;
     self.total = count * standardData;
+    int index = 0;
     
     CGFloat viewHeight = self.bounds.size.height - confineY;
     
-    for (int index = 0; index < count; index++) {
+    // 创建Y轴数据坐标
+    for (index = 0; index < count; index++) {
+        if (index != 0 && index != count && !self.showAllDashLine) {
+            continue;
+        }
+        
         UILabel *dataLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         dataLabel.tag = 2000 + (index + 1);
         dataLabel.textAlignment = NSTextAlignmentCenter;
@@ -109,86 +120,97 @@
                                                 attributes:@{NSFontAttributeName : dataLabel.font}
                                                    context:NULL];
         dataLabel.frame = CGRectMake(0, viewHeight / count * index, messageRect.size.width, ceil(messageRect.size.height));
-        if (_maxLabelWidth <= messageRect.size.width) {
-            _maxLabelWidth = messageRect.size.width;
-        }
     }
     
-    //创建分割线
-    for (int index = 0; index < count; index++) {
-        
-        if (self.hasDashLine) {
-            UIBezierPath *dashPath = [UIBezierPath bezierPath];
-            dashPath.lineWidth = 1.f;
-            dashPath.lineJoinStyle = kCGLineJoinRound;
-            [dashPath moveToPoint:CGPointMake(0, viewHeight / count * index)];
-            [dashPath addLineToPoint:CGPointMake(self.bounds.size.width - _maxLabelWidth, viewHeight / count * index)];
-            
-            CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-            shapeLayer.strokeColor = self.dashLineColor.CGColor;
-            shapeLayer.fillColor = [UIColor clearColor].CGColor;
-            shapeLayer.lineWidth = 1.f;
-            shapeLayer.path = dashPath.CGPath;
-            [self.gradientView.layer addSublayer:shapeLayer];
-        }
-    }
+    [self p_drawDashLine:count height:viewHeight];
     
-    self.gradientView.frame = CGRectMake(_maxLabelWidth, self.gradientView.frame.origin.y,
-                                         self.gradientView.frame.size.width + confineX - _maxLabelWidth, self.gradientView.frame.size.height);
-    self.gradientLayer.frame = self.gradientView.bounds;
+    self.gradientView.frame = CGRectMake(0, self.gradientView.frame.origin.y,
+                                         self.gradientView.frame.size.width, self.gradientView.frame.size.height);
     [self setNeedsDisplay];
-    
 }
 
-- (void)p_drawGrandientLayer {
-    
-    self.gradientLayer = [CAGradientLayer layer];
-    self.gradientLayer.frame = self.gradientView.bounds;
-    self.gradientLayer.startPoint = CGPointMake(0.f, 0.f);
-    self.gradientLayer.endPoint = CGPointMake(1.f, 0.f);
-    self.gradientLayer.colors = self.backgroundColors;
-    [self.gradientView.layer addSublayer:self.gradientLayer];
+#pragma mark - Draw DashLine
+- (void)p_drawDashLine:(int)count height:(CGFloat)viewHeight {
+    if (!self.hasDashLine) {
+        return ;
+    }
+    for (int index = 0; index <= count; index++) {
+        
+        if (index != 0 && index != count && !self.showAllDashLine) {
+            continue;
+        }
+        
+        UIBezierPath *dashPath = [UIBezierPath bezierPath];
+        dashPath.lineWidth = 1.f;
+        dashPath.lineJoinStyle = kCGLineJoinRound;
+        if (index == count) {
+            [dashPath moveToPoint:CGPointMake(0, viewHeight / count * index + self.lineWidth + 2)];
+            [dashPath addLineToPoint:CGPointMake(self.bounds.size.width, viewHeight / count * index + self.lineWidth + 2)];
+        } else {
+            [dashPath moveToPoint:CGPointMake(0, viewHeight / count * index)];
+            [dashPath addLineToPoint:CGPointMake(self.bounds.size.width, viewHeight / count * index)];
+        }
+        
+        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+        shapeLayer.strokeColor = self.dashLineColor.CGColor;
+        if (index == count) {
+            shapeLayer.strokeColor = self.lineColor.CGColor;
+        }
+        shapeLayer.fillColor = [UIColor clearColor].CGColor;
+        shapeLayer.lineWidth = 1.5f;
+        shapeLayer.path = dashPath.CGPath;
+        [self.gradientView.layer addSublayer:shapeLayer];
+    }
 }
 
 - (void)p_drawLineChart {
-    if (self.dataArray.count <= 0 || self.heightXDatas.count <= 0) {
+    if (self.dataArray.count <= 0) {
         return ;
     }
     
-    UILabel *label = [self viewWithTag:1001];
+    CGFloat width = self.gradientView.bounds.size.width / (double)self.dataArray.count;
     
+    int index = 0, lastIndex = 0;
+    for (index = 0; index < self.dataArray.count; index++) {
+        int value = [self.dataArray[index] intValue];
+        if (value > 0) {
+            break;
+        }
+    }
+    
+    CGPoint startPoint = CGPointMake(width / 2.0 + index * width,
+                                     (self.total - [self.dataArray[index] intValue]) / (double)self.total * (self.bounds.size.height - confineY));
     UIBezierPath *path = [UIBezierPath bezierPath];
     path.lineWidth = self.lineWidth;
     self.path = path;
-    [path moveToPoint:CGPointMake(label.center.x - _maxLabelWidth,
-                                  (self.total - [self.dataArray[0] intValue]) / (double)self.total * (self.bounds.size.height - confineY))];
+    [path moveToPoint:startPoint];
     
-    UIBezierPath *firstPointPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(label.center.x - _maxLabelWidth - pointRaduis / 2.0,
-                                                                                 (self.total - [self.dataArray[0] intValue]) / (double)self.total *
-                                                                                 (self.bounds.size.height - confineY) - pointRaduis / 2.0,
-                                                                                 pointRaduis, pointRaduis) cornerRadius:pointRaduis];
-    CAShapeLayer *firstPointLayer = [CAShapeLayer layer];
-    firstPointLayer.path = firstPointPath.CGPath;
-    firstPointLayer.strokeColor = self.lineColor.CGColor;
-    firstPointLayer.fillColor = self.lineColor.CGColor;
-    [self.gradientView.layer addSublayer:firstPointLayer];
+    UIBezierPath *maskPath = [UIBezierPath bezierPath];
+    [maskPath moveToPoint:CGPointMake(width / 2.0 - self.lineWidth / 2.0 + index * width, self.bounds.size.height - confineY / 2.0 - 3)];
+    [maskPath addLineToPoint:CGPointMake(startPoint.x - self.lineWidth / 2.0, startPoint.y)];
     
-    for (int index = 1; index < self.heightXDatas.count; index++) {
-        UILabel *monthLabel = [self viewWithTag:1000 + (index + 1)];
+    for (index = index + 1; index < self.dataArray.count; index++) {
         CGFloat arc = [self.dataArray[index] intValue];
-        UIBezierPath *pointPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(monthLabel.center.x - _maxLabelWidth - pointRaduis / 2.0,
-                                                                                     (self.total - arc) / self.total *
-                                                                                     (self.bounds.size.height - confineY) - pointRaduis / 2.0,
-                                                                                     pointRaduis, pointRaduis) cornerRadius:pointRaduis];
-        CAShapeLayer *pointLayer = [CAShapeLayer layer];
-        pointLayer.path = pointPath.CGPath;
-        pointLayer.strokeColor = self.lineColor.CGColor;
-        pointLayer.fillColor = self.lineColor.CGColor;
-        [self.gradientView.layer addSublayer:pointLayer];
+        if (arc <= 0) {
+            continue;
+        }
+        lastIndex = index;
+        CGFloat originX = width / 2.0 - pointRaduis / 2.0 + width * index;
         
-        [path addLineToPoint:CGPointMake(monthLabel.center.x - _maxLabelWidth, (self.total - arc) / self.total * (self.bounds.size.height - confineY))];
+        [path addLineToPoint:CGPointMake(originX + pointRaduis / 2.0, (self.total - arc) / self.total * (self.bounds.size.height - confineY))];
+        [maskPath addLineToPoint:CGPointMake(originX + self.lineWidth, (self.total - arc) / self.total * (self.bounds.size.height - confineY))];
     }
+    CGPoint endPoint = CGPointMake(width / 2.0 + self.lineWidth / 2.0 + lastIndex * width, self.bounds.size.height - confineY / 2.0 - 3);
+    [maskPath addLineToPoint:endPoint];
+    [maskPath closePath];
     
+    [self p_drawMask:maskPath startPoint:startPoint endPoint:endPoint];
+    [self p_drawLine:path];
+    [self p_animation];
+}
+
+#pragma mark - Draw Line
+- (void)p_drawLine:(UIBezierPath *)path {
     self.shapeLayer = [CAShapeLayer layer];
     self.shapeLayer.strokeColor = self.lineColor.CGColor;
     self.shapeLayer.fillColor = [UIColor clearColor].CGColor;
@@ -196,8 +218,43 @@
     self.shapeLayer.lineJoin = kCALineJoinRound;
     self.shapeLayer.lineWidth = self.lineWidth;
     self.shapeLayer.path = path.CGPath;
-    [self.gradientView.layer addSublayer:self.shapeLayer];
     
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = self.gradientView.bounds;
+    gradient.startPoint = CGPointMake(0.f, 0.f);
+    gradient.endPoint = CGPointMake(0.f, 1.f);
+    gradient.colors = self.backgroundColors;
+    [gradient setLocations:@[@0,@0.8,@1]];
+    [gradient setMask:self.shapeLayer];
+    [self.gradientView.layer addSublayer:gradient];
+}
+
+#pragma mark - Draw Mask 
+- (void)p_drawMask:(UIBezierPath *)maskPath startPoint:(CGPoint)start endPoint:(CGPoint)end {
+    CGFloat height = (self.bounds.size.height - confineY / 2.0 - 3) / 2.0;
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(start.x - self.lineWidth / 2.0, height)];
+    [path addLineToPoint:CGPointMake(end.x, height)];
+    
+    self.maskLayer = [CAShapeLayer layer];
+    self.maskLayer.strokeColor = [UIColor colorWithRed:217 / 255.0 green:252 / 255.0 blue:255 / 255.0 alpha:1].CGColor;
+    self.maskLayer.fillColor = [UIColor clearColor].CGColor;
+    self.maskLayer.path = path.CGPath;
+    self.maskLayer.lineWidth = height * 2;
+    
+    CAShapeLayer *layer = [CAShapeLayer layer];
+    layer.strokeColor = [UIColor clearColor].CGColor;
+    layer.fillColor = [UIColor colorWithRed:217 / 255.0 green:252 / 255.0 blue:255 / 255.0 alpha:1].CGColor;
+    layer.lineCap = kCALineCapRound;
+    layer.lineJoin = kCALineJoinRound;
+    layer.path = maskPath.CGPath;
+    [self.maskLayer setMask:layer];
+    
+    [self.gradientView.layer addSublayer:self.maskLayer];
+}
+
+#pragma mark - Animation
+- (void)p_animation {
     if (self.hasAnimation) {
         CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
         basicAnimation.duration = self.animationDuration;
@@ -206,10 +263,11 @@
         basicAnimation.fromValue = @0.0;
         basicAnimation.toValue = @1.0;
         [self.shapeLayer addAnimation:basicAnimation forKey:@"strokeEnd"];
+        [self.maskLayer addAnimation:basicAnimation forKey:@"strokeEnd"];
     }
-    
 }
 
+#pragma mark - Get Max Data
 - (int)p_getMaxData {
     int max = 0;
     
@@ -224,7 +282,9 @@
 
 #pragma mark Public Method
 - (void)drawChart {
-    [self p_drawGrandientLayer];
+    self.valueLabel.textColor = self.valueLabelColor;
+    self.valueLabel.font = self.valueLabelFont;
+    
     [self p_createDataY];
     [self p_createDataX];
     
@@ -240,13 +300,25 @@
     UITouch *touch = [touches anyObject];
     CGPoint touchPoint = [touch locationInView:self.gradientView];
     CGRect frame;
+    CGFloat width = self.gradientView.bounds.size.width / (double)self.dataArray.count;
     
-    for (int index = 0 ; index < self.heightXDatas.count; index++) {
-        UILabel *obj = self.labels[index];
-        frame = CGRectMake(obj.frame.origin.x - _maxLabelWidth, obj.frame.origin.y - self.gradientView.bounds.size.height,
-                           obj.frame.size.width, self.gradientView.bounds.size.height);
+    for (int index = 0 ; index < self.dataArray.count; index++) {
+        CGFloat originX = width / 2.0 - pointRaduis / 2.0 + width * index;
+        CGFloat arc = [self.dataArray[index] intValue];
+        CGFloat height = arc / self.total * (self.bounds.size.height - confineY);
+        frame = CGRectMake(originX, self.gradientView.bounds.size.height - height - self.lineWidth * 2,
+                           width, height + confineY);
+        NSString *value = nil;
         if (CGRectContainsPoint(frame, touchPoint)) {
-            NSString *value = [NSString stringWithFormat:@"%@ : %@", self.heightXDatas[index], self.dataArray[index]];
+            if (self.unit == YXLUnitWeak) {
+                value = [NSString stringWithFormat:@"%@ : %@", self.heightXDatas[index], self.dataArray[index]];
+            } else if (self.unit == YXLUnitMonth){
+                value = [NSString stringWithFormat:@"%d日 : %@", index + 1, self.dataArray[index]];
+            } else if (self.unit == YXLUnitDay) {
+                value = [NSString stringWithFormat:@"%d时 : %@", index, self.dataArray[index]];
+            } else {
+                value = [NSString stringWithFormat:@"%d月 : %@", index + 1, self.dataArray[index]];
+            }
             self.valueLabel.text = value;
             CGSize containerSize = CGSizeMake(self.bounds.size.width, 30);
             CGRect messageRect = [value boundingRectWithSize:containerSize options:NSStringDrawingUsesLineFragmentOrigin |

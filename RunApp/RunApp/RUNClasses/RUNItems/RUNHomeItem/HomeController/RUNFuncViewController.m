@@ -66,14 +66,7 @@ static NSString * const kYearsCell = @"kChoiceCell";
     self.tableView.dataSource = self;
     self.tableView.scrollEnabled = NO;
     self.tableView.tableFooterView = [[UIView alloc] init];
-    
-    // 解决分割线不从起始位置开始的问题
-    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
-    }
-    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
-        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
-    }
+    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     
     [self.view addSubview:self.tableView];
     
@@ -82,7 +75,7 @@ static NSString * const kYearsCell = @"kChoiceCell";
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         make.top.equalTo(self.view.top).offset(20);
-        make.height.equalTo(4 * 44);
+        make.height.equalTo(4 * 55);
     }];
 }
 
@@ -100,12 +93,7 @@ static NSString * const kYearsCell = @"kChoiceCell";
     cell.imageView.image = [UIImage imageNamed:self.images[indexPath.row]];
     cell.backgroundColor = [UIColor clearColor];
     
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
+    [cell setSeparatorInset:UIEdgeInsetsZero];
 
     return cell;
 }
@@ -119,6 +107,10 @@ static NSString * const kYearsCell = @"kChoiceCell";
     }];
     
     
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 55;
 }
 
 #pragma mark - UIViewControllerTransitioningDelegate

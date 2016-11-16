@@ -12,10 +12,13 @@
 
 @property (nonatomic, assign)   NSUInteger    animationDuration;
 @property (nonatomic, copy)     NSString      *mainTitle;
+@property (nonatomic, strong)   UIFont        *mainTitleFont;
 @property (nonatomic, copy)     NSString      *title;
+@property (nonatomic, strong)   UIFont        *titleFont;
 @property (nonatomic, copy)     NSString      *format;
+@property (nonatomic, strong)   UIColor       *mainTitleColor;
 @property (nonatomic, strong)   UIColor       *titleColor;
 
-- (void)setLabels;
+- (void)setLabelAnimation;
 
 @end

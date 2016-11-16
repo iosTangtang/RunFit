@@ -8,10 +8,11 @@
 
 #import "RUNCalendarViewController.h"
 #import "RUNTransitionAnimation.h"
+#import "RUNCalendarView.h"
 
-@interface RUNCalendarViewController () <UIViewControllerTransitioningDelegate>
+@interface RUNCalendarViewController () <UIViewControllerTransitioningDelegate, RUNCalendarDelegate>
 
-@property (nonatomic, strong) UIView    *clanderView;
+@property (nonatomic, strong) RUNCalendarView    *clanderView;
 
 @end
 
@@ -30,14 +31,26 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
     
-    self.clanderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 273)];
-    self.clanderView.backgroundColor = [UIColor redColor];
+    self.clanderView = [[RUNCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 300) withCurrentDate:self.currentDate];
+    self.clanderView.backgroundColor = [UIColor whiteColor];
+    self.clanderView.delegate = self;
     [self.view addSubview:self.clanderView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - RUNCalendarDelegate
+- (void)dayMessage:(NSString *)dayMessage {
+    NSLog(@"%@", dayMessage);
+    self.calendarBlock(dayMessage);
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)getCalendarHeight:(CGFloat)height {
+    self.clanderView.frame = CGRectMake(0, 0, self.view.bounds.size.width, height);
 }
 
 - (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented

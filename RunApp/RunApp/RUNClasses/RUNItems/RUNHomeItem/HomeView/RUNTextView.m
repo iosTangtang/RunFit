@@ -18,20 +18,27 @@
 
 @implementation RUNTextView
 
-- (void)setLabels {
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self p_setLabels];
+    }
+    return self;
+}
+
+- (void)p_setLabels {
     self.valueLabel = [[UICountingLabel alloc] initWithFrame:CGRectZero];
     self.valueLabel.textAlignment = NSTextAlignmentCenter;
-    self.valueLabel.textColor = self.titleColor;
-    self.valueLabel.font = [UIFont fontWithName:@"Helvetica" size:ViewHeight / 20.f];
-    self.valueLabel.method = UILabelCountingMethodLinear;
-    self.valueLabel.format = self.format;
+    self.valueLabel.textColor = self.mainTitleColor;
+    self.valueLabel.font = self.mainTitleFont;
+    self.valueLabel.text = self.mainTitle;
     [self addSubview:self.valueLabel];
     
     self.unitLabel = [[UICountingLabel alloc] initWithFrame:CGRectZero];
     self.unitLabel.text = self.title;
     self.unitLabel.textAlignment = NSTextAlignmentCenter;
-    self.unitLabel.textColor = [UIColor colorWithRed:158 / 255.0 green:158 / 255.0 blue:158 / 255.0 alpha:1];
-    self.unitLabel.font = [UIFont systemFontOfSize:12.f];
+    self.unitLabel.textColor = self.titleColor;
+    self.unitLabel.font = self.titleFont;
     [self addSubview:self.unitLabel];
     
     [self.valueLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -40,13 +47,43 @@
     }];
     
     [self.unitLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.valueLabel.bottom).offset(-3);
+        make.top.equalTo(self.valueLabel.bottom).offset(2);
         make.left.right.equalTo(self.valueLabel);
         make.height.equalTo(21);
     }];
-    
+}
+
+- (void)setLabelAnimation {
+
+    self.valueLabel.method = UILabelCountingMethodLinear;
+    self.valueLabel.format = self.format;
     [self.valueLabel countFrom:0 to:[self.mainTitle doubleValue] withDuration:self.animationDuration];
-    
+}
+
+- (void)setMainTitle:(NSString *)mainTitle {
+    _mainTitle = mainTitle;
+    self.valueLabel.text = mainTitle;
+}
+
+- (void)setMainTitleFont:(UIFont *)mainTitleFont {
+    self.valueLabel.font = mainTitleFont;
+}
+
+- (void)setMainTitleColor:(UIColor *)mainTitleColor {
+    self.valueLabel.textColor = mainTitleColor;
+}
+
+- (void)setTitle:(NSString *)title {
+    _title = title;
+    self.unitLabel.text = title;
+}
+
+- (void)setTitleFont:(UIFont *)titleFont {
+    self.unitLabel.font = titleFont;
+}
+
+- (void)setTitleColor:(UIColor *)titleColor {
+    self.unitLabel.textColor = titleColor;
 }
 
 @end

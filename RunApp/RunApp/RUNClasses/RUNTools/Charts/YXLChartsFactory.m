@@ -29,20 +29,20 @@
             break;
     }
     
-    base.lineColor = [UIColor whiteColor];
-    base.lineWidth = 2.f;
+    base.lineColor = [UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1];
+    base.lineWidth = 5.f;
     base.hasAnimation = YES;
-    base.dashLineColor = [UIColor colorWithRed:255 / 255.0 green:227 / 255.0 blue:123 / 255.0 alpha:0.8];
+    base.dashLineColor = [UIColor colorWithRed:230 / 255.0 green:227 / 255.0 blue:227 / 255.0 alpha:0.6];
     base.valueLabelFont = [UIFont systemFontOfSize:14.f];
-    base.valueLabelColor = [UIColor grayColor];
-    base.animationDuration = 0.5f;
+    base.valueLabelColor = [UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1];
+    base.animationDuration = 1.f;
     base.labelFont = [UIFont systemFontOfSize:10.f];
     base.labelColor = [UIColor colorWithRed:202 / 255.0 green:202 / 255.0 blue:202 / 255.0 alpha:1];
     base.hasDashLine = YES;
     base.hasShowValue = NO;
     base.showAllDashLine = YES;
-    base.backgroundColors = @[(__bridge id)[UIColor colorWithRed:253 / 255.0 green:164 / 255.0 blue:8 / 255.0 alpha:1.0].CGColor,
-                              (__bridge id)[UIColor colorWithRed:251 / 255.0 green:37 / 255.0 blue:45 / 255.0 alpha:1.0].CGColor];
+    base.backgroundColors = @[(__bridge id)[UIColor colorWithRed:34 / 255.0 green:231 / 255.0 blue:248 / 255.0 alpha:1].CGColor,
+                              (__bridge id)[UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1].CGColor];
     
     return base;
 }

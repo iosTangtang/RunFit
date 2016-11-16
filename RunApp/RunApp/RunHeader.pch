@@ -22,5 +22,6 @@
 #define ViewHeight [UIScreen mainScreen].bounds.size.height
 
 #define RUNFUNCNOTIFICATION @"RUNFUNCNOTIFICATION"
+#define RUNHEADIMAGENOTIFICATION @"RUNHEADIMAGENOTIFICATION"
 
 #endif /* RunHeader_pch */

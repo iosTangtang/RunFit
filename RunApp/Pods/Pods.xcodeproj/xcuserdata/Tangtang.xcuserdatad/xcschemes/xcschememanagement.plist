@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SVProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>UICountingLabel.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -22,12 +27,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0744452A22303FB642DB8AD6E3139293</key>
+		<key>0BA22FBBA0F9F6B6688434DECA3CFB77</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>992D1D4A7DF83106AF434AF9C667E131</key>
+		<key>412958154F81ACB71A90738CFACA0D90</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>46BF4D47A50C34966F4D5C8AD4A387BB</key>
 		<dict>
 			<key>primary</key>
 			<true/>

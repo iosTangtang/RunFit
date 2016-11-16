@@ -64,15 +64,13 @@
     NSUInteger number = self.heightXDatas.count;
     for (int index = 0; index < number; index++) {
         UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width / number * index,
-                                                                        self.bounds.size.height - confineY / 2.0,
+                                                                        self.bounds.size.height - confineY / 3.0,
                                                                         self.bounds.size.width / number, confineY / 2.0)];
         monthLabel.textAlignment = NSTextAlignmentCenter;
         monthLabel.font = self.labelFont;
         monthLabel.text = self.heightXDatas[index];
         monthLabel.textColor = self.labelColor;
         [self addSubview:monthLabel];
-        
-        [self.labels addObject:monthLabel];
     }
     
     if (number <= 3 && number > 1) {
@@ -170,6 +168,10 @@
 }
 
 - (void)p_drawColumChart {
+    if (self.dataArray.count <= 0) {
+        return ;
+    }
+    
     CGFloat width = self.gradientView.bounds.size.width / (double)self.dataArray.count;
     
     for (int index = 0; index < self.dataArray.count; index++) {
@@ -220,6 +222,8 @@
 
 #pragma mark Public Method
 - (void)drawChart {
+    self.valueLabel.textColor = self.valueLabelColor;
+    self.valueLabel.font = self.valueLabelFont;
     [self p_createDataY];
     [self p_createDataX];
     
@@ -232,20 +236,30 @@
 
 #pragma mark Touch Method
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    if (self.labels.count <= 0) {
-        return;
-    }
     
     UITouch *touch = [touches anyObject];
     CGPoint touchPoint = [touch locationInView:self.gradientView];
     CGRect frame;
+    CGFloat width = self.gradientView.bounds.size.width / (double)self.dataArray.count;
     
-    for (int index = 0 ; index < self.heightXDatas.count; index++) {
-        UILabel *obj = self.labels[index];
-        frame = CGRectMake(obj.frame.origin.x, obj.frame.origin.y - self.gradientView.bounds.size.height,
-                           obj.frame.size.width, self.gradientView.bounds.size.height);
+    for (int index = 0 ; index < self.dataArray.count; index++) {
+        CGFloat originX = width * index;
+        CGFloat arc = [self.dataArray[index] intValue];
+        CGFloat height = arc / self.total * (self.bounds.size.height - confineY);
+        frame = CGRectMake(originX, self.gradientView.bounds.size.height - height,
+                           width, height + self.lineWidth);
+        NSString *value = nil;
         if (CGRectContainsPoint(frame, touchPoint)) {
-            NSString *value = [NSString stringWithFormat:@"%@ : %@", self.heightXDatas[index], self.dataArray[index]];
+            if (self.unit == YXLUnitWeak) {
+                value = [NSString stringWithFormat:@"%@ : %@", self.heightXDatas[index], self.dataArray[index]];
+            } else if (self.unit == YXLUnitMonth){
+                value = [NSString stringWithFormat:@"%d日 : %@", index + 1, self.dataArray[index]];
+            } else if (self.unit == YXLUnitDay) {
+                value = [NSString stringWithFormat:@"%d时 : %@", index, self.dataArray[index]];
+            } else {
+                value = [NSString stringWithFormat:@"%d月 : %@", index + 1, self.dataArray[index]];
+            }
+            
             self.valueLabel.text = value;
             CGSize containerSize = CGSizeMake(self.bounds.size.width, 30);
             CGRect messageRect = [value boundingRectWithSize:containerSize options:NSStringDrawingUsesLineFragmentOrigin |

@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^RUNCalendarBlock)(NSString *);
+
 @interface RUNCalendarViewController : UIViewController
+
+@property (nonatomic, strong)   NSDate              *currentDate;
+@property (nonatomic, copy)     RUNCalendarBlock    calendarBlock;
 
 @end
