@@ -10,4 +10,7 @@
 
 @interface RUNShareViewController : UIViewController
 
+@property (nonatomic, assign)   BOOL    isPush;
+@property (nonatomic, strong)   UIImage *imageData;
+
 @end

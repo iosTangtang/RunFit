@@ -16,6 +16,8 @@
 #import "RUNFuncViewController.h"
 #import "RUNCalendarViewController.h"
 #import "RUNFAQViewController.h"
+#import "UIViewController+ScreenShot.h"
+#import "RUNWeightViewController.h"
 
 static CGFloat const animationDuration = 1.f;
 
@@ -233,21 +235,22 @@ static CGFloat const animationDuration = 1.f;
 
 - (void)rightBarItemAction:(UIBarButtonItem *)button {
     RUNFuncViewController *funcVC = [[RUNFuncViewController alloc] init];
-    
     [self presentViewController:funcVC animated:YES completion:nil];
-    
 }
 
 #pragma mark - Button Action
 - (void)shotScreenButton:(UIButton *)button {
     RUNShareViewController *shareVC = [[RUNShareViewController alloc] init];
+    shareVC.imageData = [self run_getScreenShotWithSize:self.view.bounds.size view:self.view];
     [self presentViewController:shareVC animated:YES completion:nil];
     
 }
 
 - (void)runButton:(UIButton *)button {
     RUNMapViewController *mapVC = [[RUNMapViewController alloc] init];
-    [self presentViewController:mapVC animated:YES completion:nil];
+    mapVC.hidesBottomBarWhenPushed = YES;
+    mapVC.title = @"运动";
+    [self.navigationController pushViewController:mapVC animated:YES];
 }
 
 #pragma mark - NSNotification Action
@@ -255,12 +258,19 @@ static CGFloat const animationDuration = 1.f;
     NSInteger row = [[[sender userInfo] objectForKey:@"row"] integerValue];
     if (row == 0) {
         RUNMapViewController *mapVC = [[RUNMapViewController alloc] init];
-        [self presentViewController:mapVC animated:YES completion:nil];
-    } else if (row == 3) {
+        mapVC.hidesBottomBarWhenPushed = YES;
+        mapVC.title = @"运动";
+        [self.navigationController pushViewController:mapVC animated:YES];
+    } else if (row == 2) {
         RUNFAQViewController *faqVC = [[RUNFAQViewController alloc] init];
         faqVC.title = @"帮助";
         faqVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:faqVC animated:YES];
+    } else if (row == 1) {
+        RUNWeightViewController *weight = [[RUNWeightViewController alloc] init];
+        weight.title = @"录入体重";
+        weight.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:weight animated:YES];
     }
 }
 

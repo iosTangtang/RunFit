@@ -12,6 +12,8 @@
 #import "RUNChildViewController.h"
 #import "RUNMapViewController.h"
 #import "RUNFAQViewController.h"
+#import "RUNWeightViewController.h"
+#import "UIViewController+ScreenShot.h"
 
 static CGFloat const kRUNTitleH = 44;
 static CGFloat const kMaxScale = 1.1;
@@ -104,6 +106,7 @@ static int const kMarginWidth = 116;
 #pragma mark - Bar Item Action
 - (void)leftBarItemAction:(UIBarButtonItem *)button {
     RUNShareViewController *shareVC = [[RUNShareViewController alloc] init];
+    shareVC.imageData = [self run_getScreenShotWithSize:self.view.bounds.size view:self.view];
     [self presentViewController:shareVC animated:YES completion:nil];
 }
 
@@ -302,12 +305,19 @@ static int const kMarginWidth = 116;
     NSInteger row = [[[sender userInfo] objectForKey:@"row"] integerValue];
     if (row == 0) {
         RUNMapViewController *mapVC = [[RUNMapViewController alloc] init];
-        [self presentViewController:mapVC animated:YES completion:nil];
-    } else if (row == 3) {
+        mapVC.hidesBottomBarWhenPushed = YES;
+        mapVC.title = @"运动";
+        [self.navigationController pushViewController:mapVC animated:YES];
+    } else if (row == 2) {
         RUNFAQViewController *faqVC = [[RUNFAQViewController alloc] init];
         faqVC.title = @"帮助";
         faqVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:faqVC animated:YES];
+    } else if (row == 1) {
+        RUNWeightViewController *weight = [[RUNWeightViewController alloc] init];
+        weight.title = @"录入体重";
+        weight.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:weight animated:YES];
     }
 }
 

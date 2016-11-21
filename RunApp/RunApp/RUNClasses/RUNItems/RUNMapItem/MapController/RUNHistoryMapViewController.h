@@ -10,4 +10,6 @@
 
 @interface RUNHistoryMapViewController : UIViewController
 
+@property (nonatomic, assign) BOOL  isToRoot;
+
 @end

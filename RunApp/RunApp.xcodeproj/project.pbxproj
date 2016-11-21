@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6602A82D1DE3135500FF0225 /* RUNWeightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602A82C1DE3135500FF0225 /* RUNWeightViewController.m */; };
 		66085DBA1DCF3A6D00F3E867 /* RUNAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085DB71DCF3A6D00F3E867 /* RUNAppDelegate.m */; };
 		66085DBB1DCF3A6D00F3E867 /* RUNViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085DB91DCF3A6D00F3E867 /* RUNViewController.m */; };
 		66085DC31DCF3C0F00F3E867 /* RUNNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085DC21DCF3C0F00F3E867 /* RUNNavigationViewController.m */; };
@@ -16,6 +17,22 @@
 		66085E491DD07A0700F3E867 /* RUNUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085E481DD07A0700F3E867 /* RUNUserViewController.m */; };
 		66085E4C1DD0939200F3E867 /* RUNCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085E4B1DD0939200F3E867 /* RUNCircleView.m */; };
 		66085E501DD0DA1700F3E867 /* RUNTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66085E4F1DD0DA1700F3E867 /* RUNTextView.m */; };
+		660AAB681DDEBFCC0085A38D /* RUNMapStartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 660AAB671DDEBFCC0085A38D /* RUNMapStartView.m */; };
+		660AAB6F1DDEC4070085A38D /* RUNMapStartTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 660AAB6D1DDEC4070085A38D /* RUNMapStartTableViewCell.m */; };
+		660AAB701DDEC4070085A38D /* RUNMapStartTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 660AAB6E1DDEC4070085A38D /* RUNMapStartTableViewCell.xib */; };
+		660AAB731DDED11C0085A38D /* RUNMapStopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 660AAB721DDED11C0085A38D /* RUNMapStopView.m */; };
+		660AAB771DDF1DF80085A38D /* RUNMapStopCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 660AAB751DDF1DF80085A38D /* RUNMapStopCollectionViewCell.m */; };
+		660AAB781DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 660AAB761DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib */; };
+		6612BC691DE197BB00504166 /* UIViewController+ScreenShot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC681DE197BB00504166 /* UIViewController+ScreenShot.m */; };
+		6612BC6F1DE19F3100504166 /* RUNToolViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC6E1DE19F3100504166 /* RUNToolViewController.m */; };
+		6612BC721DE19F4800504166 /* RUNPasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC711DE19F4800504166 /* RUNPasterViewController.m */; };
+		6612BC751DE19F5B00504166 /* RUNFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC741DE19F5B00504166 /* RUNFilterViewController.m */; };
+		6612BC7E1DE1C50A00504166 /* RUNPasterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC7C1DE1C50A00504166 /* RUNPasterCollectionViewCell.m */; };
+		6612BC7F1DE1C50A00504166 /* RUNPasterCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6612BC7D1DE1C50A00504166 /* RUNPasterCollectionViewCell.xib */; };
+		6612BC831DE1C87C00504166 /* RUNFilterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC811DE1C87C00504166 /* RUNFilterCollectionViewCell.m */; };
+		6612BC841DE1C87C00504166 /* RUNFilterCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6612BC821DE1C87C00504166 /* RUNFilterCollectionViewCell.xib */; };
+		6612BC871DE1D88F00504166 /* RUNCutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC861DE1D88F00504166 /* RUNCutViewController.m */; };
+		6612BC8A1DE1FF7F00504166 /* UIImage+Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC891DE1FF7F00504166 /* UIImage+Filter.m */; };
 		66162D901DD489A6002AEC37 /* YXLBaseChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D871DD489A6002AEC37 /* YXLBaseChart.m */; };
 		66162D911DD489A6002AEC37 /* YXLChartsFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D891DD489A6002AEC37 /* YXLChartsFactory.m */; };
 		66162D921DD489A6002AEC37 /* YXLColumChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D8B1DD489A6002AEC37 /* YXLColumChart.m */; };
@@ -48,6 +65,8 @@
 		66162E5C1DDA942D002AEC37 /* RUNUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162E5B1DDA942D002AEC37 /* RUNUserModel.m */; };
 		66162E5F1DDB28C5002AEC37 /* RUNChildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162E5E1DDB28C5002AEC37 /* RUNChildViewController.m */; };
 		66162E651DDC6740002AEC37 /* RUNAllDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162E641DDC6740002AEC37 /* RUNAllDataViewController.m */; };
+		669B128D1DDD9C1C0081267A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 669B128C1DDD9C1C0081267A /* MapKit.framework */; };
+		669B128F1DDDF0440081267A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 669B128E1DDDF0440081267A /* CoreLocation.framework */; };
 		66B17DFC1DCB11CD00AE4C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B17DFB1DCB11CD00AE4C49 /* main.m */; };
 		66B17E051DCB11CD00AE4C49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66B17E031DCB11CD00AE4C49 /* Main.storyboard */; };
 		66B17E071DCB11CD00AE4C49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66B17E061DCB11CD00AE4C49 /* Assets.xcassets */; };
@@ -77,6 +96,8 @@
 
 /* Begin PBXFileReference section */
 		1E338C058CE596B899BF95FF /* Pods-RunApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RunApp/Pods-RunApp.debug.xcconfig"; sourceTree = "<group>"; };
+		6602A82B1DE3135500FF0225 /* RUNWeightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNWeightViewController.h; sourceTree = "<group>"; };
+		6602A82C1DE3135500FF0225 /* RUNWeightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNWeightViewController.m; sourceTree = "<group>"; };
 		66085DB61DCF3A6D00F3E867 /* RUNAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNAppDelegate.h; sourceTree = "<group>"; };
 		66085DB71DCF3A6D00F3E867 /* RUNAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNAppDelegate.m; sourceTree = "<group>"; };
 		66085DB81DCF3A6D00F3E867 /* RUNViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNViewController.h; sourceTree = "<group>"; };
@@ -96,6 +117,34 @@
 		66085E4D1DD09F9900F3E867 /* RunHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RunHeader.pch; sourceTree = "<group>"; };
 		66085E4E1DD0DA1700F3E867 /* RUNTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNTextView.h; sourceTree = "<group>"; };
 		66085E4F1DD0DA1700F3E867 /* RUNTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNTextView.m; sourceTree = "<group>"; };
+		660AAB661DDEBFCC0085A38D /* RUNMapStartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNMapStartView.h; sourceTree = "<group>"; };
+		660AAB671DDEBFCC0085A38D /* RUNMapStartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNMapStartView.m; sourceTree = "<group>"; };
+		660AAB6C1DDEC4070085A38D /* RUNMapStartTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNMapStartTableViewCell.h; sourceTree = "<group>"; };
+		660AAB6D1DDEC4070085A38D /* RUNMapStartTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNMapStartTableViewCell.m; sourceTree = "<group>"; };
+		660AAB6E1DDEC4070085A38D /* RUNMapStartTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RUNMapStartTableViewCell.xib; sourceTree = "<group>"; };
+		660AAB711DDED11C0085A38D /* RUNMapStopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNMapStopView.h; sourceTree = "<group>"; };
+		660AAB721DDED11C0085A38D /* RUNMapStopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNMapStopView.m; sourceTree = "<group>"; };
+		660AAB741DDF1DF80085A38D /* RUNMapStopCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNMapStopCollectionViewCell.h; sourceTree = "<group>"; };
+		660AAB751DDF1DF80085A38D /* RUNMapStopCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNMapStopCollectionViewCell.m; sourceTree = "<group>"; };
+		660AAB761DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RUNMapStopCollectionViewCell.xib; sourceTree = "<group>"; };
+		6612BC671DE197BB00504166 /* UIViewController+ScreenShot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ScreenShot.h"; sourceTree = "<group>"; };
+		6612BC681DE197BB00504166 /* UIViewController+ScreenShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ScreenShot.m"; sourceTree = "<group>"; };
+		6612BC6D1DE19F3100504166 /* RUNToolViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNToolViewController.h; sourceTree = "<group>"; };
+		6612BC6E1DE19F3100504166 /* RUNToolViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNToolViewController.m; sourceTree = "<group>"; };
+		6612BC701DE19F4800504166 /* RUNPasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNPasterViewController.h; sourceTree = "<group>"; };
+		6612BC711DE19F4800504166 /* RUNPasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNPasterViewController.m; sourceTree = "<group>"; };
+		6612BC731DE19F5B00504166 /* RUNFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNFilterViewController.h; sourceTree = "<group>"; };
+		6612BC741DE19F5B00504166 /* RUNFilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNFilterViewController.m; sourceTree = "<group>"; };
+		6612BC7B1DE1C50A00504166 /* RUNPasterCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNPasterCollectionViewCell.h; sourceTree = "<group>"; };
+		6612BC7C1DE1C50A00504166 /* RUNPasterCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNPasterCollectionViewCell.m; sourceTree = "<group>"; };
+		6612BC7D1DE1C50A00504166 /* RUNPasterCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RUNPasterCollectionViewCell.xib; sourceTree = "<group>"; };
+		6612BC801DE1C87C00504166 /* RUNFilterCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNFilterCollectionViewCell.h; sourceTree = "<group>"; };
+		6612BC811DE1C87C00504166 /* RUNFilterCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNFilterCollectionViewCell.m; sourceTree = "<group>"; };
+		6612BC821DE1C87C00504166 /* RUNFilterCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RUNFilterCollectionViewCell.xib; sourceTree = "<group>"; };
+		6612BC851DE1D88F00504166 /* RUNCutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNCutViewController.h; sourceTree = "<group>"; };
+		6612BC861DE1D88F00504166 /* RUNCutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNCutViewController.m; sourceTree = "<group>"; };
+		6612BC881DE1FF7F00504166 /* UIImage+Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Filter.h"; sourceTree = "<group>"; };
+		6612BC891DE1FF7F00504166 /* UIImage+Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Filter.m"; sourceTree = "<group>"; };
 		66162D861DD489A6002AEC37 /* YXLBaseChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLBaseChart.h; sourceTree = "<group>"; };
 		66162D871DD489A6002AEC37 /* YXLBaseChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXLBaseChart.m; sourceTree = "<group>"; };
 		66162D881DD489A6002AEC37 /* YXLChartsFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLChartsFactory.h; sourceTree = "<group>"; };
@@ -156,6 +205,8 @@
 		66162E5E1DDB28C5002AEC37 /* RUNChildViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNChildViewController.m; sourceTree = "<group>"; };
 		66162E631DDC6740002AEC37 /* RUNAllDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNAllDataViewController.h; sourceTree = "<group>"; };
 		66162E641DDC6740002AEC37 /* RUNAllDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNAllDataViewController.m; sourceTree = "<group>"; };
+		669B128C1DDD9C1C0081267A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		669B128E1DDDF0440081267A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		66B17DF71DCB11CD00AE4C49 /* RunApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66B17DFB1DCB11CD00AE4C49 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		66B17E041DCB11CD00AE4C49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -179,6 +230,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				669B128F1DDDF0440081267A /* CoreLocation.framework in Frameworks */,
+				669B128D1DDD9C1C0081267A /* MapKit.framework in Frameworks */,
 				66B17E301DCB11EC00AE4C49 /* HealthKit.framework in Frameworks */,
 				F5D304D459C13C777157AED5 /* Pods_RunApp.framework in Frameworks */,
 			);
@@ -221,13 +274,6 @@
 			path = RUNClasses;
 			sourceTree = "<group>";
 		};
-		66085DB11DCF39BE00F3E867 /* RUNResource */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = RUNResource;
-			sourceTree = "<group>";
-		};
 		66085DB21DCF39CF00F3E867 /* RUNItems */ = {
 			isa = PBXGroup;
 			children = (
@@ -268,6 +314,10 @@
 		66085DB51DCF39FB00F3E867 /* RUNCategoties */ = {
 			isa = PBXGroup;
 			children = (
+				6612BC671DE197BB00504166 /* UIViewController+ScreenShot.h */,
+				6612BC681DE197BB00504166 /* UIViewController+ScreenShot.m */,
+				6612BC881DE1FF7F00504166 /* UIImage+Filter.h */,
+				6612BC891DE1FF7F00504166 /* UIImage+Filter.m */,
 			);
 			path = RUNCategoties;
 			sourceTree = "<group>";
@@ -331,6 +381,8 @@
 				66162DA21DD633F6002AEC37 /* RUNFuncViewController.m */,
 				66162DEC1DD72646002AEC37 /* RUNCalendarViewController.h */,
 				66162DED1DD72646002AEC37 /* RUNCalendarViewController.m */,
+				6602A82B1DE3135500FF0225 /* RUNWeightViewController.h */,
+				6602A82C1DE3135500FF0225 /* RUNWeightViewController.m */,
 			);
 			path = HomeController;
 			sourceTree = "<group>";
@@ -434,6 +486,16 @@
 		66085E3D1DD0766000F3E867 /* MapView */ = {
 			isa = PBXGroup;
 			children = (
+				660AAB661DDEBFCC0085A38D /* RUNMapStartView.h */,
+				660AAB671DDEBFCC0085A38D /* RUNMapStartView.m */,
+				660AAB6C1DDEC4070085A38D /* RUNMapStartTableViewCell.h */,
+				660AAB6D1DDEC4070085A38D /* RUNMapStartTableViewCell.m */,
+				660AAB6E1DDEC4070085A38D /* RUNMapStartTableViewCell.xib */,
+				660AAB711DDED11C0085A38D /* RUNMapStopView.h */,
+				660AAB721DDED11C0085A38D /* RUNMapStopView.m */,
+				660AAB741DDF1DF80085A38D /* RUNMapStopCollectionViewCell.h */,
+				660AAB751DDF1DF80085A38D /* RUNMapStopCollectionViewCell.m */,
+				660AAB761DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib */,
 			);
 			path = MapView;
 			sourceTree = "<group>";
@@ -450,6 +512,14 @@
 			children = (
 				66162D951DD63063002AEC37 /* RUNShareViewController.h */,
 				66162D961DD63063002AEC37 /* RUNShareViewController.m */,
+				6612BC6D1DE19F3100504166 /* RUNToolViewController.h */,
+				6612BC6E1DE19F3100504166 /* RUNToolViewController.m */,
+				6612BC701DE19F4800504166 /* RUNPasterViewController.h */,
+				6612BC711DE19F4800504166 /* RUNPasterViewController.m */,
+				6612BC731DE19F5B00504166 /* RUNFilterViewController.h */,
+				6612BC741DE19F5B00504166 /* RUNFilterViewController.m */,
+				6612BC851DE1D88F00504166 /* RUNCutViewController.h */,
+				6612BC861DE1D88F00504166 /* RUNCutViewController.m */,
 			);
 			path = ShareController;
 			sourceTree = "<group>";
@@ -457,6 +527,12 @@
 		66085E401DD0768100F3E867 /* ShareView */ = {
 			isa = PBXGroup;
 			children = (
+				6612BC7B1DE1C50A00504166 /* RUNPasterCollectionViewCell.h */,
+				6612BC7C1DE1C50A00504166 /* RUNPasterCollectionViewCell.m */,
+				6612BC7D1DE1C50A00504166 /* RUNPasterCollectionViewCell.xib */,
+				6612BC801DE1C87C00504166 /* RUNFilterCollectionViewCell.h */,
+				6612BC811DE1C87C00504166 /* RUNFilterCollectionViewCell.m */,
+				6612BC821DE1C87C00504166 /* RUNFilterCollectionViewCell.xib */,
 			);
 			path = ShareView;
 			sourceTree = "<group>";
@@ -600,7 +676,6 @@
 			isa = PBXGroup;
 			children = (
 				66085DB01DCF39A100F3E867 /* RUNClasses */,
-				66085DB11DCF39BE00F3E867 /* RUNResource */,
 				66B17DFA1DCB11CD00AE4C49 /* Supporting Files */,
 			);
 			path = RunApp;
@@ -641,6 +716,8 @@
 		66B17E2E1DCB11EC00AE4C49 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				669B128E1DDDF0440081267A /* CoreLocation.framework */,
+				669B128C1DDD9C1C0081267A /* MapKit.framework */,
 				66B17E2F1DCB11EC00AE4C49 /* HealthKit.framework */,
 				EF3E40822659E5F42A1D5E2C /* Pods_RunApp.framework */,
 			);
@@ -723,6 +800,9 @@
 							com.apple.HealthKit = {
 								enabled = 1;
 							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
 						};
 					};
 					66B17E0F1DCB11CD00AE4C49 = {
@@ -763,12 +843,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				66B17E0A1DCB11CD00AE4C49 /* LaunchScreen.storyboard in Resources */,
+				660AAB701DDEC4070085A38D /* RUNMapStartTableViewCell.xib in Resources */,
 				66B17E071DCB11CD00AE4C49 /* Assets.xcassets in Resources */,
 				66162E231DD9B898002AEC37 /* RUNHistoryTableViewCell.xib in Resources */,
+				6612BC841DE1C87C00504166 /* RUNFilterCollectionViewCell.xib in Resources */,
 				66B17E051DCB11CD00AE4C49 /* Main.storyboard in Resources */,
 				66162E341DD9D6C5002AEC37 /* RUNFAQTableViewCell.xib in Resources */,
+				660AAB781DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib in Resources */,
 				66162E551DDA031D002AEC37 /* RunUserTableViewCell.xib in Resources */,
 				66162E2C1DD9C18C002AEC37 /* RUNSettingTableViewCell.xib in Resources */,
+				6612BC7F1DE1C50A00504166 /* RUNPasterCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -844,12 +928,15 @@
 				66162E5F1DDB28C5002AEC37 /* RUNChildViewController.m in Sources */,
 				66162E331DD9D6C5002AEC37 /* RUNFAQTableViewCell.m in Sources */,
 				66085E4C1DD0939200F3E867 /* RUNCircleView.m in Sources */,
+				6612BC7E1DE1C50A00504166 /* RUNPasterCollectionViewCell.m in Sources */,
+				6612BC871DE1D88F00504166 /* RUNCutViewController.m in Sources */,
 				66085E501DD0DA1700F3E867 /* RUNTextView.m in Sources */,
 				66162E541DDA031D002AEC37 /* RunUserTableViewCell.m in Sources */,
 				66162DFF1DD82449002AEC37 /* RUNCalendarView.m in Sources */,
 				66162D921DD489A6002AEC37 /* YXLColumChart.m in Sources */,
 				66162E591DDA15A9002AEC37 /* RUNPickViewController.m in Sources */,
 				66162E651DDC6740002AEC37 /* RUNAllDataViewController.m in Sources */,
+				6612BC8A1DE1FF7F00504166 /* UIImage+Filter.m in Sources */,
 				66162D9A1DD6309C002AEC37 /* RUNMapViewController.m in Sources */,
 				66085E461DD079F500F3E867 /* RUNAnalazyViewController.m in Sources */,
 				66085DC31DCF3C0F00F3E867 /* RUNNavigationViewController.m in Sources */,
@@ -857,13 +944,20 @@
 				66085DBB1DCF3A6D00F3E867 /* RUNViewController.m in Sources */,
 				66085DC61DCF3C2500F3E867 /* RUNTabBarViewController.m in Sources */,
 				66162D971DD63063002AEC37 /* RUNShareViewController.m in Sources */,
+				6612BC751DE19F5B00504166 /* RUNFilterViewController.m in Sources */,
+				660AAB681DDEBFCC0085A38D /* RUNMapStartView.m in Sources */,
 				66162E5C1DDA942D002AEC37 /* RUNUserModel.m in Sources */,
 				66085E351DD075F500F3E867 /* RUNHomeViewController.m in Sources */,
+				6612BC691DE197BB00504166 /* UIViewController+ScreenShot.m in Sources */,
 				66162DEE1DD72646002AEC37 /* RUNCalendarViewController.m in Sources */,
 				66162D901DD489A6002AEC37 /* YXLBaseChart.m in Sources */,
 				66162DA31DD633F6002AEC37 /* RUNFuncViewController.m in Sources */,
 				66162E021DD832FD002AEC37 /* RUNCalendarCollectionViewCell.m in Sources */,
+				6612BC831DE1C87C00504166 /* RUNFilterCollectionViewCell.m in Sources */,
+				6612BC6F1DE19F3100504166 /* RUNToolViewController.m in Sources */,
 				66162E261DD9BE25002AEC37 /* RUNHistoryMapViewController.m in Sources */,
+				6612BC721DE19F4800504166 /* RUNPasterViewController.m in Sources */,
+				660AAB731DDED11C0085A38D /* RUNMapStopView.m in Sources */,
 				66162E051DD84EC6002AEC37 /* RUNUserHeadView.m in Sources */,
 				66085E491DD07A0700F3E867 /* RUNUserViewController.m in Sources */,
 				66085DBA1DCF3A6D00F3E867 /* RUNAppDelegate.m in Sources */,
@@ -871,14 +965,17 @@
 				66162E121DD88DD5002AEC37 /* RUNLockViewController.m in Sources */,
 				66162E371DD9D728002AEC37 /* RUNFeedBackViewController.m in Sources */,
 				66B17DFC1DCB11CD00AE4C49 /* main.m in Sources */,
+				6602A82D1DE3135500FF0225 /* RUNWeightViewController.m in Sources */,
 				66162E2F1DD9D673002AEC37 /* RUNFAQViewController.m in Sources */,
 				66162E081DD87DB5002AEC37 /* RUNButton.m in Sources */,
+				660AAB6F1DDEC4070085A38D /* RUNMapStartTableViewCell.m in Sources */,
 				66162E2B1DD9C18C002AEC37 /* RUNSettingTableViewCell.m in Sources */,
 				66162E181DD88DE8002AEC37 /* RUNSettingViewController.m in Sources */,
 				66162D931DD489A6002AEC37 /* YXLLineChart.m in Sources */,
 				66162D911DD489A6002AEC37 /* YXLChartsFactory.m in Sources */,
 				66162E221DD9B898002AEC37 /* RUNHistoryTableViewCell.m in Sources */,
 				66162DFC1DD7294C002AEC37 /* RUNTransitionAnimation.m in Sources */,
+				660AAB771DDF1DF80085A38D /* RUNMapStopCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

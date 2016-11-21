@@ -24,14 +24,14 @@ static NSString * const kYearsCell = @"kChoiceCell";
 
 - (NSArray *)images {
     if (!_images) {
-        _images = @[@"run", @"edit", @"fit", @"help"];
+        _images = @[@"run", @"fit", @"help"];
     }
     return _images;
 }
 
 - (NSArray *)titles {
     if (!_titles) {
-        _titles = @[@"开始跑步", @"录入运动", @"录入体重", @"帮助"];
+        _titles = @[@"开始跑步", @"录入体重", @"帮助"];
     }
     return _titles;
 }
@@ -75,7 +75,7 @@ static NSString * const kYearsCell = @"kChoiceCell";
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         make.top.equalTo(self.view.top).offset(20);
-        make.height.equalTo(4 * 55);
+        make.height.equalTo(3 * 55);
     }];
 }
 

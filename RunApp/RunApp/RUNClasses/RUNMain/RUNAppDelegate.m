@@ -20,6 +20,7 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     RUNTabBarViewController *tabVC = [[RUNTabBarViewController alloc] init];
+    tabVC.isRoot = YES;
     self.window.rootViewController = tabVC;
     
     [self.window makeKeyWindow];

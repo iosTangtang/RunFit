@@ -10,4 +10,11 @@
 
 @interface RUNTabBarViewController : UITabBarController
 
+@property (nonatomic, assign) BOOL  isRoot;
+
+- (void)addChildController:(UIViewController *)childController
+               normalImage:(UIImage *)normalImage
+             selectedImage:(UIImage *)selectImage
+                     title:(NSString *)title;
+
 @end

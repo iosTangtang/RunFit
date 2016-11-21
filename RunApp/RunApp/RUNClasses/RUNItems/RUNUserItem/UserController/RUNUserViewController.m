@@ -61,6 +61,7 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_refreshImage) name:RUNHEADIMAGENOTIFICATION object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_reloadUserMessage) name:RUNUSERNOTIFICATION object:nil];
     
     [self p_setUI];
 }
@@ -155,6 +156,15 @@
     }
     [self.headView setUserImage:image];
     
+    // 刷新数据
+    [self.userModel loadData];
+    [self.headView setUserName:self.userModel.name];
+    [self.headView setUserHeight:[self.userModel.height doubleValue]];
+    [self.headView setUserWeight:[self.userModel.weight doubleValue]];
+    [self.headView setUserTarget:[self.userModel.tag integerValue]];
+}
+
+- (void)p_reloadUserMessage {
     // 刷新数据
     [self.userModel loadData];
     [self.headView setUserName:self.userModel.name];
