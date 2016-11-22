@@ -18,6 +18,7 @@
 #import "RUNFAQViewController.h"
 #import "UIViewController+ScreenShot.h"
 #import "RUNWeightViewController.h"
+#import "RUNTimeManager.h"
 
 static CGFloat const animationDuration = 1.f;
 

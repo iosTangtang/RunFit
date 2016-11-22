@@ -16,4 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *numbersLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
++ (instancetype)cellWith:(UITableView *)tableView identifity:(NSString *)identifity;
+
 @end

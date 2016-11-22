@@ -36,7 +36,7 @@
 
 - (NSArray *)titles {
     if (!_titles) {
-        _titles = @[@"个人资料", @"权限中心", @"运动记录", @"设置"];
+        _titles = @[@"个人资料", @"权限中心", @"历史记录", @"设置"];
     }
     return _titles;
 }
@@ -129,7 +129,7 @@
         }
         case 2: {
             RUNHistoryViewController *historyVC = [[RUNHistoryViewController alloc] init];
-            historyVC.title = @"运动记录";
+            historyVC.title = @"历史记录";
             historyVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:historyVC animated:YES];
             break;

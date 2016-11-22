@@ -10,7 +10,9 @@
 
 @protocol RUNPickerViewDelegate <NSObject>
 
+@optional
 - (void)pickText:(NSString *)text;
+- (void)pickText:(NSString *)text withRow:(NSUInteger)row;
 
 @end
 
@@ -21,5 +23,10 @@
 @property (nonatomic, copy)   NSString                  *mainTitle;
 @property (nonatomic, copy)   UIColor                   *backGroundColor;
 @property (nonatomic, copy)   NSString                  *separator;
+@property (nonatomic, assign) BOOL                      isTime;
+@property (nonatomic, assign) BOOL                      isDate;
+@property (nonatomic, copy)   NSArray <NSNumber *>      *dValue;
+@property (nonatomic, copy)   NSArray                   *defaultData;
+@property (nonatomic, assign) NSUInteger                row;
 
 @end

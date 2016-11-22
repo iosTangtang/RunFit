@@ -73,6 +73,11 @@
         make.left.right.bottom.equalTo(self.backView).offset(0);
     }];
     
+    for (int index = 0; index < self.defaultData.count; index++) {
+        [self.pickerView selectRow:[self.defaultData[index] integerValue] - [self.dValue[index] integerValue]
+                       inComponent:index animated:NO];
+    }
+    
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.text = self.mainTitle;
     self.titleLabel.font = [UIFont fontWithName:@"PingFang SC" size:14.f];
@@ -105,6 +110,9 @@
     if (self.pickDelegate && [self.pickDelegate respondsToSelector:@selector(pickText:)]) {
         [self.pickDelegate pickText:self.chooseText];
     }
+    if (self.pickDelegate && [self.pickDelegate respondsToSelector:@selector(pickText:withRow:)]) {
+        [self.pickDelegate pickText:self.chooseText withRow:self.row];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -135,9 +143,12 @@
     int index;
     self.chooseText = [NSMutableString stringWithString:@""];
     
-    if (component < self.datas.count - 1) {
-        [pickerView reloadComponent:component + 1];
-        [pickerView selectRow:component inComponent:component + 1 animated:YES];
+    if (self.defaultData && self.dValue && self.isDate) {
+        NSInteger index = [self.defaultData[component] integerValue] - [self.dValue[component] integerValue];
+        if (row > index) {
+            [pickerView selectRow:[self.defaultData[component] integerValue] - [self.dValue[component] integerValue]
+                      inComponent:component animated:YES];
+        }
     }
     
     for (index = 0; index < self.datas.count - 1; index++) {
@@ -146,10 +157,14 @@
     }
     
     NSInteger selectedRow = [pickerView selectedRowInComponent:index];
-    if (self.datas.count > 1) {
+    if (self.datas.count > 1 && ![self.separator isEqualToString:@""]) {
         self.chooseText = [NSMutableString stringWithString:[self.chooseText substringToIndex:self.chooseText.length - 1]];
     }
-    [self.chooseText appendFormat:@"%@", [self.datas[index] objectAtIndex:selectedRow]];
+    if (self.isTime) {
+        [self.chooseText appendFormat:@":%@", [self.datas[index] objectAtIndex:selectedRow]];
+    } else {
+        [self.chooseText appendFormat:@"%@", [self.datas[index] objectAtIndex:selectedRow]];
+    }
     
 }
 

@@ -8,6 +8,8 @@
 
 #import "RUNAppDelegate.h"
 #import "RUNTabBarViewController.h"
+#import "RUNNavigationViewController.h"
+#import "RUNLoginViewController.h"
 
 @interface RUNAppDelegate ()
 
@@ -19,9 +21,13 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    RUNTabBarViewController *tabVC = [[RUNTabBarViewController alloc] init];
-    tabVC.isRoot = YES;
-    self.window.rootViewController = tabVC;
+//    RUNTabBarViewController *tabVC = [[RUNTabBarViewController alloc] init];
+//    tabVC.isRoot = YES;
+//    self.window.rootViewController = tabVC;
+    
+    RUNLoginViewController *login = [[RUNLoginViewController alloc] init];
+    RUNNavigationViewController *nav = [[RUNNavigationViewController alloc] initWithRootViewController:login];
+    self.window.rootViewController = nav;
     
     [self.window makeKeyWindow];
     

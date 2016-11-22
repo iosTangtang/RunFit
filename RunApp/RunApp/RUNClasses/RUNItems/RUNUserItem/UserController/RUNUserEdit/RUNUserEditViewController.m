@@ -201,16 +201,37 @@
         }
     } else {
         _row = indexPath.row - 2;
-        RUNPickViewController *pick = [[RUNPickViewController alloc] init];
-        pick.pickDelegate = self;
-        pick.backGroundColor = [UIColor whiteColor];
-        pick.datas = self.stands[indexPath.row - 2];
-        pick.mainTitle = self.titles[indexPath.row - 2];
-        pick.separator = @".";
-        pick.modalPresentationStyle = UIModalPresentationCustom;
-        [self presentViewController:pick animated:YES completion:nil];
+        [self p_initPickerView:indexPath.row];
     }
     
+}
+
+- (void)p_initPickerView:(NSUInteger)row {
+    RUNPickViewController *pick = [[RUNPickViewController alloc] init];
+    pick.pickDelegate = self;
+    pick.backGroundColor = [UIColor whiteColor];
+    pick.datas = self.stands[row - 2];
+    pick.mainTitle = self.titles[row - 2];
+    pick.separator = @".";
+    if (row == 2) {
+        NSString *value = @"0";
+        if ([self.userModel.sex isEqualToString:@"女"]) {
+            value = @"1";
+        }
+        pick.defaultData = @[value];
+        pick.dValue = @[@"0"];
+    } else if (row == 3) {
+        NSString *weight = [[self.userModel.weight componentsSeparatedByString:@"kg"] firstObject];
+        pick.defaultData = [weight componentsSeparatedByString:@"."];
+        pick.dValue = @[@"25", @"0"];
+    } else if (row == 4) {
+        NSString *height = [[self.userModel.height componentsSeparatedByString:@"c"] firstObject];
+        pick.defaultData = @[height];
+        pick.dValue = @[@"50"];
+    }
+    
+    pick.modalPresentationStyle = UIModalPresentationCustom;
+    [self presentViewController:pick animated:YES completion:nil];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {

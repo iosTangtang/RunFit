@@ -10,7 +10,8 @@
 #import "RUNHistoryTableViewCell.h"
 #import "RUNHistoryMapViewController.h"
 
-static NSString *const  kIdentifity = @"RUNHISTORY";
+static NSString *const  kRUNIdentifity = @"RUNHistoryCell";
+static NSString *const  kWeightIdentifity = @"RUNWeightCell";
 
 @interface RUNHistoryViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -24,9 +25,10 @@ static NSString *const  kIdentifity = @"RUNHISTORY";
 - (NSMutableArray *)datas {
     if (!_datas) {
         _datas = [[NSMutableArray alloc] initWithArray:@[@{@"run" : @"10公里", @"duration" : @"10分钟", @"kcal" : @"299大卡", @"numbers" : @"2999步",
-                                                           @"time" : @"2016年11月4日 下午10:22"},
+                                                           @"time" : @"2016年11月4日 PM 10:22", @"type" : @"run"},
                                                          @{@"run" : @"12公里", @"duration" : @"30分钟", @"kcal" : @"399大卡", @"numbers" : @"5999步",
-                                                           @"time" : @"2016年11月14日 下午10:22"}]];
+                                                           @"time" : @"2016年11月14日 PM 10:22", @"type" : @"run"},
+                                                         @{@"weight" : @"56.6kg", @"time" : @"2016年11月16日 PM 10:22", @"type" : @"weight"}]];
     }
     return _datas;
 }
@@ -58,9 +60,6 @@ static NSString *const  kIdentifity = @"RUNHISTORY";
     [self.view addSubview:self.tableView];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([RUNHistoryTableViewCell class])
-                                               bundle:nil] forCellReuseIdentifier:kIdentifity];
-    
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
     }];
@@ -72,13 +71,19 @@ static NSString *const  kIdentifity = @"RUNHISTORY";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RUNHistoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kIdentifity];
-    
+    RUNHistoryTableViewCell *cell = nil;
     NSDictionary *dic = self.datas[indexPath.row];
-    cell.runLabel.text = dic[@"run"];
-    cell.durationLabel.text = dic[@"duration"];
-    cell.kcalLabel.text = dic[@"kcal"];
-    cell.numbersLabel.text = dic[@"numbers"];
+    if ([dic[@"type"] isEqualToString:@"run"]) {
+        cell = [RUNHistoryTableViewCell cellWith:tableView identifity:kRUNIdentifity];
+        cell.runLabel.text = dic[@"run"];
+        cell.durationLabel.text = dic[@"duration"];
+        cell.kcalLabel.text = dic[@"kcal"];
+        cell.numbersLabel.text = dic[@"numbers"];
+    } else {
+        cell = [RUNHistoryTableViewCell cellWith:tableView identifity:kWeightIdentifity];
+        cell.runLabel.text = dic[@"weight"];
+    }
+    
     cell.timeLabel.text = dic[@"time"];
     [cell setSeparatorInset:UIEdgeInsetsZero];
     
@@ -87,11 +92,19 @@ static NSString *const  kIdentifity = @"RUNHISTORY";
 
 #pragma mark - TableView Delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 136.5;
+    NSDictionary *dic = self.datas[indexPath.row];
+    if ([dic[@"type"] isEqualToString:@"run"]) {
+        return 136.5;
+    }
+    return 70.f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSDictionary *dic = self.datas[indexPath.row];
+    if ([dic[@"type"] isEqualToString:@"weight"]) {
+        return ;
+    }
     RUNHistoryMapViewController *hisMapVC = [[RUNHistoryMapViewController alloc] init];
     [self.navigationController pushViewController:hisMapVC animated:YES];
 }

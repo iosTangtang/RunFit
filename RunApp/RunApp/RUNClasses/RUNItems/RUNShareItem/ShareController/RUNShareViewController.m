@@ -74,34 +74,6 @@
     }];
 };
 
-//- (void)p_setTool {
-//    RUNTabBarViewController *tabVC = [[RUNTabBarViewController alloc] init];
-//    tabVC.isRoot = NO;
-//    [self addChildViewController:tabVC];
-    
-//    RUNPasterViewController *pasterVC = [[RUNPasterViewController alloc] init];
-//    [self.tabVC addChildController:pasterVC normalImage:[UIImage imageNamed:@"paster"]
-//                     selectedImage:[UIImage imageNamed:@"paster-fill"] title:@"贴纸"];
-    
-//    self.filterVC = [[RUNFilterViewController alloc] init];
-//    self.filterVC.imageData = self.imageData;
-//    self.filterVC.delegate = self;
-//    [tabVC addChildController:self.filterVC normalImage:[UIImage imageNamed:@"filter"]
-//                selectedImage:[UIImage imageNamed:@"filter-fill"] title:@"滤镜"];
-//    
-//    RUNToolViewController *toolVC = [[RUNToolViewController alloc] init];
-//    toolVC.delegate = self;
-//    [tabVC addChildController:toolVC normalImage:[UIImage imageNamed:@"tool"]
-//                selectedImage:[UIImage imageNamed:@"tool-fill"] title:@"工具"];
-//    
-//    [self.view addSubview:tabVC.view];
-//    
-//    [tabVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.right.bottom.equalTo(self.view);
-//        make.height.equalTo(ViewHeight / 4.0);
-//    }];
-//}
-
 #pragma - Button Action
 - (void)p_closeButton:(UIButton *)button {
     if (self.isPush) {
@@ -113,39 +85,5 @@
 - (void)p_shareButton:(UIButton *)button {
     NSLog(@"share");
 }
-
-//#pragma mark - RUNTool Delegate
-//- (void)rotateAction:(UIButton *)button {
-//    _count++;
-//    CGAffineTransform transform;
-//    CGFloat scaleMin = 0.85;
-//    CGFloat scaleMax = 1 / 0.85;
-//    if (_count % 2 == 0) {
-//        transform = CGAffineTransformScale(self.screenImage.transform, scaleMax, scaleMax);
-//    } else {
-//        transform = CGAffineTransformScale(self.screenImage.transform, scaleMin, scaleMin);
-//    }
-//    self.screenImage.transform = transform;
-//    self.screenImage.transform = CGAffineTransformRotate(self.screenImage.transform, M_PI_2);
-//    
-//}
-//
-//- (void)cutAction:(UIButton *)button {
-//    RUNCutViewController *cutVC = [[RUNCutViewController alloc] init];
-//    cutVC.imageData = self.imageData;
-//    cutVC.delegate = self;
-//    [self presentViewController:cutVC animated:NO completion:nil];
-//}
-//
-//- (void)cutImage:(UIImage *)image {
-//    self.screenImage.image = image;
-//    self.imageData = image;
-//    self.filterVC.imageData = image;
-//}
-//
-//- (void)filterImage:(UIImage *)image {
-//    self.screenImage.image = image;
-//    self.imageData = image;
-//}
 
 @end

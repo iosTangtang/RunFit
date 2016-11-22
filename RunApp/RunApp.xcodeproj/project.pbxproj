@@ -24,14 +24,6 @@
 		660AAB771DDF1DF80085A38D /* RUNMapStopCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 660AAB751DDF1DF80085A38D /* RUNMapStopCollectionViewCell.m */; };
 		660AAB781DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 660AAB761DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib */; };
 		6612BC691DE197BB00504166 /* UIViewController+ScreenShot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC681DE197BB00504166 /* UIViewController+ScreenShot.m */; };
-		6612BC6F1DE19F3100504166 /* RUNToolViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC6E1DE19F3100504166 /* RUNToolViewController.m */; };
-		6612BC721DE19F4800504166 /* RUNPasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC711DE19F4800504166 /* RUNPasterViewController.m */; };
-		6612BC751DE19F5B00504166 /* RUNFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC741DE19F5B00504166 /* RUNFilterViewController.m */; };
-		6612BC7E1DE1C50A00504166 /* RUNPasterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC7C1DE1C50A00504166 /* RUNPasterCollectionViewCell.m */; };
-		6612BC7F1DE1C50A00504166 /* RUNPasterCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6612BC7D1DE1C50A00504166 /* RUNPasterCollectionViewCell.xib */; };
-		6612BC831DE1C87C00504166 /* RUNFilterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC811DE1C87C00504166 /* RUNFilterCollectionViewCell.m */; };
-		6612BC841DE1C87C00504166 /* RUNFilterCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6612BC821DE1C87C00504166 /* RUNFilterCollectionViewCell.xib */; };
-		6612BC871DE1D88F00504166 /* RUNCutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC861DE1D88F00504166 /* RUNCutViewController.m */; };
 		6612BC8A1DE1FF7F00504166 /* UIImage+Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC891DE1FF7F00504166 /* UIImage+Filter.m */; };
 		66162D901DD489A6002AEC37 /* YXLBaseChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D871DD489A6002AEC37 /* YXLBaseChart.m */; };
 		66162D911DD489A6002AEC37 /* YXLChartsFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D891DD489A6002AEC37 /* YXLChartsFactory.m */; };
@@ -65,6 +57,11 @@
 		66162E5C1DDA942D002AEC37 /* RUNUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162E5B1DDA942D002AEC37 /* RUNUserModel.m */; };
 		66162E5F1DDB28C5002AEC37 /* RUNChildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162E5E1DDB28C5002AEC37 /* RUNChildViewController.m */; };
 		66162E651DDC6740002AEC37 /* RUNAllDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162E641DDC6740002AEC37 /* RUNAllDataViewController.m */; };
+		665FD63D1DE41F1E006FB220 /* RUNTimeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 665FD63C1DE41F1E006FB220 /* RUNTimeManager.m */; };
+		665FD6431DE45365006FB220 /* RUNLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 665FD6421DE45365006FB220 /* RUNLoginViewController.m */; };
+		665FD64C1DE47439006FB220 /* RUNRAndFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 665FD64B1DE47439006FB220 /* RUNRAndFViewController.m */; };
+		665FD64F1DE47C0B006FB220 /* RUNCheckCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 665FD64E1DE47C0B006FB220 /* RUNCheckCodeViewController.m */; };
+		665FD6521DE484C2006FB220 /* RUNChangePassViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 665FD6511DE484C2006FB220 /* RUNChangePassViewController.m */; };
 		669B128D1DDD9C1C0081267A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 669B128C1DDD9C1C0081267A /* MapKit.framework */; };
 		669B128F1DDDF0440081267A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 669B128E1DDDF0440081267A /* CoreLocation.framework */; };
 		66B17DFC1DCB11CD00AE4C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B17DFB1DCB11CD00AE4C49 /* main.m */; };
@@ -129,20 +126,6 @@
 		660AAB761DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RUNMapStopCollectionViewCell.xib; sourceTree = "<group>"; };
 		6612BC671DE197BB00504166 /* UIViewController+ScreenShot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ScreenShot.h"; sourceTree = "<group>"; };
 		6612BC681DE197BB00504166 /* UIViewController+ScreenShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ScreenShot.m"; sourceTree = "<group>"; };
-		6612BC6D1DE19F3100504166 /* RUNToolViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNToolViewController.h; sourceTree = "<group>"; };
-		6612BC6E1DE19F3100504166 /* RUNToolViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNToolViewController.m; sourceTree = "<group>"; };
-		6612BC701DE19F4800504166 /* RUNPasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNPasterViewController.h; sourceTree = "<group>"; };
-		6612BC711DE19F4800504166 /* RUNPasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNPasterViewController.m; sourceTree = "<group>"; };
-		6612BC731DE19F5B00504166 /* RUNFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNFilterViewController.h; sourceTree = "<group>"; };
-		6612BC741DE19F5B00504166 /* RUNFilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNFilterViewController.m; sourceTree = "<group>"; };
-		6612BC7B1DE1C50A00504166 /* RUNPasterCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNPasterCollectionViewCell.h; sourceTree = "<group>"; };
-		6612BC7C1DE1C50A00504166 /* RUNPasterCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNPasterCollectionViewCell.m; sourceTree = "<group>"; };
-		6612BC7D1DE1C50A00504166 /* RUNPasterCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RUNPasterCollectionViewCell.xib; sourceTree = "<group>"; };
-		6612BC801DE1C87C00504166 /* RUNFilterCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNFilterCollectionViewCell.h; sourceTree = "<group>"; };
-		6612BC811DE1C87C00504166 /* RUNFilterCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNFilterCollectionViewCell.m; sourceTree = "<group>"; };
-		6612BC821DE1C87C00504166 /* RUNFilterCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RUNFilterCollectionViewCell.xib; sourceTree = "<group>"; };
-		6612BC851DE1D88F00504166 /* RUNCutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNCutViewController.h; sourceTree = "<group>"; };
-		6612BC861DE1D88F00504166 /* RUNCutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNCutViewController.m; sourceTree = "<group>"; };
 		6612BC881DE1FF7F00504166 /* UIImage+Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Filter.h"; sourceTree = "<group>"; };
 		6612BC891DE1FF7F00504166 /* UIImage+Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Filter.m"; sourceTree = "<group>"; };
 		66162D861DD489A6002AEC37 /* YXLBaseChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLBaseChart.h; sourceTree = "<group>"; };
@@ -205,6 +188,16 @@
 		66162E5E1DDB28C5002AEC37 /* RUNChildViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNChildViewController.m; sourceTree = "<group>"; };
 		66162E631DDC6740002AEC37 /* RUNAllDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNAllDataViewController.h; sourceTree = "<group>"; };
 		66162E641DDC6740002AEC37 /* RUNAllDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNAllDataViewController.m; sourceTree = "<group>"; };
+		665FD63B1DE41F1E006FB220 /* RUNTimeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNTimeManager.h; sourceTree = "<group>"; };
+		665FD63C1DE41F1E006FB220 /* RUNTimeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNTimeManager.m; sourceTree = "<group>"; };
+		665FD6411DE45365006FB220 /* RUNLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNLoginViewController.h; sourceTree = "<group>"; };
+		665FD6421DE45365006FB220 /* RUNLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNLoginViewController.m; sourceTree = "<group>"; };
+		665FD64A1DE47439006FB220 /* RUNRAndFViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNRAndFViewController.h; sourceTree = "<group>"; };
+		665FD64B1DE47439006FB220 /* RUNRAndFViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNRAndFViewController.m; sourceTree = "<group>"; };
+		665FD64D1DE47C0B006FB220 /* RUNCheckCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNCheckCodeViewController.h; sourceTree = "<group>"; };
+		665FD64E1DE47C0B006FB220 /* RUNCheckCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNCheckCodeViewController.m; sourceTree = "<group>"; };
+		665FD6501DE484C2006FB220 /* RUNChangePassViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNChangePassViewController.h; sourceTree = "<group>"; };
+		665FD6511DE484C2006FB220 /* RUNChangePassViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNChangePassViewController.m; sourceTree = "<group>"; };
 		669B128C1DDD9C1C0081267A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		669B128E1DDDF0440081267A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		66B17DF71DCB11CD00AE4C49 /* RunApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -277,6 +270,7 @@
 		66085DB21DCF39CF00F3E867 /* RUNItems */ = {
 			isa = PBXGroup;
 			children = (
+				665FD63E1DE45326006FB220 /* RUNLoginItem */,
 				66085DBC1DCF3B7E00F3E867 /* RUNHomeItem */,
 				66085DBD1DCF3B9800F3E867 /* RUNAnalazyItem */,
 				66085DBE1DCF3BAB00F3E867 /* RUNUserItem */,
@@ -304,6 +298,7 @@
 		66085DB41DCF39EA00F3E867 /* RUNTools */ = {
 			isa = PBXGroup;
 			children = (
+				665FD63A1DE41F0D006FB220 /* RUNTimeManager */,
 				66162E561DDA156D002AEC37 /* RUNPickView */,
 				66162DF31DD726DB002AEC37 /* TransitionAnimation */,
 				66162D851DD489A6002AEC37 /* Charts */,
@@ -365,8 +360,6 @@
 		66085DC01DCF3BCF00F3E867 /* RUNShareItem */ = {
 			isa = PBXGroup;
 			children = (
-				66085E411DD0768B00F3E867 /* ShareModel */,
-				66085E401DD0768100F3E867 /* ShareView */,
 				66085E3F1DD0767900F3E867 /* ShareController */,
 			);
 			path = RUNShareItem;
@@ -512,36 +505,8 @@
 			children = (
 				66162D951DD63063002AEC37 /* RUNShareViewController.h */,
 				66162D961DD63063002AEC37 /* RUNShareViewController.m */,
-				6612BC6D1DE19F3100504166 /* RUNToolViewController.h */,
-				6612BC6E1DE19F3100504166 /* RUNToolViewController.m */,
-				6612BC701DE19F4800504166 /* RUNPasterViewController.h */,
-				6612BC711DE19F4800504166 /* RUNPasterViewController.m */,
-				6612BC731DE19F5B00504166 /* RUNFilterViewController.h */,
-				6612BC741DE19F5B00504166 /* RUNFilterViewController.m */,
-				6612BC851DE1D88F00504166 /* RUNCutViewController.h */,
-				6612BC861DE1D88F00504166 /* RUNCutViewController.m */,
 			);
 			path = ShareController;
-			sourceTree = "<group>";
-		};
-		66085E401DD0768100F3E867 /* ShareView */ = {
-			isa = PBXGroup;
-			children = (
-				6612BC7B1DE1C50A00504166 /* RUNPasterCollectionViewCell.h */,
-				6612BC7C1DE1C50A00504166 /* RUNPasterCollectionViewCell.m */,
-				6612BC7D1DE1C50A00504166 /* RUNPasterCollectionViewCell.xib */,
-				6612BC801DE1C87C00504166 /* RUNFilterCollectionViewCell.h */,
-				6612BC811DE1C87C00504166 /* RUNFilterCollectionViewCell.m */,
-				6612BC821DE1C87C00504166 /* RUNFilterCollectionViewCell.xib */,
-			);
-			path = ShareView;
-			sourceTree = "<group>";
-		};
-		66085E411DD0768B00F3E867 /* ShareModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ShareModel;
 			sourceTree = "<group>";
 		};
 		66162D851DD489A6002AEC37 /* Charts */ = {
@@ -648,6 +613,38 @@
 				66162E581DDA15A9002AEC37 /* RUNPickViewController.m */,
 			);
 			path = RUNPickView;
+			sourceTree = "<group>";
+		};
+		665FD63A1DE41F0D006FB220 /* RUNTimeManager */ = {
+			isa = PBXGroup;
+			children = (
+				665FD63B1DE41F1E006FB220 /* RUNTimeManager.h */,
+				665FD63C1DE41F1E006FB220 /* RUNTimeManager.m */,
+			);
+			path = RUNTimeManager;
+			sourceTree = "<group>";
+		};
+		665FD63E1DE45326006FB220 /* RUNLoginItem */ = {
+			isa = PBXGroup;
+			children = (
+				665FD6401DE4534C006FB220 /* LoginController */,
+			);
+			path = RUNLoginItem;
+			sourceTree = "<group>";
+		};
+		665FD6401DE4534C006FB220 /* LoginController */ = {
+			isa = PBXGroup;
+			children = (
+				665FD6411DE45365006FB220 /* RUNLoginViewController.h */,
+				665FD6421DE45365006FB220 /* RUNLoginViewController.m */,
+				665FD64A1DE47439006FB220 /* RUNRAndFViewController.h */,
+				665FD64B1DE47439006FB220 /* RUNRAndFViewController.m */,
+				665FD64D1DE47C0B006FB220 /* RUNCheckCodeViewController.h */,
+				665FD64E1DE47C0B006FB220 /* RUNCheckCodeViewController.m */,
+				665FD6501DE484C2006FB220 /* RUNChangePassViewController.h */,
+				665FD6511DE484C2006FB220 /* RUNChangePassViewController.m */,
+			);
+			path = LoginController;
 			sourceTree = "<group>";
 		};
 		66B17DEE1DCB11CD00AE4C49 = {
@@ -846,13 +843,11 @@
 				660AAB701DDEC4070085A38D /* RUNMapStartTableViewCell.xib in Resources */,
 				66B17E071DCB11CD00AE4C49 /* Assets.xcassets in Resources */,
 				66162E231DD9B898002AEC37 /* RUNHistoryTableViewCell.xib in Resources */,
-				6612BC841DE1C87C00504166 /* RUNFilterCollectionViewCell.xib in Resources */,
 				66B17E051DCB11CD00AE4C49 /* Main.storyboard in Resources */,
 				66162E341DD9D6C5002AEC37 /* RUNFAQTableViewCell.xib in Resources */,
 				660AAB781DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib in Resources */,
 				66162E551DDA031D002AEC37 /* RunUserTableViewCell.xib in Resources */,
 				66162E2C1DD9C18C002AEC37 /* RUNSettingTableViewCell.xib in Resources */,
-				6612BC7F1DE1C50A00504166 /* RUNPasterCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -928,8 +923,6 @@
 				66162E5F1DDB28C5002AEC37 /* RUNChildViewController.m in Sources */,
 				66162E331DD9D6C5002AEC37 /* RUNFAQTableViewCell.m in Sources */,
 				66085E4C1DD0939200F3E867 /* RUNCircleView.m in Sources */,
-				6612BC7E1DE1C50A00504166 /* RUNPasterCollectionViewCell.m in Sources */,
-				6612BC871DE1D88F00504166 /* RUNCutViewController.m in Sources */,
 				66085E501DD0DA1700F3E867 /* RUNTextView.m in Sources */,
 				66162E541DDA031D002AEC37 /* RunUserTableViewCell.m in Sources */,
 				66162DFF1DD82449002AEC37 /* RUNCalendarView.m in Sources */,
@@ -937,26 +930,27 @@
 				66162E591DDA15A9002AEC37 /* RUNPickViewController.m in Sources */,
 				66162E651DDC6740002AEC37 /* RUNAllDataViewController.m in Sources */,
 				6612BC8A1DE1FF7F00504166 /* UIImage+Filter.m in Sources */,
+				665FD63D1DE41F1E006FB220 /* RUNTimeManager.m in Sources */,
 				66162D9A1DD6309C002AEC37 /* RUNMapViewController.m in Sources */,
 				66085E461DD079F500F3E867 /* RUNAnalazyViewController.m in Sources */,
 				66085DC31DCF3C0F00F3E867 /* RUNNavigationViewController.m in Sources */,
 				66162E0F1DD88DC6002AEC37 /* RUNUserEditViewController.m in Sources */,
 				66085DBB1DCF3A6D00F3E867 /* RUNViewController.m in Sources */,
 				66085DC61DCF3C2500F3E867 /* RUNTabBarViewController.m in Sources */,
+				665FD6431DE45365006FB220 /* RUNLoginViewController.m in Sources */,
+				665FD64C1DE47439006FB220 /* RUNRAndFViewController.m in Sources */,
 				66162D971DD63063002AEC37 /* RUNShareViewController.m in Sources */,
-				6612BC751DE19F5B00504166 /* RUNFilterViewController.m in Sources */,
 				660AAB681DDEBFCC0085A38D /* RUNMapStartView.m in Sources */,
+				665FD6521DE484C2006FB220 /* RUNChangePassViewController.m in Sources */,
 				66162E5C1DDA942D002AEC37 /* RUNUserModel.m in Sources */,
 				66085E351DD075F500F3E867 /* RUNHomeViewController.m in Sources */,
 				6612BC691DE197BB00504166 /* UIViewController+ScreenShot.m in Sources */,
 				66162DEE1DD72646002AEC37 /* RUNCalendarViewController.m in Sources */,
 				66162D901DD489A6002AEC37 /* YXLBaseChart.m in Sources */,
 				66162DA31DD633F6002AEC37 /* RUNFuncViewController.m in Sources */,
+				665FD64F1DE47C0B006FB220 /* RUNCheckCodeViewController.m in Sources */,
 				66162E021DD832FD002AEC37 /* RUNCalendarCollectionViewCell.m in Sources */,
-				6612BC831DE1C87C00504166 /* RUNFilterCollectionViewCell.m in Sources */,
-				6612BC6F1DE19F3100504166 /* RUNToolViewController.m in Sources */,
 				66162E261DD9BE25002AEC37 /* RUNHistoryMapViewController.m in Sources */,
-				6612BC721DE19F4800504166 /* RUNPasterViewController.m in Sources */,
 				660AAB731DDED11C0085A38D /* RUNMapStopView.m in Sources */,
 				66162E051DD84EC6002AEC37 /* RUNUserHeadView.m in Sources */,
 				66085E491DD07A0700F3E867 /* RUNUserViewController.m in Sources */,
