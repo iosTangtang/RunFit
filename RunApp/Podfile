@@ -8,6 +8,8 @@ target 'RunApp' do
 pod 'Masonry', '~> 0.6.3'
 pod 'UICountingLabel', '~> 1.2.0'
 pod 'SVProgressHUD', '~> 1.1.3'
+pod 'BmobSDK', '~> 1.6.5'
+pod 'FMDB', '~> 2.5'
 
 end
 
