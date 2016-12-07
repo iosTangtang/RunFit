@@ -15,8 +15,7 @@ typedef enum : NSUInteger {
 
 @interface RUNChildViewController : UIViewController
 
-@property (nonatomic, copy)     NSString        *averValue;
-@property (nonatomic, copy)     NSString        *totalValue;
+@property (nonatomic, copy)     NSString        *unit;
 @property (nonatomic, copy)     NSString        *unitStr;
 @property (nonatomic, assign)   RUNChartType    chartType;
 

@@ -61,12 +61,10 @@ static NSString *const identifity = @"RUNWeightViewController";
     }
     [SVProgressHUD showWithStatus:@"保存中.."];
     self.userModel.weight = self.weightText;
-    __weak typeof(self) weakSelf = self;
-    [self.userModel saveData:^{
-        [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:RUNUSERNOTIFICATION object:nil];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
-    }];
+    [self.userModel saveData];
+    [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RUNUSERNOTIFICATION object:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Set TableView

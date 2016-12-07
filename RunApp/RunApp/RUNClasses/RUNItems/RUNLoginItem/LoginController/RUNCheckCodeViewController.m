@@ -50,6 +50,7 @@
     self.phoneNumber.placeholder = @"输入验证码";
     self.phoneNumber.clearButtonMode = YES;
     self.phoneNumber.delegate = self;
+    self.phoneNumber.keyboardType = UIKeyboardTypePhonePad;
     self.phoneNumber.textColor = [UIColor grayColor];
     self.phoneNumber.textAlignment = NSTextAlignmentCenter;
     self.phoneNumber.returnKeyType = UIReturnKeyDone;

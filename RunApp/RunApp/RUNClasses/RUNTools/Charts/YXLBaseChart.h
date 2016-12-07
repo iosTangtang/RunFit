@@ -18,6 +18,7 @@ typedef enum : NSUInteger {
 static CGFloat const confineX = 40;
 static CGFloat const confineY = 20;
 static int const standardData = 5000;
+static int const dayStandardData = 500;
 static CGFloat const pointRaduis = 7;
 
 @interface YXLBaseChart : UIView
@@ -37,6 +38,7 @@ static CGFloat const pointRaduis = 7;
 @property (nonatomic, assign)   YXLChartUnit            unit;                               // 数据展示时的单位
 @property (nonatomic, assign)   NSUInteger              heightXCount;                       // X坐标实际数据个数
 @property (nonatomic, copy)     NSArray <NSString *>    *dataArray;                         // 需要制作成图表的数据
+@property (nonatomic, copy)     NSArray <NSString *>    *dataXArray;                         // 需要制作成图表的数据
 @property (nonatomic, copy)     NSArray <NSString *>    *heightXDatas;                      // X坐标数据
 @property (nonatomic, copy)     NSArray <UIColor *>     *backgroundColors;                  // 图标背景渐变颜色组
 @property (nonatomic, copy)     NSArray <UIColor *>     *panCakeColors;                     // 饼图中的颜色组

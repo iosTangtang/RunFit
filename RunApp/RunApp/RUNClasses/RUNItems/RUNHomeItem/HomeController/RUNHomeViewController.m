@@ -19,49 +19,63 @@
 #import "UIViewController+ScreenShot.h"
 #import "RUNWeightViewController.h"
 #import "RUNTimeManager.h"
+#import "RUNHealthDataManager.h"
+#import "RUNUserModel.h"
+#import <CoreMotion/CoreMotion.h>
 
 static CGFloat const animationDuration = 1.f;
 
 @interface RUNHomeViewController () {
     NSArray *_descs;
     NSArray *_colors;
+    NSString *_stepCount;
+    NSDate  *_stepDate;
+    CGFloat _activityTime;
+    NSInteger  _count;
+    NSMutableArray *_barDatas;
 }
 
 @property (nonatomic, strong) RUNCircleView                     *circleView;
 @property (nonatomic, strong) YXLBaseChart                      *barChart;
+@property (nonatomic, strong) RUNTimeManager                    *timeManager;
+@property (nonatomic, strong) RUNHealthDataManager              *healthManager;
 @property (nonatomic, strong) NSDate                            *currentDate;
-@property (nonatomic, strong) NSMutableArray                    *datas;
+@property (nonatomic, strong) RUNUserModel                      *userModel;
+@property (nonatomic, strong) CMPedometer                       *cmPedometer;
+@property (nonatomic, strong) RUNTextView                       *kcalLabel;
+@property (nonatomic, strong) RUNTextView                       *timeLabel;
+@property (nonatomic, strong) RUNTextView                       *disLabel;
+@property (nonatomic, assign) BOOL                              isSuccess;
 
 @end
 
 @implementation RUNHomeViewController
-
-// 获取当地的Date
-- (NSDate *)currentDate {
-    if (!_currentDate) {
-        _currentDate = [NSDate date];
-    }
-    return _currentDate;
-}
-
-- (NSMutableArray *)datas {
-    if (!_datas) {
-        _datas = [[NSMutableArray alloc] initWithArray:@[@"147", @"82", @"3.2"]];
-    }
-    return _datas;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_refreshMessage) name:RUNHEADIMAGENOTIFICATION object:nil];
+    
     [self p_initilaze];
     [self p_setNavigation];
     [self p_drawCircle];
     [self p_addMessageText];
     [self p_addBarChart];
+    [self p_setBarDataWithNowDate:[NSDate date] isChange:NO];
     [self p_addButton];
+    
+    if (![CMPedometer isStepCountingAvailable] || ![CMPedometer isDistanceAvailable] || ![CMPedometer isPaceAvailable]) {
+        NSLog(@"CMPedometer Error");
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    [self.healthManager getAuthorizationWithHandle:^(BOOL isSuccess) {
+        weakSelf.isSuccess = isSuccess;
+        [weakSelf p_setBarDataWithNowDate:[NSDate date] isChange:NO];
+    }];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -74,6 +88,10 @@ static CGFloat const animationDuration = 1.f;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RUNFUNCNOTIFICATION object:nil];
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RUNHEADIMAGENOTIFICATION object:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     
@@ -81,16 +99,20 @@ static CGFloat const animationDuration = 1.f;
 
 #pragma mark - Init
 - (void)p_initilaze {
+    [self.userModel loadData];
+    _count = 0;
+    _stepCount = @"0";
     _descs = @[@"千卡", @"活跃时间(分)", @"公里"];
     _colors = @[[UIColor colorWithRed:234 / 255.0 green:98 / 255.0 blue:86 / 255.0 alpha:1],
                 [UIColor colorWithRed:245 / 255.0 green:166 / 255.0 blue:35 / 255.0 alpha:1],
                 [UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1]];
+    self.healthManager = [[RUNHealthDataManager alloc] init];
 }
 
 #pragma mark - Navigation Item
 - (void)p_setNavigation {
     //单独设置Navigation的title
-    self.navigationItem.title = [self p_stringFromDate:self.currentDate];
+    self.navigationItem.title = [self.timeManager run_getCurrentDate];
     
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"calendar"]
                                                                    style:UIBarButtonItemStyleDone
@@ -107,50 +129,55 @@ static CGFloat const animationDuration = 1.f;
 
 #pragma mark - Draw Circle
 - (void)p_drawCircle {
-    self.circleView = [[RUNCircleView alloc] initWithFrame:CGRectZero];
-    self.circleView.totalStep = 10000;
-    self.circleView.nowStep = 8924;
+    self.circleView = [[RUNCircleView alloc] initWithFrame:CGRectMake(ViewWidth / 2.0 - ViewWidth / 4.2, ViewHeight / 16.0,
+                                                                      ViewWidth / 2.1, ViewWidth / 2.1)];
+    self.circleView.totalStep = [self.userModel.tag integerValue];
     self.circleView.animationDuration = animationDuration;
-    self.circleView.bounds = CGRectMake(0, 0, ViewWidth / 2.1, ViewWidth / 2.1);
-    
+    self.circleView.nowStep = @"0";
     [self.view addSubview:self.circleView];
-    
-    [self.circleView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view);
-        make.top.equalTo(self.view.top).offset(ViewHeight / 16.0);
-        make.width.height.equalTo(ViewWidth / 2.1);
-    }];
-    
-    [self.circleView drawCircle];
 }
 
 #pragma mark - Add MessageText
 - (void)p_addMessageText {
+    self.kcalLabel = [self p_getRunTextView];
+    self.kcalLabel.title = _descs[0];
+    self.kcalLabel.mainTitleColor = _colors[0];
+    [self.view addSubview:self.kcalLabel];
     
-    for (int index = 0; index < 3; index++) {
-        RUNTextView *energyView = [[RUNTextView alloc] initWithFrame:CGRectZero];
-        energyView.mainTitle = self.datas[index];
-        energyView.title = _descs[index];
-        energyView.mainTitleFont = [UIFont fontWithName:@"Helvetica" size:ViewHeight / 20.f];
-        energyView.titleFont = [UIFont systemFontOfSize:12.f];
-        energyView.animationDuration = animationDuration;
-        energyView.mainTitleColor = _colors[index];
-        energyView.titleColor = [UIColor colorWithRed:158 / 255.0 green:158 / 255.0 blue:158 / 255.0 alpha:1];
-        energyView.format = @"%d";
-        if (index == 2) {
-            energyView.format = @"%.1f";
-        }
-        [self.view addSubview:energyView];
-        
-        [energyView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.circleView.bottom).offset(30);
-            make.left.equalTo(self.view.left).offset(ViewWidth / 3.0 * (index % 3));
-            make.width.equalTo(ViewWidth / 3.0);
-            make.height.equalTo(ViewHeight / 10.0);
-        }];
-        [energyView setLabelAnimation];
-    }
+    [self.kcalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.circleView.bottom).offset(30);
+        make.left.equalTo(self.view.left).offset(ViewWidth / 3.0 * (0 % 3));
+        make.width.equalTo(ViewWidth / 3.0);
+        make.height.equalTo(ViewHeight / 10.0);
+    }];
     
+    self.timeLabel = [self p_getRunTextView];
+    self.timeLabel.title = _descs[1];
+    self.timeLabel.mainTitleColor = _colors[1];
+    [self.view addSubview:self.timeLabel];
+    
+    [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.circleView.bottom).offset(30);
+        make.left.equalTo(self.view.left).offset(ViewWidth / 3.0 * (1 % 3));
+        make.width.equalTo(ViewWidth / 3.0);
+        make.height.equalTo(ViewHeight / 10.0);
+    }];
+    
+    self.disLabel = [self p_getRunTextView];
+    self.disLabel.title = _descs[2];
+    self.disLabel.mainTitleColor = _colors[2];
+    self.disLabel.format = @"%.1f";
+    [self.view addSubview:self.disLabel];
+    
+    [self.disLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.circleView.bottom).offset(30);
+        make.left.equalTo(self.view.left).offset(ViewWidth / 3.0 * (2 % 3));
+        make.width.equalTo(ViewWidth / 3.0);
+        make.height.equalTo(ViewHeight / 10.0);
+    }];
+    
+    [self p_startUpdateCount];
+
 }
 
 #pragma mark - SetBarChart
@@ -168,12 +195,11 @@ static CGFloat const animationDuration = 1.f;
     self.barChart.labelColor = [UIColor lightGrayColor];
     //不使用所有的虚线
     self.barChart.showAllDashLine = NO;
+    self.barChart.unit = YXLUnitDay;
     self.barChart.heightXDatas = @[@"上午12时", @"下午12时", @"上午12时"];
-    self.barChart.dataArray = @[@"0", @"0", @"0", @"0", @"16532", @"0",@"11111", @"0", @"9876", @"10870", @"11432", @"12555",
-                           @"11823", @"12345", @"3582", @"4987", @"16532", @"17982",@"11111", @"2345", @"0", @"0", @"0", @"0"];
-    
+    self.barChart.dataArray = _barDatas;
+
     [self.barChart drawChart];
-    
     [self.view addSubview:self.barChart];
     
     [self.barChart mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -222,6 +248,100 @@ static CGFloat const animationDuration = 1.f;
     }];
 }
 
+#pragma mark - Start Update Count
+- (void)p_startUpdateCount {
+    // 启动计步
+    [self.cmPedometer startPedometerUpdatesFromDate:[self stepDate] withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (_count == 0) {
+                _activityTime = [pedometerData.averageActivePace doubleValue] / 60 * [pedometerData.distance doubleValue];
+                _count++;
+            }
+            CGFloat time = [pedometerData.averageActivePace doubleValue] / 60 * [pedometerData.distance doubleValue];
+            CGFloat timeValue = (time != _activityTime) ? time + _activityTime : time;
+            _stepCount = [pedometerData.numberOfSteps stringValue];
+            self.circleView.nowStep = [pedometerData.numberOfSteps stringValue];
+            self.disLabel.mainTitle = [NSString stringWithFormat:@"%.1f", [pedometerData.distance doubleValue] / 1000];
+            self.timeLabel.mainTitle = [NSString stringWithFormat:@"%.0f", timeValue];
+//            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] *
+//                                        ([pedometerData.distance doubleValue] / 1000) * 1.036];
+            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] * timeValue / 60 *
+                                        (25 / (400 / ([pedometerData.distance doubleValue] / timeValue)))];
+//            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", 0.43 * [self.userModel.height doubleValue] +
+//                                        0.57 * [self.userModel.weight doubleValue] +
+//                                        0.26 * ([pedometerData.numberOfSteps doubleValue] / timeValue) +
+//                                        1.51 * timeValue - 108];
+            
+            
+            [self.disLabel setLabelAnimation];
+            [self.timeLabel setLabelAnimation];
+            [self.kcalLabel setLabelAnimation];
+        });
+    }];
+}
+
+#pragma mark - Set Bar Data
+- (void)p_setBarDataWithNowDate:(NSDate *)nowDate isChange:(BOOL)isChange {
+    if (!self.isSuccess) {
+        return ;
+    }
+    
+    NSDate *nowDay = nil;
+    NSDate *nextDay = nil;
+    
+    if (!isChange) {
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSUInteger flags = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+        NSDateComponents *dateComponents = [calendar components:flags fromDate:nowDate];
+        NSInteger hour = dateComponents.hour;
+        NSInteger minute = dateComponents.minute;
+        NSInteger second = dateComponents.second;
+        NSInteger dayTime = 86400 - (hour * 3600 + minute * 60 + second);
+        nowDay = [NSDate dateWithTimeIntervalSinceNow:dayTime - 86400];
+        nextDay = [NSDate dateWithTimeIntervalSinceNow:dayTime];
+    } else {
+        nowDay = nowDate;
+        nextDay = [nowDate dateByAddingTimeInterval:86400];
+    }
+    
+    if (_barDatas == nil) {
+        _barDatas = [NSMutableArray array];
+    } else {
+        [_barDatas removeAllObjects];
+    }
+    
+    [self.healthManager getHealthCountFromDate:nowDay toDate:nextDay type:RUNDateDayType motionType:RUNStepType resultHandle:^(NSArray *datas) {
+        if (datas != nil) {
+            int count = 0;
+            for (int index = 0; index < 24; index++) {
+                if (count >= datas.count) {
+                    [_barDatas addObject:@"0"];
+                    continue;
+                }
+                NSMutableString *indexStr = [NSMutableString stringWithFormat:@"%d", index];
+                if (index < 10) {
+                    [indexStr insertString:@"0" atIndex:0];
+                }
+                NSNumber *value = [datas[count] objectForKey:indexStr];
+                if (value == nil) {
+                    [_barDatas addObject:@"0"];
+                } else {
+                    [_barDatas addObject:[NSString stringWithFormat:@"%@", value]];
+                    count++;
+                }
+            }
+        } else {
+            [_barDatas addObject:@"0"];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.barChart removeFromSuperview];
+            [self p_addBarChart];
+        });
+
+    }];
+}
+
 #pragma mark - Bar Item Action
 - (void)leftBarItemAction:(UIBarButtonItem *)button {
     RUNCalendarViewController *caleVC = [[RUNCalendarViewController alloc] init];
@@ -229,7 +349,8 @@ static CGFloat const animationDuration = 1.f;
     __weak typeof(self) weakSelf = self;
     caleVC.calendarBlock = ^(NSString *dateMessage) {
         weakSelf.navigationItem.title = dateMessage;
-        weakSelf.currentDate = [weakSelf p_dateFromString:dateMessage];
+        weakSelf.currentDate = [weakSelf.timeManager run_getDateFromString:dateMessage withFormatter:@"yyyy年MM月dd日"];
+        [weakSelf p_changeDataWithDate:weakSelf.currentDate];
     };
     [self presentViewController:caleVC animated:YES completion:nil];
 }
@@ -244,7 +365,6 @@ static CGFloat const animationDuration = 1.f;
     RUNShareViewController *shareVC = [[RUNShareViewController alloc] init];
     shareVC.imageData = [self run_getScreenShotWithSize:self.view.bounds.size view:self.view];
     [self presentViewController:shareVC animated:YES completion:nil];
-    
 }
 
 - (void)runButton:(UIButton *)button {
@@ -254,9 +374,42 @@ static CGFloat const animationDuration = 1.f;
     [self.navigationController pushViewController:mapVC animated:YES];
 }
 
+#pragma mark - Change Data
+- (void)p_changeDataWithDate:(NSDate *)nowDate {
+    NSDate *current = [self.timeManager run_getDateFromString:[self.timeManager run_getCurrentDate] withFormatter:@"yyyy年MM月dd日"];
+    if (![nowDate isEqualToDate:current]) {
+        [self.cmPedometer stopPedometerUpdates];
+        NSDate *toDate = [nowDate dateByAddingTimeInterval:86400];
+        [self p_getStepCountFromDate:nowDate toDate:toDate];
+    } else {
+        [self p_setBarDataWithNowDate:[NSDate date] isChange:NO];
+        [self p_startUpdateCount];
+    }
+}
+
+#pragma mark - Get Step Count
+- (void)p_getStepCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate {
+    [self.cmPedometer queryPedometerDataFromDate:fromDate toDate:toDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CGFloat timeValue = [pedometerData.averageActivePace doubleValue] / 60 * [pedometerData.distance doubleValue];
+            self.circleView.nowStep = [pedometerData.numberOfSteps stringValue];
+            self.disLabel.mainTitle = [NSString stringWithFormat:@"%.1f", [pedometerData.distance doubleValue] / 1000];
+            self.timeLabel.mainTitle = [NSString stringWithFormat:@"%.0f", timeValue];
+            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] * timeValue / 60 *
+                                        (25 / (400 / ([pedometerData.distance doubleValue] / timeValue)))];
+            
+            [self.disLabel setLabelAnimation];
+            [self.timeLabel setLabelAnimation];
+            [self.kcalLabel setLabelAnimation];
+            [self p_setBarDataWithNowDate:fromDate isChange:YES];
+        });
+    }];
+}
+
 #pragma mark - NSNotification Action
 - (void)popOverWithRow:(id)sender{
     NSInteger row = [[[sender userInfo] objectForKey:@"row"] integerValue];
+    NSLog(@"%ld", (long)row);
     if (row == 0) {
         RUNMapViewController *mapVC = [[RUNMapViewController alloc] init];
         mapVC.hidesBottomBarWhenPushed = YES;
@@ -275,17 +428,63 @@ static CGFloat const animationDuration = 1.f;
     }
 }
 
-#pragma mark - DateFormater
-- (NSString *)p_stringFromDate:(NSDate *)date {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"yyyy年MM月dd日";
-    return [formatter stringFromDate:date];
+- (void)p_refreshMessage {
+    [self.userModel loadData];
+    self.circleView.totalStep = [self.userModel.tag integerValue];
+    self.circleView.nowStep = _stepCount;
+    [self.cmPedometer stopPedometerUpdates];
+    [self p_startUpdateCount];
 }
 
-- (NSDate *)p_dateFromString:(NSString *)string {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"yyyy年MM月dd日";
-    return [formatter dateFromString:string];
+#pragma mark - Lazy Method
+- (NSDate *)currentDate {
+    if (!_currentDate) {
+        _currentDate = [NSDate date];
+    }
+    return _currentDate;
+}
+
+- (RUNTimeManager *)timeManager {
+    if (!_timeManager) {
+        _timeManager = [[RUNTimeManager alloc] init];
+    }
+    return _timeManager;
+}
+
+- (RUNUserModel *)userModel {
+    if (!_userModel) {
+        _userModel = [[RUNUserModel alloc] init];
+    }
+    return _userModel;
+}
+
+- (NSDate *)stepDate {
+    if (!_stepDate) {
+        NSDate *toDate = [NSDate date];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        _stepDate = [dateFormatter dateFromString:[dateFormatter stringFromDate:toDate]];
+    }
+    return _stepDate;
+}
+
+- (CMPedometer *)cmPedometer {
+    if (!_cmPedometer) {
+        _cmPedometer = [[CMPedometer alloc] init];
+    }
+    return _cmPedometer;
+}
+
+- (RUNTextView *)p_getRunTextView {
+    RUNTextView *energyView = [[RUNTextView alloc] initWithFrame:CGRectZero];
+    energyView.mainTitle = @"0";
+    energyView.mainTitleFont = [UIFont fontWithName:@"Helvetica" size:ViewHeight / 20.f];
+    energyView.titleFont = [UIFont systemFontOfSize:12.f];
+    energyView.animationDuration = animationDuration;
+    energyView.titleColor = [UIColor colorWithRed:158 / 255.0 green:158 / 255.0 blue:158 / 255.0 alpha:1];
+    energyView.format = @"%d";
+    
+    return energyView;
 }
 
 @end

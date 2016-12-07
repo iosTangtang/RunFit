@@ -8,7 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol RUNUserHeadDelegate <NSObject>
+
+- (void)userHeadClick;
+
+@end
+
 @interface RUNUserHeadView : UIView
+
+@property (nonatomic, weak) id<RUNUserHeadDelegate> delegate;
 
 - (void)setUserName:(NSString *)name;                                       // 设置用户名
 - (void)setUserImage:(UIImage *)image;                                      // 设置用户头像

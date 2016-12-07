@@ -19,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="时间" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Svl-2r-R0N">
-                        <rect key="frame" x="86" y="15" width="35" height="21"/>
+                        <rect key="frame" x="86" y="10" width="35" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="35" id="BTH-JG-Vm4"/>
                             <constraint firstAttribute="height" constant="21" id="ZMW-hy-vZI"/>
@@ -29,11 +29,8 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R02-wv-ddt">
-                        <rect key="frame" x="3.5" y="46" width="200" height="60"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="200" id="RYx-Ft-JpL"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                        <rect key="frame" x="3.5" y="41" width="200" height="75"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                         <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -57,12 +54,14 @@
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="9T0-Kb-XpC" secondAttribute="trailing" id="3t7-sc-Vk9"/>
                 <constraint firstItem="wgA-Qi-vkw" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="6ra-D6-Jcj"/>
+                <constraint firstItem="R02-wv-ddt" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="3.5" id="D6z-cE-2fJ"/>
                 <constraint firstItem="Svl-2r-R0N" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="DFX-7N-znb"/>
                 <constraint firstAttribute="bottom" secondItem="wgA-Qi-vkw" secondAttribute="bottom" id="JMt-XY-14C"/>
                 <constraint firstItem="R02-wv-ddt" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="Lpn-9C-mOI"/>
-                <constraint firstItem="wgA-Qi-vkw" firstAttribute="top" secondItem="R02-wv-ddt" secondAttribute="bottom" constant="20" id="NII-zE-tp6"/>
-                <constraint firstItem="Svl-2r-R0N" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="15" id="R5m-qC-Pfc"/>
+                <constraint firstItem="wgA-Qi-vkw" firstAttribute="top" secondItem="R02-wv-ddt" secondAttribute="bottom" constant="10" id="NII-zE-tp6"/>
+                <constraint firstItem="Svl-2r-R0N" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="R5m-qC-Pfc"/>
                 <constraint firstAttribute="bottom" secondItem="9T0-Kb-XpC" secondAttribute="bottom" id="RGH-kS-ajn"/>
+                <constraint firstItem="9T0-Kb-XpC" firstAttribute="leading" secondItem="R02-wv-ddt" secondAttribute="trailing" constant="2.5" id="WsP-ck-Wlp"/>
                 <constraint firstAttribute="trailing" secondItem="wgA-Qi-vkw" secondAttribute="trailing" id="nM5-1g-2DP"/>
                 <constraint firstItem="9T0-Kb-XpC" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="-1" id="oJw-WU-Bcg"/>
                 <constraint firstItem="R02-wv-ddt" firstAttribute="top" secondItem="Svl-2r-R0N" secondAttribute="bottom" constant="10" id="rAW-IW-jYd"/>

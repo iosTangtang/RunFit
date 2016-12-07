@@ -10,6 +10,7 @@
 #import "RUNSettingTableViewCell.h"
 #import "RUNFAQViewController.h"
 #import "RUNFeedBackViewController.h"
+#import "RUNUserModel.h"
 
 static NSString *const  kIdentifity = @"RUNSETTING";
 static NSString *const  kCellIdentifity = @"RUNSETTINGNORMAL";
@@ -42,7 +43,13 @@ static NSString *const  kCellIdentifity = @"RUNSETTINGNORMAL";
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    _count = 1;
+    RUNUserModel *userModel = [[RUNUserModel alloc] init];
+    [userModel loadData];
+    if (userModel.isLogin) {
+        _count = 1;
+    } else {
+        _count = 0;
+    }
     
     [self p_setupTableView];
 }
@@ -124,6 +131,12 @@ static NSString *const  kCellIdentifity = @"RUNSETTINGNORMAL";
                 [self.navigationController pushViewController:feedVC animated:YES];
                 break;
             }
+            case 2: {
+                NSURL *imageUrl = [[NSURL alloc] initWithString:@"https://www.baidu.com"];
+                UIActivityViewController *activityVC = [[UIActivityViewController alloc]
+                                                        initWithActivityItems:@[imageUrl] applicationActivities:nil];
+                [self presentViewController:activityVC animated:YES completion:nil];
+            }
             
             default:
                 break;
@@ -144,6 +157,7 @@ static NSString *const  kCellIdentifity = @"RUNSETTINGNORMAL";
             _count++;
         }
         [weakSelf.tableView reloadData];
+        [weakSelf p_changStatus];
     }];
     [alert addAction:yesAction];
     
@@ -151,6 +165,15 @@ static NSString *const  kCellIdentifity = @"RUNSETTINGNORMAL";
     [alert addAction:noAction];
     
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)p_changStatus {
+    RUNUserModel *userModel = [[RUNUserModel alloc] init];
+    [userModel loadData];
+    userModel.isLogin = @"NO";
+    [userModel saveLoginStatus];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
+
 }
 
 @end

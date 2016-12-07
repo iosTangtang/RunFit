@@ -15,6 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
 
-+ (instancetype)cellWith:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
++ (instancetype)cellWith:(UITableView *)tableView identifity:(NSString *)identifity;
 
 @end

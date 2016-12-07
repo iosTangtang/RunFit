@@ -47,7 +47,7 @@ static NSString *const identifity = @"RUNAllDataViewController";
 
 #pragma mark - TableView DataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 20;
+    return self.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -60,8 +60,14 @@ static NSString *const identifity = @"RUNAllDataViewController";
         cell.detailTextLabel.textColor = [UIColor colorWithRed:74 / 255.0 green:74 / 255.0 blue:74 / 255.0 alpha:1];
     }
     
-    cell.textLabel.text = @"12345";
-    cell.detailTextLabel.text = @"2016年11月11日 22:22:22";
+    NSDictionary *dic = self.dataArray[self.dataArray.count - indexPath.row - 1];
+    NSNumber *number = dic[@"value"];
+    cell.textLabel.text = [NSString stringWithFormat:@"%.1f %@", [number doubleValue], self.unit];
+    cell.detailTextLabel.text = dic[@"date"];
+
+    if ([self.unit isEqualToString:@"公里"]) {
+        cell.textLabel.text = [NSString stringWithFormat:@"%.1f %@", [number doubleValue] / 1000, self.unit];
+    }
     
     return cell;
 }

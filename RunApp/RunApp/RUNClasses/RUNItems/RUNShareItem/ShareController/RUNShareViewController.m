@@ -83,7 +83,21 @@
 }
 
 - (void)p_shareButton:(UIButton *)button {
-    NSLog(@"share");
+    NSArray *cachePathArray = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cachePath = cachePathArray[0];
+    NSString *pathStr = [NSString stringWithFormat:@"%@/%@", cachePath, @"yxl_runImage.png"];
+    
+    NSData *imageData = UIImagePNGRepresentation(self.imageData);
+    BOOL succeed = [imageData writeToFile:pathStr atomically:YES];
+    if (!succeed) {
+        NSLog(@"write data file error");
+        return ;
+    }
+    
+    NSURL *imageUrl = [NSURL fileURLWithPath:pathStr];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc]
+                                            initWithActivityItems:@[imageUrl] applicationActivities:nil];
+    [self presentViewController:activityVC animated:YES completion:nil];
 }
 
 @end

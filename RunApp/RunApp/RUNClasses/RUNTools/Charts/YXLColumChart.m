@@ -15,6 +15,7 @@
 @property (nonatomic, assign) int               total;
 @property (nonatomic, strong) UILabel           *valueLabel;
 @property (nonatomic, strong) NSMutableArray    *labels;
+@property (nonatomic, strong) UILabel           *noMessageLabel;
 
 @end
 
@@ -39,6 +40,17 @@
         
     }
     return _valueLabel;
+}
+
+- (UILabel *)noMessageLabel {
+    if (!_noMessageLabel) {
+        _noMessageLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _noMessageLabel.textAlignment = NSTextAlignmentCenter;
+        _noMessageLabel.textColor = self.valueLabelColor;
+        _noMessageLabel.font = [UIFont systemFontOfSize:20.f];
+        _noMessageLabel.text = @"无数据";
+    }
+    return _noMessageLabel;
 }
 
 - (NSMutableArray *)labels {
@@ -66,28 +78,27 @@
         UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width / number * index,
                                                                         self.bounds.size.height - confineY / 3.0,
                                                                         self.bounds.size.width / number, confineY / 2.0)];
-        monthLabel.textAlignment = NSTextAlignmentCenter;
+        if (self.unit == YXLUnitDay || self.unit == YXLUnitWeak) {
+            monthLabel.textAlignment = NSTextAlignmentCenter;
+        } else {
+            monthLabel.textAlignment = NSTextAlignmentRight;
+        }
+        
         monthLabel.font = self.labelFont;
         monthLabel.text = self.heightXDatas[index];
         monthLabel.textColor = self.labelColor;
         [self addSubview:monthLabel];
-    }
-    
-    if (number <= 3 && number > 1) {
-        UILabel *firstLabel = [self.labels firstObject];
-        firstLabel.textAlignment = NSTextAlignmentLeft;
-        
-        UILabel *lastLabel = [self.labels lastObject];
-        lastLabel.textAlignment = NSTextAlignmentRight;
+        [self.labels addObject:monthLabel];
     }
     
 }
 
 - (void)p_createDataY {
     self.maxData = [self p_getMaxData];
-    int dis = self.maxData % standardData;
-    int count = (dis == 0) ? self.maxData / standardData: self.maxData / standardData + 1;
-    self.total = count * standardData;
+    int standard = [self p_getStandard];
+    int dis = self.maxData % standard;
+    int count = (dis == 0) ? self.maxData / standard : self.maxData / standard + 1;
+    self.total = count * standard;
     int index = 0;
     
     CGFloat viewHeight = self.bounds.size.height - confineY;
@@ -103,7 +114,7 @@
         dataLabel.textAlignment = NSTextAlignmentCenter;
         dataLabel.font = self.labelFont;
         dataLabel.textColor = self.labelColor;
-        dataLabel.text = [NSString stringWithFormat:@"%dk", (standardData / 1000) * (count - index)];
+        dataLabel.text = [NSString stringWithFormat:@"%d", standard * (count - index)];
         [self addSubview:dataLabel];
         
         NSString *message = dataLabel.text;
@@ -164,19 +175,44 @@
         }
     }
     
+    if (max == 0) {
+        max = standardData;
+        if (self.unit == YXLUnitDay) {
+            max = dayStandardData;
+        }
+    }
+    
     return max;
+}
+
+- (int)p_getStandard {
+    int count = 0;
+    int max = self.maxData;
+    while (max) {
+        max /= 10;
+        count++;
+    }
+    
+    if (count < 2) {
+        count = 2;
+    }
+    
+    return 5 * pow(10, count - 2);
 }
 
 - (void)p_drawColumChart {
     if (self.dataArray.count <= 0) {
+        [self p_showNoMessageView];
         return ;
     }
     
     CGFloat width = self.gradientView.bounds.size.width / (double)self.dataArray.count;
     
+    int noMessageCount = 0;
     for (int index = 0; index < self.dataArray.count; index++) {
         CGFloat arc = [self.dataArray[index] intValue];
         if (arc <= 0) {
+            noMessageCount++;
             continue;
         }
         CGFloat height = arc / self.total * (self.bounds.size.height - confineY);
@@ -215,13 +251,34 @@
             basicAnimation.toValue = @1.0;
             [shapeLayer addAnimation:basicAnimation forKey:@"strokeEnd"];
         }
-        
+    }
+    
+    if (noMessageCount == self.dataArray.count) {
+        [self p_showNoMessageView];
     }
     
 }
 
+- (void)p_showNoMessageView {
+    [self.gradientView addSubview:self.noMessageLabel];
+    [self.noMessageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.gradientView.centerX);
+        make.centerY.equalTo(self.gradientView.centerY);
+        make.width.equalTo(ViewWidth / 2.0);
+        make.height.equalTo(self.gradientView.frame.size.height / 2.0);
+    }];
+}
+
 #pragma mark Public Method
 - (void)drawChart {
+    [self.layer removeAllAnimations];
+    [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+        obj = nil;
+    }];
+    self.gradientView = nil;
+    self.valueLabel = nil;
+    
     self.valueLabel.textColor = self.valueLabelColor;
     self.valueLabel.font = self.valueLabelFont;
     [self p_createDataY];
@@ -250,14 +307,15 @@
                            width, height + self.lineWidth);
         NSString *value = nil;
         if (CGRectContainsPoint(frame, touchPoint)) {
+            NSNumber *number = (NSNumber *)self.dataArray[index];
             if (self.unit == YXLUnitWeak) {
-                value = [NSString stringWithFormat:@"%@ : %@", self.heightXDatas[index], self.dataArray[index]];
+                value = [NSString stringWithFormat:@"%@日 : %ld", self.dataXArray[index], (long)[number integerValue]];
             } else if (self.unit == YXLUnitMonth){
-                value = [NSString stringWithFormat:@"%d日 : %@", index + 1, self.dataArray[index]];
+                value = [NSString stringWithFormat:@"%@日 : %ld", self.dataXArray[index], (long)[number integerValue]];
             } else if (self.unit == YXLUnitDay) {
-                value = [NSString stringWithFormat:@"%d时 : %@", index, self.dataArray[index]];
+                value = [NSString stringWithFormat:@"%d时 : %ld", index, (long)[number integerValue]];
             } else {
-                value = [NSString stringWithFormat:@"%d月 : %@", index + 1, self.dataArray[index]];
+                value = [NSString stringWithFormat:@"%@ : %ld", self.dataXArray[index], (long)[number integerValue]];
             }
             
             self.valueLabel.text = value;

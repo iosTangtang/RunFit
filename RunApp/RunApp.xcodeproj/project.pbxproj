@@ -71,6 +71,7 @@
 		66B17E151DCB11CD00AE4C49 /* RunAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B17E141DCB11CD00AE4C49 /* RunAppTests.m */; };
 		66B17E201DCB11CD00AE4C49 /* RunAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B17E1F1DCB11CD00AE4C49 /* RunAppUITests.m */; };
 		66B17E301DCB11EC00AE4C49 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66B17E2F1DCB11EC00AE4C49 /* HealthKit.framework */; };
+		66DC82431DF1B30E009432DB /* RUNHealthDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DC82421DF1B30E009432DB /* RUNHealthDataManager.m */; };
 		F5D304D459C13C777157AED5 /* Pods_RunApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF3E40822659E5F42A1D5E2C /* Pods_RunApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -214,6 +215,8 @@
 		66B17E211DCB11CD00AE4C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66B17E2D1DCB11EC00AE4C49 /* RunApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunApp.entitlements; sourceTree = "<group>"; };
 		66B17E2F1DCB11EC00AE4C49 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		66DC82411DF1B30E009432DB /* RUNHealthDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNHealthDataManager.h; sourceTree = "<group>"; };
+		66DC82421DF1B30E009432DB /* RUNHealthDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNHealthDataManager.m; sourceTree = "<group>"; };
 		6C9B1A89F85AE1870431A140 /* Pods-RunApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-RunApp/Pods-RunApp.release.xcconfig"; sourceTree = "<group>"; };
 		EF3E40822659E5F42A1D5E2C /* Pods_RunApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -398,6 +401,8 @@
 		66085E321DD075EA00F3E867 /* HomeModel */ = {
 			isa = PBXGroup;
 			children = (
+				66DC82411DF1B30E009432DB /* RUNHealthDataManager.h */,
+				66DC82421DF1B30E009432DB /* RUNHealthDataManager.m */,
 			);
 			path = HomeModel;
 			sourceTree = "<group>";
@@ -937,6 +942,7 @@
 				66162E0F1DD88DC6002AEC37 /* RUNUserEditViewController.m in Sources */,
 				66085DBB1DCF3A6D00F3E867 /* RUNViewController.m in Sources */,
 				66085DC61DCF3C2500F3E867 /* RUNTabBarViewController.m in Sources */,
+				66DC82431DF1B30E009432DB /* RUNHealthDataManager.m in Sources */,
 				665FD6431DE45365006FB220 /* RUNLoginViewController.m in Sources */,
 				665FD64C1DE47439006FB220 /* RUNRAndFViewController.m in Sources */,
 				66162D971DD63063002AEC37 /* RUNShareViewController.m in Sources */,
@@ -1129,6 +1135,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = tang.RunApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Debug;
@@ -1146,6 +1153,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = tang.RunApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Release;

@@ -9,7 +9,9 @@
 #import "RUNTextView.h"
 #import "UICountingLabel.h"
 
-@interface RUNTextView ()
+@interface RUNTextView () {
+    NSString *_oldTitle;
+}
 
 @property (nonatomic, strong) UICountingLabel   *valueLabel;
 @property (nonatomic, strong) UICountingLabel   *unitLabel;
@@ -54,13 +56,13 @@
 }
 
 - (void)setLabelAnimation {
-
     self.valueLabel.method = UILabelCountingMethodLinear;
     self.valueLabel.format = self.format;
-    [self.valueLabel countFrom:0 to:[self.mainTitle doubleValue] withDuration:self.animationDuration];
+    [self.valueLabel countFrom:[_oldTitle doubleValue] to:[self.mainTitle doubleValue] withDuration:self.animationDuration];
 }
 
 - (void)setMainTitle:(NSString *)mainTitle {
+    _oldTitle = _mainTitle;
     _mainTitle = mainTitle;
     self.valueLabel.text = mainTitle;
 }

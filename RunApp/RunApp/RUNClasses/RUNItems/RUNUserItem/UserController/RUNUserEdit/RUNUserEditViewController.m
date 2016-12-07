@@ -12,6 +12,10 @@
 #import "SVProgressHUD.h"
 #import "RUNUserModel.h"
 
+static NSString *const kImageCell = @"RUNUserHeadCell";
+static NSString *const kNameCell = @"RUNUserNameCell";
+static NSString *const kNormalCell = @"RUNUserNormalCell";
+
 @interface RUNUserEditViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate,
                                         RUNPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
     NSInteger _row;
@@ -123,13 +127,11 @@
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"选取图片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        // 设置照片来源为相机
+
         imgpickVC.sourceType = UIImagePickerControllerSourceTypeCamera;
         
-        // 设置进入相机时使用前置或后置摄像头
         imgpickVC.cameraDevice = UIImagePickerControllerCameraDeviceFront;
         
-        // 展示选取照片控制器
         [self presentViewController:imgpickVC animated:YES completion:^{}];
     }];
     
@@ -142,41 +144,48 @@
     }];
     
     // 判断是否支持相机
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-    {
-        // 添加警告按钮
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         [alert addAction:cameraAction];
     }
     [alert addAction:photosAction];
     [alert addAction:cancelAction];
-    // 展示警告控制器
+    
     [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - TableView DataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 6;
+    return self.userModel.isLogin ? 6 : 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RunUserTableViewCell *cell = [RunUserTableViewCell cellWith:tableView indexPath:indexPath];
+    RunUserTableViewCell *cell = nil;
     
-    if (indexPath.row == 0) {
+    if (indexPath.row == 0 && self.userModel.isLogin) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSData *imageData = [defaults objectForKey:@"userIcon"];
         UIImage *image = [UIImage imageWithData:imageData];
         if (image == nil) {
             image = [UIImage imageNamed:@"Oval 3"];
         }
+        cell = [RunUserTableViewCell cellWith:tableView identifity:kImageCell];
         cell.userHeadImage.image = image;
-    } else if(indexPath.row == 1) {
+    } else if(indexPath.row == 1 && self.userModel.isLogin) {
+        cell = [RunUserTableViewCell cellWith:tableView identifity:kNameCell];
         self.textField = cell.nameTextField;
         self.textField.text = self.userModel.name;
         self.textField.delegate = self;
         self.textField.returnKeyType = UIReturnKeyDone;
     } else {
-        cell.titleLabel.text = self.titles[indexPath.row - 2];
-        cell.valueLabel.text = self.datas[indexPath.row - 2];
+        NSUInteger index = 0;
+        if (self.userModel.isLogin) {
+            index = indexPath.row - 2;
+        } else {
+            index = indexPath.row;
+        }
+        cell = [RunUserTableViewCell cellWith:tableView identifity:kNormalCell];
+        cell.titleLabel.text = self.titles[index];
+        cell.valueLabel.text = self.datas[index];
     }
     
     return cell;
@@ -184,7 +193,7 @@
 
 #pragma mark - TableView Delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0) {
+    if (indexPath.row == 0 && self.userModel.isLogin) {
         return 116;
     }
     return 44;
@@ -192,6 +201,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (![self.userModel.isLogin boolValue]) {
+        _row = indexPath.row;
+        [self p_initPickerView:indexPath.row];
+        return;
+    }
     
     if (indexPath.row == 0) {
         [self p_chooseImage];
@@ -201,7 +216,7 @@
         }
     } else {
         _row = indexPath.row - 2;
-        [self p_initPickerView:indexPath.row];
+        [self p_initPickerView:indexPath.row - 2];
     }
     
 }
@@ -210,21 +225,21 @@
     RUNPickViewController *pick = [[RUNPickViewController alloc] init];
     pick.pickDelegate = self;
     pick.backGroundColor = [UIColor whiteColor];
-    pick.datas = self.stands[row - 2];
-    pick.mainTitle = self.titles[row - 2];
+    pick.datas = self.stands[row];
+    pick.mainTitle = self.titles[row];
     pick.separator = @".";
-    if (row == 2) {
+    if (row == 0) {
         NSString *value = @"0";
         if ([self.userModel.sex isEqualToString:@"女"]) {
             value = @"1";
         }
         pick.defaultData = @[value];
         pick.dValue = @[@"0"];
-    } else if (row == 3) {
+    } else if (row == 1) {
         NSString *weight = [[self.userModel.weight componentsSeparatedByString:@"kg"] firstObject];
         pick.defaultData = [weight componentsSeparatedByString:@"."];
         pick.dValue = @[@"25", @"0"];
-    } else if (row == 4) {
+    } else if (row == 2) {
         NSString *height = [[self.userModel.height componentsSeparatedByString:@"c"] firstObject];
         pick.defaultData = @[height];
         pick.dValue = @[@"50"];
@@ -292,18 +307,16 @@
 
 #pragma mark - Over Action
 - (void)p_overAction:(UIBarButtonItem *)barButton {
-    __weak typeof(self) weakSelf = self;
     [SVProgressHUD showWithStatus:@"保存中.."];
     self.userModel.name = self.textField.text;
     self.userModel.sex = self.datas[0];
     self.userModel.weight = self.datas[1];
     self.userModel.height = self.datas[2];
     self.userModel.tag = self.datas[3];
-    [self.userModel saveData:^{
-        [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
-    }];
+    [self.userModel saveData];
+    [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

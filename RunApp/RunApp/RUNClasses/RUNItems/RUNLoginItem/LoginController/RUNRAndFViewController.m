@@ -46,6 +46,7 @@
     self.phoneNumber.backgroundColor = [UIColor whiteColor];
     self.phoneNumber.placeholder = @"输入手机号";
     self.phoneNumber.clearButtonMode = YES;
+    self.phoneNumber.keyboardType = UIKeyboardTypePhonePad;
     self.phoneNumber.delegate = self;
     self.phoneNumber.textColor = [UIColor grayColor];
     self.phoneNumber.textAlignment = NSTextAlignmentLeft;

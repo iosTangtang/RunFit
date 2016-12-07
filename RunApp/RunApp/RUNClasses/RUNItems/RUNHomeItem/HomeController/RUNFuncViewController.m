@@ -105,8 +105,6 @@ static NSString * const kYearsCell = @"kChoiceCell";
         NSDictionary *dic = @{@"row" : [NSString stringWithFormat:@"%ld", indexPath.row]};
         [[NSNotificationCenter defaultCenter] postNotificationName:RUNFUNCNOTIFICATION object:nil userInfo:dic];
     }];
-    
-    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

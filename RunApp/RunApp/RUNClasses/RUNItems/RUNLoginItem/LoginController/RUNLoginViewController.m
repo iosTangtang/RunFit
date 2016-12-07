@@ -8,6 +8,7 @@
 
 #import "RUNLoginViewController.h"
 #import "RUNRAndFViewController.h"
+#import "RUNUserModel.h"
 
 @interface RUNLoginViewController () <UITextFieldDelegate>
 
@@ -51,6 +52,7 @@
     self.userName.placeholder = @"输入手机号";
     self.userName.clearButtonMode = YES;
     self.userName.delegate = self;
+    self.userName.keyboardType = UIKeyboardTypePhonePad;
     self.userName.textColor = [UIColor grayColor];
     self.userName.textAlignment = NSTextAlignmentCenter;
     self.userName.returnKeyType = UIReturnKeyDone;
@@ -137,6 +139,12 @@
 - (void)p_loginAction {
     [self.userName resignFirstResponder];
     [self.password resignFirstResponder];
+    RUNUserModel *model = [[RUNUserModel alloc] init];
+    [model loadData];
+    model.isLogin = @"YES";
+    [model saveLoginStatus];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)p_forgetAction:(UIButton *)button {
@@ -153,7 +161,7 @@
 
 #pragma mark - Bar Item Action
 - (void)p_leftBarItemAction:(UIBarButtonItem *)button {
-
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UITextField

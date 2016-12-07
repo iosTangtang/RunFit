@@ -8,26 +8,42 @@
 
 #import "RUNUserModel.h"
 
+@interface RUNUserModel ()
+
+@property (nonatomic, strong) NSUserDefaults   *defaults;
+
+@end
+
 @implementation RUNUserModel
 
 - (void)loadData {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.name = [defaults objectForKey:@"userName"];
-    self.sex = [defaults objectForKey:@"userSex"];
-    self.weight = [defaults objectForKey:@"userWeight"];
-    self.height = [defaults objectForKey:@"userHeight"];
-    self.tag = [defaults objectForKey:@"userTag"];
+    self.isLogin = [self.defaults objectForKey:@"isLogin"];
+    self.name = [self.defaults objectForKey:@"userName"];
+    self.sex = [self.defaults objectForKey:@"userSex"];
+    self.weight = [self.defaults objectForKey:@"userWeight"];
+    self.height = [self.defaults objectForKey:@"userHeight"];
+    self.tag = [self.defaults objectForKey:@"userTag"];
 }
 
-- (void)saveData:(RUNUserBlock)handle {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:self.name forKey:@"userName"];
-    [defaults setObject:self.sex forKey:@"userSex"];
-    [defaults setObject:self.weight forKey:@"userWeight"];
-    [defaults setObject:self.height forKey:@"userHeight"];
-    [defaults setObject:self.tag forKey:@"userTag"];
-    [defaults synchronize];
-    handle();
+- (void)saveData {
+    [self.defaults setObject:self.name forKey:@"userName"];
+    [self.defaults setObject:self.sex forKey:@"userSex"];
+    [self.defaults setObject:self.weight forKey:@"userWeight"];
+    [self.defaults setObject:self.height forKey:@"userHeight"];
+    [self.defaults setObject:self.tag forKey:@"userTag"];
+    [self.defaults synchronize];
+}
+
+- (void)saveLoginStatus {
+    [self.defaults setObject:self.isLogin forKey:@"isLogin"];
+    [self.defaults synchronize];
+}
+
+- (NSUserDefaults *)defaults {
+    if (!_defaults) {
+        _defaults = [NSUserDefaults standardUserDefaults];
+    }
+    return _defaults;
 }
 
 - (NSString *)name {
@@ -63,6 +79,13 @@
         _tag = @"10000";
     }
     return _tag;
+}
+
+- (NSString *)isLogin {
+    if (!_isLogin) {
+        _isLogin = @"NO";
+    }
+    return _isLogin;
 }
 
 @end

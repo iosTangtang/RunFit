@@ -8,17 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void(^RUNUserBlock)(void);
-
 @interface RUNUserModel : NSObject
 
-@property (nonatomic, copy) NSString    *name;
-@property (nonatomic, copy) NSString    *sex;
-@property (nonatomic, copy) NSString    *weight;
-@property (nonatomic, copy) NSString    *height;
-@property (nonatomic, copy) NSString    *tag;
+@property (nonatomic, copy)     NSString    *name;
+@property (nonatomic, copy)     NSString    *sex;
+@property (nonatomic, copy)     NSString    *weight;
+@property (nonatomic, copy)     NSString    *height;
+@property (nonatomic, copy)     NSString    *tag;
+@property (nonatomic, copy)     NSString    *isLogin;
 
 - (void)loadData;
-- (void)saveData:(RUNUserBlock)handle;
+- (void)saveData;
+- (void)saveLoginStatus;
 
 @end

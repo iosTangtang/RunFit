@@ -11,9 +11,7 @@
 @interface RUNCircleView : UIView
 
 @property (nonatomic, assign) NSUInteger    totalStep;
-@property (nonatomic, assign) NSUInteger    nowStep;
+@property (nonatomic, copy)   NSString      *nowStep;
 @property (nonatomic, assign) NSUInteger    animationDuration;
-
-- (void)drawCircle;
 
 @end

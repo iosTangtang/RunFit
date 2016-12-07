@@ -11,11 +11,13 @@
 #import "RUNLockViewController.h"
 #import "RUNHistoryViewController.h"
 #import "RUNSettingViewController.h"
+#import "RUNNavigationViewController.h"
+#import "RUNLoginViewController.h"
 #import "RUNUserHeadView.h"
 #import "RUNButton.h"
 #import "RUNUserModel.h"
 
-@interface RUNUserViewController ()
+@interface RUNUserViewController () <RUNUserHeadDelegate>
 
 @property (nonatomic, strong) RUNUserHeadView   *userHead;
 @property (nonatomic, copy)   NSArray           *images;
@@ -44,7 +46,6 @@
 - (RUNUserModel *)userModel {
     if (!_userModel) {
         _userModel = [[RUNUserModel alloc] init];
-        [_userModel loadData];
     }
     return _userModel;
 }
@@ -63,6 +64,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_refreshImage) name:RUNHEADIMAGENOTIFICATION object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_reloadUserMessage) name:RUNUSERNOTIFICATION object:nil];
     
+    [self.userModel loadData];
     [self p_setUI];
 }
 
@@ -81,11 +83,19 @@
     }
     
     self.headView = [[RUNUserHeadView alloc] initWithFrame:CGRectMake(0, 0, ViewWidth, ViewHeight / 2.0)];
-    [self.headView setUserName:self.userModel.name];
-    [self.headView setUserImage:image];
+    self.headView.delegate = self;
+    if (![self.userModel.isLogin boolValue]) {
+        [self.headView setUserName:@"Run用户"];
+        [self.headView setUserImage:[UIImage imageNamed:@"unLogin"]];
+    } else {
+        [self.headView setUserName:self.userModel.name];
+        [self.headView setUserImage:image];
+    }
+    
     [self.headView setUserHeight:[self.userModel.height doubleValue]];
     [self.headView setUserWeight:[self.userModel.weight doubleValue]];
-    [self.headView setUserBMI:23.9];
+    [self.headView setUserBMI:[[NSString stringWithFormat:@"%.1f", [self.userModel.weight doubleValue] /
+                                pow([self.userModel.height doubleValue] / 100, 2)] doubleValue]];
     [self.headView setUserTarget:[self.userModel.tag integerValue]];
     [self.view addSubview:self.headView];
     
@@ -147,20 +157,38 @@
     }
 }
 
+#pragma mark - RUNUser Delegate 
+- (void)userHeadClick {
+    if ([self.userModel.isLogin boolValue]) {
+        return;
+    }
+    RUNLoginViewController *login = [[RUNLoginViewController alloc] init];
+    RUNNavigationViewController *nav = [[RUNNavigationViewController alloc] initWithRootViewController:login];
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
 - (void)p_refreshImage {
+    // 刷新数据
+    [self.userModel loadData];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *imageData = [defaults objectForKey:@"userIcon"];
     UIImage *image = [UIImage imageWithData:imageData];
-    if (image == nil) {
+    if (image == nil || ![self.userModel.isLogin boolValue]) {
         image = [UIImage imageNamed:@"Oval 3"];
     }
     [self.headView setUserImage:image];
     
-    // 刷新数据
-    [self.userModel loadData];
-    [self.headView setUserName:self.userModel.name];
+    if (![self.userModel.isLogin boolValue]) {
+        [self.headView setUserName:@"Run用户"];
+        [self.headView setUserImage:[UIImage imageNamed:@"unLogin"]];
+    } else {
+        [self.headView setUserName:self.userModel.name];
+        [self.headView setUserImage:image];
+    }
     [self.headView setUserHeight:[self.userModel.height doubleValue]];
     [self.headView setUserWeight:[self.userModel.weight doubleValue]];
+    [self.headView setUserBMI:[[NSString stringWithFormat:@"%.1f", [self.userModel.weight doubleValue] /
+                                pow([self.userModel.height doubleValue] / 100, 2)] doubleValue]];
     [self.headView setUserTarget:[self.userModel.tag integerValue]];
 }
 
@@ -170,6 +198,8 @@
     [self.headView setUserName:self.userModel.name];
     [self.headView setUserHeight:[self.userModel.height doubleValue]];
     [self.headView setUserWeight:[self.userModel.weight doubleValue]];
+    [self.headView setUserBMI:[[NSString stringWithFormat:@"%.1f", [self.userModel.weight doubleValue] /
+                                pow([self.userModel.height doubleValue] / 100, 2)] doubleValue]];
     [self.headView setUserTarget:[self.userModel.tag integerValue]];
 }
 

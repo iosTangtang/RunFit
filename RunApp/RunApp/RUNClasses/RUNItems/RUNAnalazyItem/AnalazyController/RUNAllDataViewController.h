@@ -10,4 +10,7 @@
 
 @interface RUNAllDataViewController : UIViewController
 
+@property (nonatomic, copy) NSArray     *dataArray;
+@property (nonatomic, copy) NSString    *unit;
+
 @end

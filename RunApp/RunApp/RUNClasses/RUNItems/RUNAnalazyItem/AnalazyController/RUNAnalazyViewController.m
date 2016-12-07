@@ -26,7 +26,7 @@ static int const kMarginWidth = 116;
 
 @interface RUNAnalazyViewController () <UIScrollViewDelegate> {
     NSUInteger  _currentX;
-    NSArray     *_avers;
+    NSArray     *_unitStrs;
     NSArray     *_totals;
     NSArray     *_titles;
     NSArray     *_units;
@@ -148,8 +148,7 @@ static int const kMarginWidth = 116;
         RUNChildViewController *workVC = [[RUNChildViewController alloc] init];
         workVC.title = self.titles[index];
         workVC.unitStr = self.units[index];
-        workVC.averValue = self.avers[index];
-        workVC.totalValue = self.totals[index];
+        workVC.unit = self.unitStrs[index];
         workVC.chartType = [self.chartTypes[index] intValue];
         [self addChildViewController:workVC];
     }
@@ -346,18 +345,11 @@ static int const kMarginWidth = 116;
     return _bottomLine;
 }
 
-- (NSArray *)avers {
-    if (!_avers) {
-        _avers = @[@"9584 步", @"55.0 公斤", @"3.2 公里", @"13 层", @"142 大卡"];
+- (NSArray *)unitStrs {
+    if (!_unitStrs) {
+        _unitStrs = @[@"步", @"公斤", @"公里", @"层", @"大卡"];
     }
-    return _avers;
-}
-
-- (NSArray *)totals {
-    if (!_totals) {
-        _totals = @[@"67085 步", @"27.1", @"26.7 公里", @"58 层", @"456 大卡"];
-    }
-    return _totals;
+    return _unitStrs;
 }
 
 - (NSArray *)units {

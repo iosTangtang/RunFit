@@ -11,33 +11,27 @@
 
 static int const circleWidth = 13;
 
-@interface RUNCircleView ()
+@interface RUNCircleView () {
+    NSString *_oldStep;
+}
 
 @property (nonatomic, strong) CAShapeLayer      *shapeLayer;
 @property (nonatomic, strong) CAShapeLayer      *circleLayer;
 @property (nonatomic, strong) CAGradientLayer   *gradientLayer;
 @property (nonatomic, strong) UICountingLabel   *stepLabel;
+@property (nonatomic, strong) UILabel           *totalLabel;
 
 @end
 
 @implementation RUNCircleView
 
-- (UILabel *)stepLabel {
-    if (!_stepLabel) {
-        _stepLabel = [[UICountingLabel alloc] initWithFrame:CGRectZero];
-        _stepLabel.textAlignment = NSTextAlignmentCenter;
-        _stepLabel.textColor = [UIColor colorWithRed:12 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1];
-        _stepLabel.font = [UIFont fontWithName:@"Helvetica" size:ViewHeight / 16.f];
-        _stepLabel.method = UILabelCountingMethodLinear;
-        _stepLabel.format = @"%d";
-    }
-    return _stepLabel;
-}
-
-- (instancetype)init{
-    self = [super init];
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
     if (self) {
+        _oldStep = @"0";
         self.backgroundColor = [UIColor clearColor];
+        [self p_setLabel];
+        [self p_drawCircle];
     }
     return self;
 }
@@ -51,16 +45,19 @@ static int const circleWidth = 13;
     titleLable.textAlignment = NSTextAlignmentCenter;
     [self addSubview:titleLable];
     
-    [self.stepLabel countFrom:0 to:self.nowStep withDuration:self.animationDuration];
-    
+    self.stepLabel = [[UICountingLabel alloc] initWithFrame:CGRectZero];
+    self.stepLabel.textAlignment = NSTextAlignmentCenter;
+    self.stepLabel.textColor = [UIColor colorWithRed:12 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1];
+    self.stepLabel.font = [UIFont fontWithName:@"Helvetica" size:ViewHeight / 16.f];
+    self.stepLabel.method = UILabelCountingMethodLinear;
+    self.stepLabel.format = @"%d";
     [self addSubview:self.stepLabel];
     
-    UILabel *totalLable = [[UILabel alloc] initWithFrame:CGRectZero];
-    totalLable.text = [NSString stringWithFormat:@"目标: %ld", (long)self.totalStep];
-    totalLable.textColor = [UIColor lightGrayColor];
-    totalLable.font = [UIFont systemFontOfSize:12.f];
-    totalLable.textAlignment = NSTextAlignmentCenter;
-    [self addSubview:totalLable];
+    self.totalLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.totalLabel.textColor = [UIColor lightGrayColor];
+    self.totalLabel.font = [UIFont systemFontOfSize:12.f];
+    self.totalLabel.textAlignment = NSTextAlignmentCenter;
+    [self addSubview:self.totalLabel];
     
     [self.stepLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self);
@@ -75,7 +72,7 @@ static int const circleWidth = 13;
         make.height.equalTo(21);
     }];
     
-    [totalLable mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.totalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.stepLabel.bottom).offset(5);
         make.centerX.height.width.equalTo(titleLable);
     }];
@@ -103,7 +100,6 @@ static int const circleWidth = 13;
     self.shapeLayer.lineWidth = circleWidth;
     self.shapeLayer.strokeColor = [UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1].CGColor;
     self.shapeLayer.fillColor = [UIColor clearColor].CGColor;
-    self.shapeLayer.strokeEnd = self.nowStep > self.totalStep ? 1 : self.nowStep / (double)self.totalStep;
     self.shapeLayer.lineJoin = kCALineJoinRound;
     self.shapeLayer.lineCap = kCALineCapRound;
     
@@ -116,31 +112,38 @@ static int const circleWidth = 13;
     [self.gradientLayer setLocations:@[@0,@0.55,@1]];
     [self.gradientLayer setMask:self.shapeLayer];
     [self.layer addSublayer:self.gradientLayer];
-    
-    [self p_circleAnimation:YES];
 }
 
 #pragma mark - Animation Method
-- (void)p_circleAnimation:(BOOL)animation {
+- (void)p_circleAnimation:(BOOL)animation nowStep:(NSUInteger)nowStep {
     if (animation == NO) {
         return;
     }
     
+    self.shapeLayer.strokeEnd = nowStep > self.totalStep ? 1 : nowStep / (double)self.totalStep;
     CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     basicAnimation.duration = self.animationDuration;
     basicAnimation.repeatCount = 1;
-    basicAnimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    basicAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     basicAnimation.removedOnCompletion = YES;
-    basicAnimation.fromValue = @0.0;
-    basicAnimation.toValue = @(self.nowStep > self.totalStep ? 1 : self.nowStep / (double)self.totalStep);
+    basicAnimation.fromValue = @([_oldStep integerValue] > self.totalStep ? 1 : [_oldStep integerValue] / (double)self.totalStep);
+    basicAnimation.toValue = @(nowStep > self.totalStep ? 1 : nowStep / (double)self.totalStep);
     [self.shapeLayer addAnimation:basicAnimation forKey:@"strokeEnd"];
 }
 
-#pragma mark - Public Method
-- (void)drawCircle {
-    [self p_setLabel];
-    
-    [self p_drawCircle];
+#pragma mark - Set Method
+- (void)setNowStep:(NSString *)nowStep {
+    _oldStep = _nowStep;
+    _nowStep = nowStep;
+    self.stepLabel.text = nowStep;
+    [self.stepLabel countFrom:[_oldStep integerValue] to:[nowStep integerValue] withDuration:self.animationDuration];
+    [self.shapeLayer removeAllAnimations];
+    [self p_circleAnimation:YES nowStep:[nowStep integerValue]];
+}
+
+- (void)setTotalStep:(NSUInteger)totalStep {
+    _totalStep = totalStep;
+    self.totalLabel.text = [NSString stringWithFormat:@"目标: %ld", (long)totalStep];
 }
 
 @end

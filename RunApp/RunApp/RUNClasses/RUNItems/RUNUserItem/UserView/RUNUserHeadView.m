@@ -31,6 +31,7 @@
         [self p_setBackground];
         [self p_setUI];
         [self p_setMessageUI];
+        [self p_addGesture];
     }
     return self;
 }
@@ -78,6 +79,7 @@
     self.imageView.image = [UIImage imageNamed:@"Oval 3"];
     self.imageView.layer.cornerRadius = ViewHeight / 12.0;
     self.imageView.layer.masksToBounds = YES;
+    self.imageView.userInteractionEnabled = YES;
     [self addSubview:self.imageView];
     
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -125,6 +127,19 @@
     
 }
 
+- (void)p_addGesture {
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                action:@selector(p_headClickButtonAction)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.imageView addGestureRecognizer:singleTap];
+}
+
+#pragma mark - Head View Click Action
+- (void)p_headClickButtonAction {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(userHeadClick)]) {
+        [self.delegate userHeadClick];
+    }
+}
 
 #pragma mark - Set Method
 - (void)setUserName:(NSString *)name {

@@ -10,22 +10,18 @@
 
 @implementation RunUserTableViewCell
 
-+ (instancetype)cellWith:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
-    NSString *identifier = nil;
++ (instancetype)cellWith:(UITableView *)tableView identifity:(NSString *)identifity {
     NSInteger index = 0;
     
-    if (indexPath.row == 0) {
-        identifier = @"RUNUserHeadCell";
+    if ([identifity isEqualToString:@"RUNUserHeadCell"]) {
         index = 0;
-    } else if (indexPath.row == 1) {
-        identifier = @"RUNUserNameCell";
+    } else if ([identifity isEqualToString:@"RUNUserNameCell"]) {
         index = 1;
-    } else {
-        identifier = @"RUNUserNormalCell";
+    } else if ([identifity isEqualToString:@"RUNUserNormalCell"]) {
         index = 2;
     }
     
-    RunUserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    RunUserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifity];
     if (!cell) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"RunUserTableViewCell" owner:self options:nil] objectAtIndex:index];
     }
