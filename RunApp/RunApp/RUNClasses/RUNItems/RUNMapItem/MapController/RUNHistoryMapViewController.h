@@ -10,6 +10,9 @@
 
 @interface RUNHistoryMapViewController : UIViewController
 
-@property (nonatomic, assign) BOOL  isToRoot;
+@property (nonatomic, assign) BOOL      isToRoot;
+@property (nonatomic, assign) BOOL      isRun;
+@property (nonatomic, copy)   NSArray   *datas;
+@property (nonatomic, copy)   NSArray   *lineDatas;
 
 @end

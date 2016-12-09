@@ -13,10 +13,10 @@ static NSString *const identifity = @"RUNMapStopCollectionViewCell";
 
 @interface RUNMapStopView () <UICollectionViewDelegate, UICollectionViewDataSource> {
     NSArray *_titles;
-    NSArray *_values;
 }
 
 @property (nonatomic, strong)   UICollectionView    *collectionView;
+@property (nonatomic, copy)     NSArray             *values;
 
 @end
 
@@ -103,16 +103,31 @@ static NSString *const identifity = @"RUNMapStopCollectionViewCell";
 #pragma mark - Lazy Load
 - (NSArray *)titles {
     if (!_titles) {
-        _titles = @[@"时间", @"公里", @"消耗", @"步数"];
+        if (self.isRun) {
+            _titles = @[@"时间", @"公里", @"消耗", @"步数"];
+        } else {
+            _titles = @[@"时间", @"公里", @"消耗", @"速度(s/m)"];
+        }
+        
     }
     return _titles;
 }
 
 - (NSArray *)values {
     if (!_values) {
-        _values = @[@"0:00", @"2.3", @"375", @"9258"];
+        _values = @[@"00:00", @"0.0", @"0", @"0"];
     }
     return _values;
+}
+
+- (void)setDatas:(NSArray *)datas {
+    self.values = nil;
+    self.values = [NSArray arrayWithArray:datas];
+    [self.collectionView reloadData];
+}
+
+- (NSArray *)datas {
+    return self.values;
 }
 
 @end

@@ -19,9 +19,9 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="时间" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Svl-2r-R0N">
-                        <rect key="frame" x="86" y="10" width="35" height="21"/>
+                        <rect key="frame" x="28.5" y="10" width="150" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="35" id="BTH-JG-Vm4"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="YRx-5O-T0e"/>
                             <constraint firstAttribute="height" constant="21" id="ZMW-hy-vZI"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>

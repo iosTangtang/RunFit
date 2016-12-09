@@ -18,6 +18,7 @@
 
 @property (nonatomic, weak)     id<RUNMapStopDelegate>  delegate;
 @property (nonatomic, copy)     NSArray                 *datas;
+@property (nonatomic, assign)   BOOL                    isRun;
 
 - (instancetype)initWithStopView:(BOOL)isStop;
 
