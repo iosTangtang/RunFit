@@ -93,7 +93,7 @@
     }];
 
     UILabel *timeLabel = [[UILabel alloc] init];
-    timeLabel.text = @"2016/11/04 22:22:22";
+    timeLabel.text = self.dateTitle;
     timeLabel.textColor = [UIColor whiteColor];
     timeLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:timeLabel];

@@ -306,7 +306,7 @@ typedef void(^RUNAllDataBlock)(NSArray *datas);
     } else {
         countX = 12;
     }
-    [self.healthManager getHealthCountFromDate:dates[0] toDate:dates[1] type:index motionType:motionType resultHandle:^(NSArray *datas) {
+    [self.healthManager getHealthCountFromDate:dates[0] toDate:dates[1] type:index motionType:motionType resultHandle:^(NSArray *datas, double mintue) {
         if (dates != nil) {
             int count = 0;
             for (int index = 0; index < countX; index++) {
@@ -359,7 +359,7 @@ typedef void(^RUNAllDataBlock)(NSArray *datas);
     NSDate *nowDay = nowDay = [NSDate dateWithTimeIntervalSinceNow:dayTime - 86400 * 365 * 3];
     NSDate *nextDay = [NSDate dateWithTimeIntervalSinceNow:dayTime];
     
-    [self.healthManager getHealthCountFromDate:nowDay toDate:nextDay type:4 motionType:motionType resultHandle:^(NSArray *datas) {
+    [self.healthManager getHealthCountFromDate:nowDay toDate:nextDay type:4 motionType:motionType resultHandle:^(NSArray *datas, double mintue) {
         handle(datas);
     }];
 }

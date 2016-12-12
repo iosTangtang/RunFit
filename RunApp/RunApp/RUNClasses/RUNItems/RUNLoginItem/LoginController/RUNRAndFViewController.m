@@ -8,6 +8,8 @@
 
 #import "RUNRAndFViewController.h"
 #import "RUNCheckCodeViewController.h"
+#import "UITextField+Check.h"
+#import "SVProgressHUD.h"
 
 @interface RUNRAndFViewController () <UITextFieldDelegate>
 
@@ -91,8 +93,13 @@
 
 #pragma mark - Next Action
 - (void)p_nextAction:(UIButton *)button {
+    if (![self.phoneNumber valiMobile]) {
+        [SVProgressHUD showErrorWithStatus:@"手机号码格式有误!"];
+        return ;
+    }
     RUNCheckCodeViewController *checkCodeVC = [[RUNCheckCodeViewController alloc] init];
     checkCodeVC.title = @"填写验证码";
+    checkCodeVC.phoneStr = self.phoneNumber.text;
     [self.navigationController pushViewController:checkCodeVC animated:YES];
 }
 

@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 
 typedef void(^RUNAuthorizationResult)(BOOL isSuccess);
-typedef void(^RUNDataBlock)(NSArray *datas);
+typedef void(^RUNSaveDataBlock)(BOOL isSuccess, NSError *error);
+typedef void(^RUNDataBlock)(NSArray *datas, double mintue);
 
 typedef enum : NSUInteger {
     RUNDateDayType = 0,
@@ -34,6 +35,7 @@ typedef enum : NSUInteger {
 - (void)getHealthCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate type:(RUNDateType)type
                     motionType:(RUNMotionType)motionType resultHandle:(RUNDataBlock)handle;
 
-- (void)getHealthWeightCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate type:(RUNDateType)type resultHandle:(RUNDataBlock)handle;
+- (void)saveWeightWithValue:(double)value withDate:(NSDate *)date handle:(RUNSaveDataBlock)block;
+- (void)saveEnergyWithValue:(double)value handle:(RUNSaveDataBlock)block;
 
 @end

@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>FMDB.xcscheme</key>
+		<key>MJRefresh.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -15,6 +15,11 @@
 			<false/>
 		</dict>
 		<key>Pods-RunApp.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SFHFKeychainUtils.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,17 +37,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>23CF27B2BA6AC7125EFFEDA8C5AA819F</key>
+		<key>235B4465AAE1253EC7710E16CDB543D4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>46E8DC0ED521C26F285B1A4D50064A77</key>
+		<key>5F32D6632D84C3E9C4D6E14A1F9F860C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5F6526C1299AA81BC709C6F5560C06BA</key>
+		<key>6847254D016329D4A531D34ED2B6DF81</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>828CF4BDD8190AB68CB5A33922626F9E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -52,7 +62,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E73CB26071A1F75240F986EAC824E05C</key>
+		<key>FDC6008D0E66B9904F78E0DA4F5853E2</key>
 		<dict>
 			<key>primary</key>
 			<true/>

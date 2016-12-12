@@ -23,7 +23,7 @@
 
 - (NSMutableString *)chooseText {
     if (!_chooseText) {
-        _chooseText = [NSMutableString stringWithString:@""];
+        _chooseText = [NSMutableString string];
     }
     return _chooseText;
 }
@@ -31,26 +31,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self p_initilaze];
     [self p_setupView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - initilaze
-- (void)p_initilaze {
-    int index = 0;
-    for (; index < self.datas.count - 1; index++) {
-        [self.chooseText appendFormat:@"%@%@", [self.datas[index] objectAtIndex:0], self.separator];
-    }
-    if (self.datas.count > 1) {
-        self.chooseText = [NSMutableString stringWithString:[self.chooseText substringToIndex:self.chooseText.length - 1]];
-    }
-    
-    [self.chooseText appendFormat:@"%@", [self.datas[index] objectAtIndex:0]];
 }
 
 #pragma mark - setupView
@@ -101,12 +87,29 @@
     [overButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.backView.mas_right).offset(-8);
         make.top.equalTo(self.backView.mas_top).offset(4.5);
-        make.width.equalTo(@50);
-        make.height.equalTo(@25);
+        make.width.equalTo(@80);
+        make.height.equalTo(@50);
     }];
 }
 
 - (void)buttonAction:(UIButton *)sender {
+    self.chooseText = [NSMutableString stringWithString:@""];
+    for (int index = 0; index < self.datas.count; index++) {
+        NSInteger row = [self.pickerView selectedRowInComponent:index];
+        NSArray *array = self.datas[index];
+        if (index == self.datas.count - 1) {
+            if (self.datas.count > 1 && !self.isDate) {
+                self.chooseText = [NSMutableString stringWithString:[self.chooseText substringToIndex:self.chooseText.length - 1]];
+            }
+            if (self.isTime) {
+                [self.chooseText appendFormat:@":"];
+            }
+            [self.chooseText appendFormat:@"%@", array[row]];
+            continue;
+        }
+        [self.chooseText appendFormat:@"%@%@", array[row], self.separator];
+    }
+    
     if (self.pickDelegate && [self.pickDelegate respondsToSelector:@selector(pickText:)]) {
         [self.pickDelegate pickText:self.chooseText];
     }
@@ -140,8 +143,6 @@
 - (void)pickerView:(UIPickerView *)pickerView
       didSelectRow:(NSInteger)row
        inComponent:(NSInteger)component {
-    int index;
-    self.chooseText = [NSMutableString stringWithString:@""];
     
     if (self.defaultData && self.dValue && self.isDate) {
         NSInteger index = [self.defaultData[component] integerValue] - [self.dValue[component] integerValue];
@@ -150,22 +151,6 @@
                       inComponent:component animated:YES];
         }
     }
-    
-    for (index = 0; index < self.datas.count - 1; index++) {
-        NSInteger selectedRow = [pickerView selectedRowInComponent:index];
-        [self.chooseText appendFormat:@"%@%@", [self.datas[index] objectAtIndex:selectedRow], self.separator];
-    }
-    
-    NSInteger selectedRow = [pickerView selectedRowInComponent:index];
-    if (self.datas.count > 1 && ![self.separator isEqualToString:@""]) {
-        self.chooseText = [NSMutableString stringWithString:[self.chooseText substringToIndex:self.chooseText.length - 1]];
-    }
-    if (self.isTime) {
-        [self.chooseText appendFormat:@":%@", [self.datas[index] objectAtIndex:selectedRow]];
-    } else {
-        [self.chooseText appendFormat:@"%@", [self.datas[index] objectAtIndex:selectedRow]];
-    }
-    
 }
 
 #pragma mark - 点击背景去掉pickerView

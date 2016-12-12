@@ -11,19 +11,17 @@
 #import "RUNPickViewController.h"
 #import "SVProgressHUD.h"
 #import "RUNUserModel.h"
+#import "RUNHealthDataManager.h"
+#import "RUNHistoryModel.h"
 
-static NSString *const kImageCell = @"RUNUserHeadCell";
-static NSString *const kNameCell = @"RUNUserNameCell";
 static NSString *const kNormalCell = @"RUNUserNormalCell";
 
-@interface RUNUserEditViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate,
-                                        RUNPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
+@interface RUNUserEditViewController () <UITableViewDelegate, UITableViewDataSource, RUNPickerViewDelegate> {
     NSInteger _row;
 }
 
 @property (nonatomic, strong)   UITableView         *tableView;
 @property (nonatomic, copy)     NSArray             *titles;
-@property (nonatomic, strong)   UITextField         *textField;
 @property (nonatomic, strong)   NSMutableArray      *datas;
 @property (nonatomic, strong)   NSMutableArray      *stands;
 @property (nonatomic, strong)   RUNUserModel        *userModel;
@@ -120,104 +118,29 @@ static NSString *const kNormalCell = @"RUNUserNormalCell";
     }];
 }
 
-#pragma mark - Camera Operation
-- (void)p_chooseImage {
-    UIImagePickerController * imgpickVC =[[UIImagePickerController alloc] init];
-    imgpickVC.delegate =self;
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"选取图片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-
-        imgpickVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-        
-        imgpickVC.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-        
-        [self presentViewController:imgpickVC animated:YES completion:^{}];
-    }];
-    
-    UIAlertAction *photosAction = [UIAlertAction actionWithTitle:@"从相册选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        imgpickVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        [self presentViewController:imgpickVC animated:YES completion:^{}];
-    }];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-    }];
-    
-    // 判断是否支持相机
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        [alert addAction:cameraAction];
-    }
-    [alert addAction:photosAction];
-    [alert addAction:cancelAction];
-    
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 #pragma mark - TableView DataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.userModel.isLogin ? 6 : 4;
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RunUserTableViewCell *cell = nil;
-    
-    if (indexPath.row == 0 && self.userModel.isLogin) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSData *imageData = [defaults objectForKey:@"userIcon"];
-        UIImage *image = [UIImage imageWithData:imageData];
-        if (image == nil) {
-            image = [UIImage imageNamed:@"Oval 3"];
-        }
-        cell = [RunUserTableViewCell cellWith:tableView identifity:kImageCell];
-        cell.userHeadImage.image = image;
-    } else if(indexPath.row == 1 && self.userModel.isLogin) {
-        cell = [RunUserTableViewCell cellWith:tableView identifity:kNameCell];
-        self.textField = cell.nameTextField;
-        self.textField.text = self.userModel.name;
-        self.textField.delegate = self;
-        self.textField.returnKeyType = UIReturnKeyDone;
-    } else {
-        NSUInteger index = 0;
-        if (self.userModel.isLogin) {
-            index = indexPath.row - 2;
-        } else {
-            index = indexPath.row;
-        }
-        cell = [RunUserTableViewCell cellWith:tableView identifity:kNormalCell];
-        cell.titleLabel.text = self.titles[index];
-        cell.valueLabel.text = self.datas[index];
-    }
+    RunUserTableViewCell *cell = [RunUserTableViewCell cellWith:tableView identifity:kNormalCell];
+    cell.titleLabel.text = self.titles[indexPath.row];
+    cell.valueLabel.text = self.datas[indexPath.row];
     
     return cell;
 }
 
 #pragma mark - TableView Delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0 && self.userModel.isLogin) {
-        return 116;
-    }
     return 44;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if (![self.userModel.isLogin boolValue]) {
-        _row = indexPath.row;
-        [self p_initPickerView:indexPath.row];
-        return;
-    }
-    
-    if (indexPath.row == 0) {
-        [self p_chooseImage];
-    } else if (indexPath.row == 1) {
-        if (self.textField) {
-            [self.textField becomeFirstResponder];
-        }
-    } else {
-        _row = indexPath.row - 2;
-        [self p_initPickerView:indexPath.row - 2];
-    }
+    _row = indexPath.row;
+    [self p_initPickerView:indexPath.row];
+    return;
     
 }
 
@@ -249,74 +172,48 @@ static NSString *const kNormalCell = @"RUNUserNormalCell";
     [self presentViewController:pick animated:YES completion:nil];
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self.textField resignFirstResponder];
-}
-
-#pragma mark - TextField Delegate
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    self.userModel.name = textField.text;
-    return YES;
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return YES;
-}
-
 #pragma mark - RUNPickerViewDelegate
 - (void)pickText:(NSString *)text {
     [self.datas replaceObjectAtIndex:_row withObject:text];
     [self.tableView reloadData];
 }
 
-#pragma mark - UIImagePickerControllerDelegate
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
-    [picker dismissViewControllerAnimated:YES completion:nil];
-    
-    [SVProgressHUD showWithStatus:@"保存中.."];
-    
-    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *imgData = UIImageJPEGRepresentation(image, 0.5);
-    [defaults setObject:imgData forKey:@"userIcon"];
-    [defaults synchronize];
-    
-    SEL selectorToCall = @selector(image:didFinishSavingWithError:contextInfo:);
-    
-    UIImageWriteToSavedPhotosAlbum(image, self, selectorToCall, NULL);
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
-    if (error == nil){
-        [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
-        [self.tableView reloadData];
-        
-    } else {
-        NSLog(@"An error happened while saving the image. error = %@", error);
-        [SVProgressHUD showErrorWithStatus:@"保存失败!"];
-    }
-}
-
 #pragma mark - Over Action
 - (void)p_overAction:(UIBarButtonItem *)barButton {
     [SVProgressHUD showWithStatus:@"保存中.."];
-    self.userModel.name = self.textField.text;
     self.userModel.sex = self.datas[0];
     self.userModel.weight = self.datas[1];
     self.userModel.height = self.datas[2];
     self.userModel.tag = self.datas[3];
     [self.userModel saveData];
-    [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self p_saveData];
+}
+
+#pragma mark - Save Method
+- (void)p_saveData {
+    NSDate *timeDate = [NSDate date];
+    RUNHealthDataManager *manager = [[RUNHealthDataManager alloc] init];
+    double value = [self.datas[1] doubleValue];
+    __weak typeof(self) weakSelf = self;
+    [manager saveWeightWithValue:value withDate:timeDate handle:^(BOOL isSuccess, NSError *error) {
+        if (isSuccess) {
+            RUNHistoryModel *model = [[RUNHistoryModel alloc] init];
+            model.type = @"体重";
+            model.date = timeDate;
+            model.duration = @"0";
+            model.value = weakSelf.datas[1];
+            model.speed = @"0";
+            model.step = @"0";
+            model.kcal = @"0";
+            model.points = @[@"0"];
+            [model saveDataWithHandle:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }
+    }];
 }
 
 @end

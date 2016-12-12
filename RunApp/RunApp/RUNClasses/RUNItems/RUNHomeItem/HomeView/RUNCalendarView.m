@@ -189,7 +189,8 @@ static CGFloat  const animationDuration = 0.35f;
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section != 0) {
+    RUNCalendarCollectionViewCell *cell = (RUNCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    if (indexPath.section != 0 && ![cell.dayLabel.text isEqualToString:@""]) {
         if ([self.delegate respondsToSelector:@selector(dayMessage:)]) {
             RUNCalendarCollectionViewCell *cell = (RUNCalendarCollectionViewCell *)[self collectionView:collectionView
                                                                                  cellForItemAtIndexPath:indexPath];

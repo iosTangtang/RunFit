@@ -24,7 +24,6 @@
 		660AAB771DDF1DF80085A38D /* RUNMapStopCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 660AAB751DDF1DF80085A38D /* RUNMapStopCollectionViewCell.m */; };
 		660AAB781DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 660AAB761DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib */; };
 		6612BC691DE197BB00504166 /* UIViewController+ScreenShot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC681DE197BB00504166 /* UIViewController+ScreenShot.m */; };
-		6612BC8A1DE1FF7F00504166 /* UIImage+Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6612BC891DE1FF7F00504166 /* UIImage+Filter.m */; };
 		66162D901DD489A6002AEC37 /* YXLBaseChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D871DD489A6002AEC37 /* YXLBaseChart.m */; };
 		66162D911DD489A6002AEC37 /* YXLChartsFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D891DD489A6002AEC37 /* YXLChartsFactory.m */; };
 		66162D921DD489A6002AEC37 /* YXLColumChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 66162D8B1DD489A6002AEC37 /* YXLColumChart.m */; };
@@ -75,6 +74,10 @@
 		66DC824D1DF960D2009432DB /* CLLocation+Sino.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DC824C1DF960D2009432DB /* CLLocation+Sino.m */; };
 		66DC824F1DF9AA0F009432DB /* MMPSilence.wav in Resources */ = {isa = PBXBuildFile; fileRef = 66DC824E1DF9AA0F009432DB /* MMPSilence.wav */; };
 		66DC82531DF9AA69009432DB /* MMPDeepSleepPreventer.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DC82521DF9AA69009432DB /* MMPDeepSleepPreventer.m */; };
+		66DC82561DFD3D4D009432DB /* RUNHistoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DC82551DFD3D4D009432DB /* RUNHistoryModel.m */; };
+		66DC82591DFD400D009432DB /* NSString+Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DC82581DFD400D009432DB /* NSString+Hash.m */; };
+		66F6E61A1DFE4C68004CC9EE /* UITextField+Check.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F6E6191DFE4C68004CC9EE /* UITextField+Check.m */; };
+		66F6E61D1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F6E61C1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.m */; };
 		F5D304D459C13C777157AED5 /* Pods_RunApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF3E40822659E5F42A1D5E2C /* Pods_RunApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -130,8 +133,6 @@
 		660AAB761DDF1DF80085A38D /* RUNMapStopCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RUNMapStopCollectionViewCell.xib; sourceTree = "<group>"; };
 		6612BC671DE197BB00504166 /* UIViewController+ScreenShot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ScreenShot.h"; sourceTree = "<group>"; };
 		6612BC681DE197BB00504166 /* UIViewController+ScreenShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ScreenShot.m"; sourceTree = "<group>"; };
-		6612BC881DE1FF7F00504166 /* UIImage+Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Filter.h"; sourceTree = "<group>"; };
-		6612BC891DE1FF7F00504166 /* UIImage+Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Filter.m"; sourceTree = "<group>"; };
 		66162D861DD489A6002AEC37 /* YXLBaseChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLBaseChart.h; sourceTree = "<group>"; };
 		66162D871DD489A6002AEC37 /* YXLBaseChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXLBaseChart.m; sourceTree = "<group>"; };
 		66162D881DD489A6002AEC37 /* YXLChartsFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLChartsFactory.h; sourceTree = "<group>"; };
@@ -225,6 +226,14 @@
 		66DC824E1DF9AA0F009432DB /* MMPSilence.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = MMPSilence.wav; sourceTree = "<group>"; };
 		66DC82511DF9AA69009432DB /* MMPDeepSleepPreventer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMPDeepSleepPreventer.h; sourceTree = "<group>"; };
 		66DC82521DF9AA69009432DB /* MMPDeepSleepPreventer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMPDeepSleepPreventer.m; sourceTree = "<group>"; };
+		66DC82541DFD3D4D009432DB /* RUNHistoryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNHistoryModel.h; sourceTree = "<group>"; };
+		66DC82551DFD3D4D009432DB /* RUNHistoryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNHistoryModel.m; sourceTree = "<group>"; };
+		66DC82571DFD400D009432DB /* NSString+Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hash.h"; sourceTree = "<group>"; };
+		66DC82581DFD400D009432DB /* NSString+Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hash.m"; sourceTree = "<group>"; };
+		66F6E6181DFE4C68004CC9EE /* UITextField+Check.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+Check.h"; sourceTree = "<group>"; };
+		66F6E6191DFE4C68004CC9EE /* UITextField+Check.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Check.m"; sourceTree = "<group>"; };
+		66F6E61B1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNHeadAndUserNameViewController.h; sourceTree = "<group>"; };
+		66F6E61C1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNHeadAndUserNameViewController.m; sourceTree = "<group>"; };
 		6C9B1A89F85AE1870431A140 /* Pods-RunApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-RunApp/Pods-RunApp.release.xcconfig"; sourceTree = "<group>"; };
 		EF3E40822659E5F42A1D5E2C /* Pods_RunApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -322,10 +331,12 @@
 		66085DB51DCF39FB00F3E867 /* RUNCategoties */ = {
 			isa = PBXGroup;
 			children = (
+				66DC82571DFD400D009432DB /* NSString+Hash.h */,
+				66DC82581DFD400D009432DB /* NSString+Hash.m */,
 				6612BC671DE197BB00504166 /* UIViewController+ScreenShot.h */,
 				6612BC681DE197BB00504166 /* UIViewController+ScreenShot.m */,
-				6612BC881DE1FF7F00504166 /* UIImage+Filter.h */,
-				6612BC891DE1FF7F00504166 /* UIImage+Filter.m */,
+				66F6E6181DFE4C68004CC9EE /* UITextField+Check.h */,
+				66F6E6191DFE4C68004CC9EE /* UITextField+Check.m */,
 			);
 			path = RUNCategoties;
 			sourceTree = "<group>";
@@ -511,6 +522,8 @@
 		66085E3E1DD0766A00F3E867 /* MapModel */ = {
 			isa = PBXGroup;
 			children = (
+				66DC82541DFD3D4D009432DB /* RUNHistoryModel.h */,
+				66DC82551DFD3D4D009432DB /* RUNHistoryModel.m */,
 			);
 			path = MapModel;
 			sourceTree = "<group>";
@@ -553,6 +566,8 @@
 			children = (
 				66162E0D1DD88DC6002AEC37 /* RUNUserEditViewController.h */,
 				66162E0E1DD88DC6002AEC37 /* RUNUserEditViewController.m */,
+				66F6E61B1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.h */,
+				66F6E61C1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.m */,
 			);
 			path = RUNUserEdit;
 			sourceTree = "<group>";
@@ -955,16 +970,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66DC82561DFD3D4D009432DB /* RUNHistoryModel.m in Sources */,
 				66162E5F1DDB28C5002AEC37 /* RUNChildViewController.m in Sources */,
 				66162E331DD9D6C5002AEC37 /* RUNFAQTableViewCell.m in Sources */,
+				66DC82591DFD400D009432DB /* NSString+Hash.m in Sources */,
 				66085E4C1DD0939200F3E867 /* RUNCircleView.m in Sources */,
 				66085E501DD0DA1700F3E867 /* RUNTextView.m in Sources */,
+				66F6E61D1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.m in Sources */,
 				66162E541DDA031D002AEC37 /* RunUserTableViewCell.m in Sources */,
 				66162DFF1DD82449002AEC37 /* RUNCalendarView.m in Sources */,
 				66162D921DD489A6002AEC37 /* YXLColumChart.m in Sources */,
 				66162E591DDA15A9002AEC37 /* RUNPickViewController.m in Sources */,
 				66162E651DDC6740002AEC37 /* RUNAllDataViewController.m in Sources */,
-				6612BC8A1DE1FF7F00504166 /* UIImage+Filter.m in Sources */,
 				665FD63D1DE41F1E006FB220 /* RUNTimeManager.m in Sources */,
 				66162D9A1DD6309C002AEC37 /* RUNMapViewController.m in Sources */,
 				66085E461DD079F500F3E867 /* RUNAnalazyViewController.m in Sources */,
@@ -974,6 +991,7 @@
 				66085DC61DCF3C2500F3E867 /* RUNTabBarViewController.m in Sources */,
 				66DC82431DF1B30E009432DB /* RUNHealthDataManager.m in Sources */,
 				665FD6431DE45365006FB220 /* RUNLoginViewController.m in Sources */,
+				66F6E61A1DFE4C68004CC9EE /* UITextField+Check.m in Sources */,
 				665FD64C1DE47439006FB220 /* RUNRAndFViewController.m in Sources */,
 				66162D971DD63063002AEC37 /* RUNShareViewController.m in Sources */,
 				660AAB681DDEBFCC0085A38D /* RUNMapStartView.m in Sources */,

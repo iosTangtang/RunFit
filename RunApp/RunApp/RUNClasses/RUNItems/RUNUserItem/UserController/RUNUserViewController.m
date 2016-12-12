@@ -16,6 +16,7 @@
 #import "RUNUserHeadView.h"
 #import "RUNButton.h"
 #import "RUNUserModel.h"
+#import "RUNHeadAndUserNameViewController.h"
 
 @interface RUNUserViewController () <RUNUserHeadDelegate>
 
@@ -31,14 +32,14 @@
 
 - (NSArray *)images {
     if (!_images) {
-        _images = @[@"userEdit", @"lock", @"history", @"set"];
+        _images = @[@"userEdit", @"upData", @"history", @"set"];
     }
     return _images;
 }
 
 - (NSArray *)titles {
     if (!_titles) {
-        _titles = @[@"个人资料", @"权限中心", @"历史记录", @"设置"];
+        _titles = @[@"个人资料", @"数据同步", @"历史记录", @"设置"];
     }
     return _titles;
 }
@@ -132,7 +133,7 @@
         }
         case 1: {
             RUNLockViewController *lockVC = [[RUNLockViewController alloc] init];
-            lockVC.title = @"权限中心";
+            lockVC.title = @"数据同步";
             lockVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:lockVC animated:YES];
             break;
@@ -160,6 +161,10 @@
 #pragma mark - RUNUser Delegate 
 - (void)userHeadClick {
     if ([self.userModel.isLogin boolValue]) {
+        RUNHeadAndUserNameViewController *headVC = [[RUNHeadAndUserNameViewController alloc] init];
+        headVC.hidesBottomBarWhenPushed = YES;
+        headVC.title = @"个性设置";
+        [self.navigationController pushViewController:headVC animated:YES];
         return;
     }
     RUNLoginViewController *login = [[RUNLoginViewController alloc] init];

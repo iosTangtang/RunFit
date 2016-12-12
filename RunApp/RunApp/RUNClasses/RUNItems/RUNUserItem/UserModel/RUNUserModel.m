@@ -48,7 +48,7 @@
 
 - (NSString *)name {
     if (!_name) {
-        _name = @"未命名";
+        _name = @"RunFit用户";
     }
     return _name;
 }

@@ -9,6 +9,9 @@
 #import "RUNLoginViewController.h"
 #import "RUNRAndFViewController.h"
 #import "RUNUserModel.h"
+#import "UITextField+Check.h"
+#import "SVProgressHUD.h"
+#import "Bmob.h"
 
 @interface RUNLoginViewController () <UITextFieldDelegate>
 
@@ -137,6 +140,16 @@
 
 #pragma mark - buttonAction
 - (void)p_loginAction {
+    if (![self.userName valiMobile]) {
+        [SVProgressHUD showErrorWithStatus:@"手机格式有误!"];
+        return ;
+    }
+    
+    if (![self.password valiPassword]) {
+        [SVProgressHUD showErrorWithStatus:@"密码格式有误!"];
+        return ;
+    }
+    
     [self.userName resignFirstResponder];
     [self.password resignFirstResponder];
     RUNUserModel *model = [[RUNUserModel alloc] init];

@@ -38,8 +38,10 @@
     HKObjectType *energyCount = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned];
     NSSet *healthSet = [NSSet setWithObjects:stepCount, weightCount, disCount, flightsClimbedCount, energyCount, nil];
     
+    NSSet *writeSet = [NSSet setWithObjects:weightCount, energyCount, nil];
+    
     //从健康中获取权限
-    [self.healthStore requestAuthorizationToShareTypes:nil readTypes:healthSet completion:^(BOOL success, NSError * _Nullable error) {
+    [self.healthStore requestAuthorizationToShareTypes:writeSet readTypes:healthSet completion:^(BOOL success, NSError * _Nullable error) {
         handle(success);
     }];
 }
@@ -68,6 +70,7 @@
             }
             
             double count = 0;
+            double mintue = 0;
             NSString *pre = [dateFormatter stringFromDate:[results firstObject].startDate];
             NSMutableArray *array = [NSMutableArray array];
             
@@ -77,6 +80,7 @@
                 HKQuantity *quantity = obj.quantity;
                 NSString *stepStr = [NSString stringWithFormat:@"%@", quantity];
                 NSString *stepCount = [[stepStr componentsSeparatedByString:@" "] firstObject];
+                mintue += [self p_getActivityTimeWithFirstTime:obj.startDate secondTime:obj.endDate];
                 if ([pre isEqualToString:[dateFormatter stringFromDate:obj.startDate]]) {
                     count += [stepStr doubleValue];
                     if (motionType == RUNWeightType) {
@@ -121,9 +125,9 @@
                                    @"value" : @(count)}];
             }
             
-            handle(array);
+            handle(array, mintue);
         } else {
-            handle(nil);
+            handle(nil, 0);
         }
     }];
     
@@ -154,13 +158,41 @@
     return motion;
 }
 
-#pragma mark - Get Step Count
-- (void)getHealthWeightCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate type:(RUNDateType)type resultHandle:(RUNDataBlock)handle {
-   [self p_getHealthWeightCountFromDate:fromDate toDate:toDate type:type resultHandle:handle];
+- (CGFloat)p_getActivityTimeWithFirstTime:(NSDate *)firstDate secondTime:(NSDate *)secondDate {
+    NSInteger second = [secondDate timeIntervalSinceDate:firstDate];
+    double time = second / 60.0;
+    
+    return time;
 }
 
-- (void)p_getHealthWeightCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate type:(RUNDateType)type resultHandle:(RUNDataBlock)handle {
-   
+#pragma mark - Save Data
+- (void)saveWeightWithValue:(double)value withDate:(NSDate *)date handle:(RUNSaveDataBlock)block {
+    HKQuantityType  *hkQuantityType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
+    HKQuantity      *hkQuantity = [HKQuantity quantityWithUnit:[HKUnit gramUnitWithMetricPrefix:HKMetricPrefixKilo] doubleValue:value];
+
+    HKQuantitySample *weightSample = [HKQuantitySample quantitySampleWithType:hkQuantityType quantity:hkQuantity
+                                                                    startDate:date endDate:date];
+    
+    [self.healthStore saveObject:weightSample withCompletion:^(BOOL success, NSError * _Nullable error) {
+        if (block != nil) {
+            block(success, error);
+        }
+    }];
+}
+
+- (void)saveEnergyWithValue:(double)value handle:(RUNSaveDataBlock)block {
+    NSDate          *now = [NSDate date];
+    HKQuantityType  *hkQuantityType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned];
+    HKQuantity      *hkQuantity = [HKQuantity quantityWithUnit:[HKUnit kilocalorieUnit] doubleValue:value];
+    
+    HKQuantitySample *weightSample = [HKQuantitySample quantitySampleWithType:hkQuantityType quantity:hkQuantity
+                                                                    startDate:now endDate:now];
+    
+    [self.healthStore saveObject:weightSample withCompletion:^(BOOL success, NSError * _Nullable error) {
+        if (block != nil) {
+            block(success, error);
+        }
+    }];
 }
 
 @end

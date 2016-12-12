@@ -7,12 +7,12 @@
 //
 
 #import "RUNLockViewController.h"
+#import "SVProgressHUD.h"
 
 @interface RUNLockViewController ()
 
 @property (nonatomic, strong)   UILabel *messageLabel;
 @property (nonatomic, copy)     NSArray *messages;
-@property (nonatomic, assign)   BOOL    isOpen;
 
 @end
 
@@ -35,7 +35,6 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
-    self.isOpen = NO;
     
     [self p_setUI];
 }
@@ -47,14 +46,6 @@
 
 #pragma mark - Set UI Method
 - (void)p_setUI {
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"health"]];
-    [self.view addSubview:imageView];
-    
-    [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view.centerX);
-        make.top.equalTo(self.view.top).offset(60);
-        make.width.height.equalTo(60);
-    }];
     
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.text = @"数据同步说明";
@@ -64,14 +55,15 @@
     [self.view addSubview:titleLabel];
     
     [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(imageView.bottom).offset(60);
+        make.top.equalTo(self.view.top).offset(60);
         make.left.equalTo(self.view.left).offset(21);
         make.width.equalTo(96);
         make.height.equalTo(22);
     }];
     
     self.messageLabel = [[UILabel alloc] init];
-    self.messageLabel.text = self.messages[0];
+    self.messageLabel.text = @"同步数据至云端: 将本地数据同步到云端。\n同步数据至本地: 将云端数据同步到本地。";
+    self.messageLabel.textAlignment = NSTextAlignmentCenter;
     self.messageLabel.numberOfLines = 0;
     self.messageLabel.font = [UIFont systemFontOfSize:14.f];
     self.messageLabel.textColor = [UIColor colorWithRed:74 / 255.0 green:74 / 255.0 blue:74 / 255.0 alpha:1];
@@ -86,15 +78,30 @@
     }];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button setTitle:@"开启健康数据同步" forState:UIControlStateNormal];
+    [button setTitle:@"同步数据至云端" forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:14.f];
     button.backgroundColor = [UIColor colorWithRed:86 / 255.0 green:209 / 255.0 blue:240 / 255.0 alpha:1];
-    [button addTarget:self action:@selector(p_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(p_upButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
     
     [button mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.messageLabel.bottom).offset(50);
+        make.top.equalTo(self.messageLabel.bottom).offset(60);
+        make.centerX.equalTo(self.view.centerX);
+        make.width.equalTo(ViewWidth / 2.0);
+        make.height.equalTo(ViewHeight / 15.0);
+    }];
+    
+    UIButton *downButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [downButton setTitle:@"同步数据至本地" forState:UIControlStateNormal];
+    [downButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    downButton.titleLabel.font = [UIFont systemFontOfSize:14.f];
+    downButton.backgroundColor = [UIColor colorWithRed:86 / 255.0 green:209 / 255.0 blue:240 / 255.0 alpha:1];
+    [downButton addTarget:self action:@selector(p_downButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:downButton];
+    
+    [downButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(button.bottom).offset(30);
         make.centerX.equalTo(self.view.centerX);
         make.width.equalTo(ViewWidth / 2.0);
         make.height.equalTo(ViewHeight / 15.0);
@@ -102,16 +109,33 @@
 }
 
 #pragma mark - Button Action
-- (void)p_buttonAction:(UIButton *)button {
-    if (!self.isOpen) {
-        [button setTitle:@"关闭健康数据同步" forState:UIControlStateNormal];
-        self.messageLabel.text = self.messages[1];
-        self.isOpen = YES;
+static float progress = 0.0f;
+- (void)p_upButtonAction:(UIButton *)button {
+    progress = 0.0f;
+    [SVProgressHUD showProgress:0 status:@"同步中"];
+    [self performSelector:@selector(increaseProgress) withObject:nil afterDelay:0.1f];
+}
+
+- (void)p_downButtonAction:(UIButton *)button {
+    progress = 0.0f;
+    [SVProgressHUD showProgress:0 status:@"同步中"];
+    [self performSelector:@selector(increaseProgress) withObject:nil afterDelay:0.1f];
+}
+
+- (void)increaseProgress {
+    progress += 0.05f;
+    [SVProgressHUD showProgress:progress status:@"同步中"];
+    
+    if(progress < 1.0f){
+        [self performSelector:@selector(increaseProgress) withObject:nil afterDelay:0.1f];
     } else {
-        [button setTitle:@"开启健康数据同步" forState:UIControlStateNormal];
-        self.messageLabel.text = self.messages[0];
-        self.isOpen = NO;
+        [self performSelector:@selector(dismiss) withObject:nil afterDelay:0.4f];
     }
 }
+
+- (void)dismiss {
+    [SVProgressHUD dismiss];
+}
+
 
 @end

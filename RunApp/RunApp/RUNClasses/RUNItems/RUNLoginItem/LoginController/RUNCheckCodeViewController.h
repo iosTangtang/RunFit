@@ -10,4 +10,6 @@
 
 @interface RUNCheckCodeViewController : UIViewController
 
+@property (nonatomic, copy) NSString    *phoneStr;
+
 @end

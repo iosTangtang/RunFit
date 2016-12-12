@@ -10,4 +10,7 @@
 
 @interface RUNChangePassViewController : UIViewController
 
+@property (nonatomic, copy) NSString    *phoneStr;
+@property (nonatomic, copy) NSString    *smsCode;
+
 @end

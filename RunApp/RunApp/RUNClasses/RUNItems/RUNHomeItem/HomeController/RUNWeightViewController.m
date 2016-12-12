@@ -12,19 +12,21 @@
 #import "RUNTimeManager.h"
 #import "SVProgressHUD.h"
 #import "RUNUserModel.h"
+#import "RUNHealthDataManager.h"
+#import "RUNHistoryModel.h"
 
 static NSString *const identifity = @"RUNWeightViewController";
 
 @interface RUNWeightViewController () <UITableViewDelegate, UITableViewDataSource, RUNPickerViewDelegate>
 
-@property (nonatomic, strong) RUNUserModel      *userModel;
-@property (nonatomic, copy)   NSArray           *datas;
-@property (nonatomic, strong) UITableView       *tableView;
-@property (nonatomic, copy)   NSArray           *titles;
-@property (nonatomic, copy)   NSMutableArray    *values;
-@property (nonatomic, copy)   NSString          *weightText;
-@property (nonatomic, copy)   NSString          *dateText;
-@property (nonatomic, copy)   NSString          *timeText;
+@property (nonatomic, strong) RUNUserModel          *userModel;
+@property (nonatomic, copy)   NSArray               *datas;
+@property (nonatomic, strong) UITableView           *tableView;
+@property (nonatomic, copy)   NSArray               *titles;
+@property (nonatomic, copy)   NSMutableArray        *values;
+@property (nonatomic, copy)   NSString              *weightText;
+@property (nonatomic, copy)   NSString              *dateText;
+@property (nonatomic, copy)   NSString              *timeText;
 
 @end
 
@@ -62,9 +64,37 @@ static NSString *const identifity = @"RUNWeightViewController";
     [SVProgressHUD showWithStatus:@"保存中.."];
     self.userModel.weight = self.weightText;
     [self.userModel saveData];
-    [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:RUNUSERNOTIFICATION object:nil];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self p_saveData];
+}
+
+#pragma mark - Save Method
+- (void)p_saveData {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy年MM月dd日 HH:mm";
+    NSString *timeStr = [NSString stringWithFormat:@"%@ %@", self.dateText, [[self.timeText componentsSeparatedByString:@" "] lastObject]];
+    NSDate *timeDate = [dateFormatter dateFromString:timeStr];
+    RUNHealthDataManager *manager = [[RUNHealthDataManager alloc] init];
+    double value = [[[self.weightText componentsSeparatedByString:@"k"] firstObject] doubleValue];
+    __weak typeof(self) weakSelf = self;
+    [manager saveWeightWithValue:value withDate:timeDate handle:^(BOOL isSuccess, NSError *error) {
+        if (isSuccess) {
+            RUNHistoryModel *model = [[RUNHistoryModel alloc] init];
+            model.type = @"体重";
+            model.date = timeDate; 
+            model.duration = @"0";
+            model.value = weakSelf.weightText;
+            model.speed = @"0";
+            model.step = @"0";
+            model.kcal = @"0";
+            model.points = @[@"0"];
+            [model saveDataWithHandle:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:RUNUSERNOTIFICATION object:nil];
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }
+    }];
 }
 
 #pragma mark - Set TableView
@@ -121,18 +151,19 @@ static NSString *const identifity = @"RUNWeightViewController";
                              [manager run_getCurrentDateWithFormatter:@"MM"],
                              [manager run_getCurrentDateWithFormatter:@"dd"]];
         pick.dValue = @[@"1000", @"1", @"1"];
+        pick.isDate = YES;
     } else if(indexPath.row == 1) {
         pick.separator = @" ";
         pick.isTime = YES;
         NSString *value;
-        if ([[manager run_getCurrentDateWithFormatter:@"a"] isEqualToString:@"AM"]) {
+        if ([[manager run_getCurrentDateWithFormatter:@"a"] isEqualToString:@"上午"]) {
             value = @"0";
         } else {
             value = @"1";
         }
         pick.defaultData = @[value,[manager run_getCurrentDateWithFormatter:@"HH"],
                              [manager run_getCurrentDateWithFormatter:@"mm"]];
-        pick.dValue = @[@"0", @"1", @"0"];
+        pick.dValue = @[@"0", @"0", @"0"];
     } else {
         pick.separator = @".";
         NSString *weight = [[self.userModel.weight componentsSeparatedByString:@"kg"] firstObject];
@@ -192,8 +223,12 @@ static NSString *const identifity = @"RUNWeightViewController";
         for (int index = 1; index < 32; index++) {
             [days addObject:[NSString stringWithFormat:@"%d日", index]];
         }
-        for (int index = 1; index < 25; index++) {
-            [hours addObject:[NSString stringWithFormat:@"%d", index]];
+        for (int index = 0; index < 24; index++) {
+            if (index < 10) {
+                [hours addObject:[NSString stringWithFormat:@"0%d", index]];
+            } else {
+                [hours addObject:[NSString stringWithFormat:@"%d", index]];
+            }
         }
         for (int index = 0; index < 60; index++) {
             if (index < 10) {
@@ -203,7 +238,7 @@ static NSString *const identifity = @"RUNWeightViewController";
             }
             
         }
-        _datas = @[@[years, months, days], @[@[@"AM", @"PM"], hours, mins], @[weight1, weight2, @[@"kg"]]];
+        _datas = @[@[years, months, days], @[@[@"上午", @"下午"], hours, mins], @[weight1, weight2, @[@"kg"]]];
     }
     return _datas;
 }

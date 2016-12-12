@@ -31,8 +31,13 @@ static CGFloat const animationDuration = 1.f;
     NSString *_stepCount;
     NSDate  *_stepDate;
     CGFloat _activityTime;
+    CGFloat _oriEnergy;
     NSInteger  _count;
     NSMutableArray *_barDatas;
+    BOOL _isInWeek;
+    double _stepSum;
+    double _energySum;
+    double _disSum;
 }
 
 @property (nonatomic, strong) RUNCircleView                     *circleView;
@@ -72,8 +77,9 @@ static CGFloat const animationDuration = 1.f;
     
     __weak typeof(self) weakSelf = self;
     [self.healthManager getAuthorizationWithHandle:^(BOOL isSuccess) {
+        NSDate *current = [weakSelf.timeManager run_getDateFromString:[weakSelf.timeManager run_getCurrentDate] withFormatter:@"yyyy年MM月dd日"];
         weakSelf.isSuccess = isSuccess;
-        [weakSelf p_setBarDataWithNowDate:[NSDate date] isChange:NO];
+        [weakSelf p_setBarDataWithNowDate:current isChange:NO];
     }];
     
 }
@@ -254,6 +260,7 @@ static CGFloat const animationDuration = 1.f;
     [self.cmPedometer startPedometerUpdatesFromDate:[self stepDate] withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (_count == 0) {
+                _oriEnergy = [self.userModel.weight doubleValue] * ([pedometerData.distance doubleValue] / 1000) * 1.036;
                 _activityTime = [pedometerData.averageActivePace doubleValue] / 60 * [pedometerData.distance doubleValue];
                 _count++;
             }
@@ -263,10 +270,13 @@ static CGFloat const animationDuration = 1.f;
             self.circleView.nowStep = [pedometerData.numberOfSteps stringValue];
             self.disLabel.mainTitle = [NSString stringWithFormat:@"%.1f", [pedometerData.distance doubleValue] / 1000];
             self.timeLabel.mainTitle = [NSString stringWithFormat:@"%.0f", timeValue];
-//            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] *
-//                                        ([pedometerData.distance doubleValue] / 1000) * 1.036];
-            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] * timeValue / 60 *
-                                        (25 / (400 / ([pedometerData.distance doubleValue] / timeValue)))];
+            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] *
+                                        ([pedometerData.distance doubleValue] / 1000) * 1.036];
+            if (_count > 0) {
+                [self.healthManager saveEnergyWithValue:[self.kcalLabel.mainTitle doubleValue] - _oriEnergy handle:nil];
+            }
+//            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] * timeValue / 60 *
+//                                        (25 / (400 / ([pedometerData.distance doubleValue] / timeValue)))];
 //            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", 0.43 * [self.userModel.height doubleValue] +
 //                                        0.57 * [self.userModel.weight doubleValue] +
 //                                        0.26 * ([pedometerData.numberOfSteps doubleValue] / timeValue) +
@@ -286,60 +296,86 @@ static CGFloat const animationDuration = 1.f;
         return ;
     }
     
-    NSDate *nowDay = nil;
-    NSDate *nextDay = nil;
+    NSDate *nowDay = nowDate;
+    NSDate *nextDay = [nowDate dateByAddingTimeInterval:86400];
     
-    if (!isChange) {
-        NSCalendar *calendar = [NSCalendar currentCalendar];
-        NSUInteger flags = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
-        NSDateComponents *dateComponents = [calendar components:flags fromDate:nowDate];
-        NSInteger hour = dateComponents.hour;
-        NSInteger minute = dateComponents.minute;
-        NSInteger second = dateComponents.second;
-        NSInteger dayTime = 86400 - (hour * 3600 + minute * 60 + second);
-        nowDay = [NSDate dateWithTimeIntervalSinceNow:dayTime - 86400];
-        nextDay = [NSDate dateWithTimeIntervalSinceNow:dayTime];
-    } else {
-        nowDay = nowDate;
-        nextDay = [nowDate dateByAddingTimeInterval:86400];
+    _barDatas = nil;
+    _barDatas = [NSMutableArray array];
+    
+    [self p_getHealthData:RUNStepType fromDate:nowDay toDate:nextDay isChange:isChange];
+    if (isChange) {
+        [self p_getHealthData:RUNDistanceType fromDate:nowDay toDate:nextDay isChange:YES];
     }
     
-    if (_barDatas == nil) {
-        _barDatas = [NSMutableArray array];
-    } else {
-        [_barDatas removeAllObjects];
-    }
-    
-    [self.healthManager getHealthCountFromDate:nowDay toDate:nextDay type:RUNDateDayType motionType:RUNStepType resultHandle:^(NSArray *datas) {
+}
+
+#pragma mark - Get Health Data
+- (void)p_getHealthData:(RUNMotionType)motionType fromDate:(NSDate *)nowDay toDate:(NSDate *)nextDay isChange:(BOOL)isChange {
+    [self.healthManager getHealthCountFromDate:nowDay toDate:nextDay type:RUNDateDayType motionType:motionType resultHandle:^(NSArray *datas, double mintue) {
+        double sum = 0;
         if (datas != nil) {
-            int count = 0;
-            for (int index = 0; index < 24; index++) {
-                if (count >= datas.count) {
+            if (motionType == RUNStepType) {
+                for (int index = 0; index < 24; index++) {
                     [_barDatas addObject:@"0"];
-                    continue;
-                }
-                NSMutableString *indexStr = [NSMutableString stringWithFormat:@"%d", index];
-                if (index < 10) {
-                    [indexStr insertString:@"0" atIndex:0];
-                }
-                NSNumber *value = [datas[count] objectForKey:indexStr];
-                if (value == nil) {
-                    [_barDatas addObject:@"0"];
-                } else {
-                    [_barDatas addObject:[NSString stringWithFormat:@"%@", value]];
-                    count++;
                 }
             }
+            for (NSDictionary *obj in datas) {
+                NSArray *keys = [obj allKeys];
+                if (motionType == RUNStepType) {
+                    NSInteger dataCount = [keys[0] integerValue];
+                    [_barDatas replaceObjectAtIndex:dataCount withObject:[obj objectForKey:keys[0]]];
+                }
+                sum += [[obj objectForKey:keys[0]] doubleValue];
+            }
+            
         } else {
-            [_barDatas addObject:@"0"];
+            if (motionType == RUNStepType) {
+                [_barDatas addObject:@"0"];
+            }
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (isChange) {
+                [self p_updateView:motionType sum:sum];
+            }
+            if (_isInWeek) {
+                [self p_updateView:RUNStepType sum:sum];
+            }
+            if (motionType == RUNStepType && isChange) {
+               self.timeLabel.mainTitle = [NSString stringWithFormat:@"%.0f", mintue];
+                [self.timeLabel setLabelAnimation];
+            }
             [self.barChart removeFromSuperview];
             [self p_addBarChart];
         });
-
     }];
+}
+
+#pragma mark - Update View
+- (void)p_updateView:(RUNMotionType)motionType sum:(double)sum {
+    switch (motionType) {
+        case RUNStepType: {
+            _stepSum = sum;
+            self.circleView.nowStep = [NSString stringWithFormat:@"%.0f", _stepSum];
+        }
+            break;
+        case RUNEnergyType: {
+            _energySum = sum;
+            
+        }
+            break;
+        case RUNDistanceType: {
+            _disSum = sum;
+            self.disLabel.mainTitle = [NSString stringWithFormat:@"%.1f", _disSum / 1000];
+            [self.disLabel setLabelAnimation];
+            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] *
+                                                                        (_disSum / 1000) * 1.036];
+            [self.kcalLabel setLabelAnimation];
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - Bar Item Action
@@ -376,32 +412,39 @@ static CGFloat const animationDuration = 1.f;
 
 #pragma mark - Change Data
 - (void)p_changeDataWithDate:(NSDate *)nowDate {
+    _isInWeek = NO;
+    _count = 0;
     NSDate *current = [self.timeManager run_getDateFromString:[self.timeManager run_getCurrentDate] withFormatter:@"yyyy年MM月dd日"];
+    NSDate *earlierWeakDate = [current dateByAddingTimeInterval:- 86400 * 7];
     if (![nowDate isEqualToDate:current]) {
         [self.cmPedometer stopPedometerUpdates];
-        NSDate *toDate = [nowDate dateByAddingTimeInterval:86400];
-        [self p_getStepCountFromDate:nowDate toDate:toDate];
+        if ([[nowDate earlierDate:earlierWeakDate] isEqualToDate:earlierWeakDate]) {
+            _isInWeek = YES;
+            NSDate *toDate = [nowDate dateByAddingTimeInterval:86400];
+            [self p_getStepCountFromDate:nowDate toDate:toDate isChange:NO];
+        } else {
+            [self p_setBarDataWithNowDate:nowDate isChange:YES];
+        }
     } else {
-        [self p_setBarDataWithNowDate:[NSDate date] isChange:NO];
+        [self p_setBarDataWithNowDate:nowDate isChange:NO];
         [self p_startUpdateCount];
     }
 }
 
 #pragma mark - Get Step Count
-- (void)p_getStepCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate {
+- (void)p_getStepCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate isChange:(BOOL)isChange {
     [self.cmPedometer queryPedometerDataFromDate:fromDate toDate:toDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             CGFloat timeValue = [pedometerData.averageActivePace doubleValue] / 60 * [pedometerData.distance doubleValue];
-            self.circleView.nowStep = [pedometerData.numberOfSteps stringValue];
             self.disLabel.mainTitle = [NSString stringWithFormat:@"%.1f", [pedometerData.distance doubleValue] / 1000];
             self.timeLabel.mainTitle = [NSString stringWithFormat:@"%.0f", timeValue];
-            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] * timeValue / 60 *
-                                        (25 / (400 / ([pedometerData.distance doubleValue] / timeValue)))];
+            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f",[self.userModel.weight doubleValue] *
+                                                                        ([pedometerData.distance doubleValue] / 1000) * 1.036];
             
             [self.disLabel setLabelAnimation];
             [self.timeLabel setLabelAnimation];
             [self.kcalLabel setLabelAnimation];
-            [self p_setBarDataWithNowDate:fromDate isChange:YES];
+            [self p_setBarDataWithNowDate:fromDate isChange:NO];
         });
     }];
 }

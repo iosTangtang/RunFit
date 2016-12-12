@@ -8,6 +8,8 @@
 
 #import "RUNCheckCodeViewController.h"
 #import "RUNChangePassViewController.h"
+#import "UITextField+Check.h"
+#import "SVProgressHUD.h"
 
 @interface RUNCheckCodeViewController () <UITextFieldDelegate>
 
@@ -102,6 +104,10 @@
 
 #pragma mark - Next Action
 - (void)p_nextAction:(UIButton *)button {
+    if (![self.phoneNumber valiSMSCode]) {
+        [SVProgressHUD showErrorWithStatus:@"验证码格式有误!"];
+        return;
+    }
     RUNChangePassViewController *changeVC = [[RUNChangePassViewController alloc] init];
     changeVC.title = @"密码";
     [self.navigationController pushViewController:changeVC animated:YES];

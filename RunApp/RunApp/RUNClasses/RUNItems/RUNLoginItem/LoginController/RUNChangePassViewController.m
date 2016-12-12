@@ -7,6 +7,8 @@
 //
 
 #import "RUNChangePassViewController.h"
+#import "UITextField+Check.h"
+#import "SVProgressHUD.h"
 
 @interface RUNChangePassViewController ()<UITextFieldDelegate>
 
@@ -35,7 +37,7 @@
 - (void)p_setUIMethod {
     self.passWord = [[UITextField alloc] init];
     self.passWord.backgroundColor = [UIColor whiteColor];
-    self.passWord.placeholder = @"输入新密码";
+    self.passWord.placeholder = @"输入新密码(6-16位，不含空格)";
     self.passWord.clearButtonMode = YES;
     self.passWord.secureTextEntry = YES;
     self.passWord.delegate = self;
@@ -92,6 +94,16 @@
 
 #pragma mark - buttonAction
 - (void)p_overAction {
+    if (![self.passWord valiPassword] || ![self.passWordAgain valiPassword]) {
+        [SVProgressHUD showErrorWithStatus:@"密码格式有误!"];
+        return ;
+    }
+    
+    if (![self.passWord.text isEqualToString:self.passWordAgain.text]) {
+        [SVProgressHUD showErrorWithStatus:@"两次密码不相同!"];
+        return ;
+    }
+    
     [self.passWord resignFirstResponder];
     [self.passWordAgain resignFirstResponder];
     [self.navigationController popToRootViewControllerAnimated:YES];

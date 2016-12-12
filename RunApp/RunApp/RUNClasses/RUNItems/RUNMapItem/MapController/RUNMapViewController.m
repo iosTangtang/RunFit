@@ -12,7 +12,9 @@
 #import "RUNMapStartView.h"
 #import "RUNMapStopView.h"
 #import "RUNUserModel.h"
+#import "RUNHistoryModel.h"
 #import "CLLocation+Sino.h"
+#import "SVProgressHUD.h"
 #import <MapKit/MapKit.h>
 #import <CoreMotion/CoreMotion.h>
 
@@ -131,25 +133,82 @@
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([self.currlocation coordinate], 2500, 2500);
     [self.mapView setRegion:region animated:YES];
     
-    if (_isRun) {
-        [self.lineArray addObject:[NSString stringWithFormat:@"%f, %f", [self.currlocation coordinate].latitude,
-                                   [self.currlocation coordinate].longitude]];
-        if (self.routeLine != nil) {
-            self.routeLine = nil;
-        }
-        [self p_loadRoute];
-        if (self.routeLine != nil) {
-            [self.mapView addOverlay:self.routeLine];
-        }
-    }
+    [self p_drawRouteLine];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     NSLog(@"%@", error);
 }
 
+#pragma mark - Start Draw Route Line 
+- (void)p_drawRouteLine {
+    if (!_isRun) {
+        return ;
+    }
+    [self.lineArray addObject:[NSString stringWithFormat:@"%f, %f", [self.currlocation coordinate].latitude,
+                               [self.currlocation coordinate].longitude]];
+    if (self.routeLine != nil) {
+        self.routeLine = nil;
+    }
+    [self p_loadRoute];
+    if (self.routeLine != nil) {
+        [self.mapView addOverlay:self.routeLine];
+    }
+}
+
 #pragma mark - RUNMapStartDelegate
 - (void)startButtonClick:(NSInteger)selected {
+    [SVProgressHUD showWithStatus:@"正在定位中..."];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [SVProgressHUD dismiss];
+        [self p_showGPSSignal:selected];
+    });
+}
+
+- (void)p_showGPSSignal:(NSInteger)selected {
+    if (self.currlocation.horizontalAccuracy < 25 && self.currlocation.horizontalAccuracy > 0) {
+        [self p_start:selected];
+        return;
+    }
+    __weak typeof(self) weakSelf = self;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"GPS信号弱，是否继续?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"放弃" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf.navigationController setNavigationBarHidden:NO];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [weakSelf.timer invalidate];
+        [weakSelf.cmPedometer stopPedometerUpdates];
+    }];
+    
+    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"继续" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        [SVProgressHUD setFont:[UIFont systemFontOfSize:20.f]];
+        [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+        for (int index = 0; index < 4; index ++) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(index * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (index == 3) {
+                    [SVProgressHUD showImage:nil status:@"Start!"];
+                } else {
+                    [SVProgressHUD showImage:nil status:[NSString stringWithFormat:@"%d", 3 - index]];
+                }
+                
+            });
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf p_start:selected];
+            [weakSelf p_reloadSVP];
+        });
+        
+    }];
+    
+    [alert addAction:noAction];
+    [alert addAction:yesAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)p_start:(NSInteger)selected {
     [self.locationManager stopUpdatingLocation];
     _isRun = YES;
     [self.locationManager startUpdatingLocation];
@@ -174,14 +233,29 @@
         yesAction = [UIAlertAction actionWithTitle:@"继续" style:UIAlertActionStyleCancel handler:nil];
         
     } else {
+        [self.timer invalidate];
+        [self.cmPedometer stopPedometerUpdates];
         message = @"是否保存数据?";
         yesAction = [UIAlertAction actionWithTitle:@"保存" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            RUNHistoryMapViewController *hisMapVC = [[RUNHistoryMapViewController alloc] init];
-            hisMapVC.isToRoot = YES;
-            hisMapVC.isRun = _selected;
-            hisMapVC.datas = self.stopView.datas;
-            hisMapVC.lineDatas = self.lineArray;
-            [weakSelf.navigationController pushViewController:hisMapVC animated:YES];
+            [SVProgressHUD showWithStatus:@"保存数据中"];
+            RUNHistoryModel *model = [weakSelf p_setHistoryModel];
+            [model saveDataWithHandle:^(BOOL isSucceed) {
+                if (isSucceed) {
+                    [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
+                    RUNHistoryMapViewController *hisMapVC = [[RUNHistoryMapViewController alloc] init];
+                    hisMapVC.isToRoot = YES;
+                    hisMapVC.isRun = _selected;
+                    hisMapVC.datas = self.stopView.datas;
+                    hisMapVC.lineDatas = self.lineArray;
+                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                    dateFormatter.dateFormat = @"yyyy年MM月dd日 HH:MM:ss";
+                    hisMapVC.dateTitle = [dateFormatter stringFromDate:model.date];
+                    [weakSelf.navigationController pushViewController:hisMapVC animated:YES];
+                } else {
+                    [SVProgressHUD showErrorWithStatus:@"保存失败!"];
+                }
+            }];
+            
         }];
         
     }
@@ -192,8 +266,6 @@
     noAction = [UIAlertAction actionWithTitle:@"放弃" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf.navigationController setNavigationBarHidden:NO];
         [weakSelf.navigationController popViewControllerAnimated:YES];
-        [weakSelf.timer invalidate];
-        [weakSelf.cmPedometer stopPedometerUpdates];
     }];
     [alert addAction:noAction];
     [alert addAction:yesAction];
@@ -273,6 +345,28 @@
     free(routeArray);
 }
 
+#pragma mark - Reload SVP
+- (void)p_reloadSVP {
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:74 / 255.0 green:74 / 255.0 blue:74 / 255.0 alpha:1]];
+    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
+    [SVProgressHUD setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
+}
+
+#pragma mark - Set Model
+- (RUNHistoryModel *)p_setHistoryModel {
+    RUNHistoryModel *model = [[RUNHistoryModel alloc] init];
+    model.type = (!_selected) == 0 ? @"步行/跑步" : @"骑行";
+    model.date = [NSDate date];
+    model.value = self.stopView.datas[1];
+    model.duration = self.stopView.datas[0];
+    model.kcal = self.stopView.datas[2];
+    model.speed = (!_selected) == 1 ? self.stopView.datas[3] : @"0";
+    model.step = (!_selected) == 0 ? self.stopView.datas[3] : @"0";
+    model.points = self.lineArray;
+    return model;
+}
+
 #pragma mark - Lazy Load
 - (MKMapView *)mapView {
     if (_mapView == nil) {
@@ -293,7 +387,7 @@
         _locationManager.desiredAccuracy = kCLLocationAccuracyBest;     //精度设置
         _locationManager.distanceFilter = kCLDistanceFilterNone;        //设备移动后获得位置信息的最小距离
         _locationManager.delegate = self;
-        [_locationManager requestWhenInUseAuthorization];                  //弹出用户授权对话框，使用程序期间授权
+        [_locationManager requestWhenInUseAuthorization];               //弹出用户授权对话框，使用程序期间授权
     }
     return _locationManager;
 }

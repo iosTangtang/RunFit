@@ -14,5 +14,6 @@
 @property (nonatomic, assign) BOOL      isRun;
 @property (nonatomic, copy)   NSArray   *datas;
 @property (nonatomic, copy)   NSArray   *lineDatas;
+@property (nonatomic, copy)   NSString  *dateTitle;
 
 @end

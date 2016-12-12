@@ -85,6 +85,7 @@
         [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
         [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:74 / 255.0 green:74 / 255.0 blue:74 / 255.0 alpha:1]];
         [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
+        [SVProgressHUD setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
         
         [self p_setTabBar];
     }
