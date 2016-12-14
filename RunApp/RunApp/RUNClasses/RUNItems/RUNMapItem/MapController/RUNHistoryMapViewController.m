@@ -58,11 +58,11 @@
     
     CLLocationCoordinate2D coordinate = [self p_stringToCoor:[self.lineDatas firstObject]];
     CLLocationCoordinate2D lastCoor = [self p_stringToCoor:[self.lineDatas lastObject]];
-    CGFloat distance = sqrt(pow(lastCoor.latitude - coordinate.latitude, 2) + pow(lastCoor.longitude - coordinate.longitude, 2));
+//    CGFloat distance = sqrt(pow(lastCoor.latitude - coordinate.latitude, 2) + pow(lastCoor.longitude - coordinate.longitude, 2));
     CLLocationCoordinate2D locaCoor = CLLocationCoordinate2DMake((coordinate.latitude + lastCoor.latitude) / 2.0,
                                                                  (coordinate.longitude + lastCoor.longitude) / 2.0);
-    distance = distance < 10 ? distance * 750 : distance;
-    [self.mapView setRegion:MKCoordinateRegionMakeWithDistance(locaCoor, distance, distance)];
+//    distance = distance < 10 ? distance * 750 : distance;
+    [self.mapView setRegion:MKCoordinateRegionMakeWithDistance(locaCoor, 1000, 1000)];
 }
 
 - (void)p_setHeadView {

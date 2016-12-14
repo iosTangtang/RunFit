@@ -8,7 +8,6 @@
 
 #import "RUNChildViewController.h"
 #import "RUNAllDataViewController.h"
-#import "RUNHealthDataManager.h"
 #import "YXLChartsFactory.h"
 #import "YXLBaseChart.h"
 #import "RUNUserModel.h"
@@ -23,7 +22,6 @@ static CGFloat const lineChartLineWidth = 6.f;
 }
 
 @property (nonatomic, strong) UISegmentedControl        *segmented;
-@property (nonatomic, strong) RUNHealthDataManager      *healthManager;
 @property (nonatomic, strong) YXLBaseChart              *barChart;
 @property (nonatomic, strong) UILabel                   *aver;
 @property (nonatomic, strong) UILabel                   *total;
@@ -31,7 +29,6 @@ static CGFloat const lineChartLineWidth = 6.f;
 @property (nonatomic, strong) NSMutableArray            *dateCache;
 @property (nonatomic, strong) NSMutableArray            *dateXCache;
 @property (nonatomic, assign) BOOL                      isSuccess;
-@property (nonatomic, assign) RUNMotionType             motionType;
 @property (nonatomic, strong) RUNUserModel              *userModel;
 @property (nonatomic, strong) RUNDataBase               *dataBase;
 
@@ -47,17 +44,10 @@ static CGFloat const lineChartLineWidth = 6.f;
     [self dateXCache];
     
     [self p_setupSegmented];
-//    [self p_dataOperationWithIndex:0];
+    [self p_dataOperationWithIndex:0];
     [self p_setChartView];
     [self p_setAllDataButton];
     [self p_label];
-    
-    // 请求权限
-//    __weak typeof(self) weakSelf = self;
-//    [self.healthManager getAuthorizationWithHandle:^(BOOL isSuccess) {
-//        weakSelf.isSuccess = isSuccess;
-//        [weakSelf p_dataOperationWithIndex:0];
-//    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -100,7 +90,7 @@ static CGFloat const lineChartLineWidth = 6.f;
 - (void)p_label {
     UILabel *averLabel = [[UILabel alloc] init];
     averLabel.text = @"平均值:";
-    if (self.motionType == RUNWeightType) {
+    if ([self.title isEqualToString:@"体重"]) {
         averLabel.text = @"最新值:";
     }
     averLabel.textColor = [UIColor colorWithRed:74 / 255.0 green:74 / 255.0 blue:74 / 255.0 alpha:1];
@@ -193,26 +183,11 @@ static CGFloat const lineChartLineWidth = 6.f;
             break;
     }
     
-//    if ([self.barChart.dataArray isEqualToArray:@[@"0"]]) {
-//        [self p_dataOperationWithIndex:index];
-//    } else {
-//        [self.barChart removeFromSuperview];
-//        NSArray *array = [self p_getAverAndTotalWithArray:self.barChart.dataArray];
-//        self.aver.text = [NSString stringWithFormat:@"%.0f %@", [array[1] doubleValue], self.unit];
-//        self.total.text = [NSString stringWithFormat:@"%.0f %@", [array[0] doubleValue], self.unit];
-//        if (self.motionType == RUNDistanceType || self.motionType == RUNEnergyType) {
-//            self.aver.text = [NSString stringWithFormat:@"%.1f %@", [array[1] doubleValue] / 1000, self.unit];
-//            self.total.text = [NSString stringWithFormat:@"%.1f %@", [array[0] doubleValue] / 1000, self.unit];
-//        } else if (self.motionType == RUNWeightType) {
-//            self.aver.text = [NSString stringWithFormat:@"%.1f %@", _lastWeight, self.unit];
-//            self.total.text = [NSString stringWithFormat:@"%.1f", _lastWeight / pow([self.userModel.height doubleValue] / 100, 2)];
-//            if (index == 0) {
-//                self.aver.text = [NSString stringWithFormat:@"0.0 %@", self.unit];
-//                self.total.text = @"0.0";
-//            }
-//        }
-//        [self p_setChartView];
-//    }
+    if ([self.barChart.dataArray isEqualToArray:@[@"0"]]) {
+        [self p_dataOperationWithIndex:index];
+    } else {
+        [self p_updateViewDataWithIndex:index];
+    }
 }
 
 #pragma mark - All Data Button Action
@@ -272,76 +247,117 @@ static CGFloat const lineChartLineWidth = 6.f;
 
 #pragma mark - Data Operation
 - (void)p_dataOperationWithIndex:(NSInteger)index {
-//    if (!self.isSuccess) {
-//        return ;
-//    }
-//    if ([self.title isEqualToString:@"步数"]) {
-//        [self p_getMotionDataWithtype:index motionType:self.motionType];
-//    } else if ([self.title isEqualToString:@"体重"]) {
-//        [self p_getMotionDataWithtype:index motionType:self.motionType];
-//    } else if ([self.title isEqualToString:@"公里"]) {
-//        [self p_getMotionDataWithtype:index motionType:self.motionType];
-//    }else if ([self.title isEqualToString:@"楼层"]) {
-//        [self p_getMotionDataWithtype:index motionType:self.motionType];
-//    } else if ([self.title isEqualToString:@"卡路里"]) {
-//        [self p_getMotionDataWithtype:index motionType:self.motionType];
-//    }
-    
+    if ([self.title isEqualToString:@"步数"]) {
+        [self p_getMotionDataWithtype:index withNumber:1];
+    } else if ([self.title isEqualToString:@"体重"]) {
+//        [self p_getMotionDataWithtype:index withNumber:6];
+    } else if ([self.title isEqualToString:@"公里"]) {
+        [self p_getMotionDataWithtype:index withNumber:4];
+    }else if ([self.title isEqualToString:@"楼层"]) {
+        [self p_getMotionDataWithtype:index withNumber:5];
+    } else if ([self.title isEqualToString:@"卡路里"]) {
+        [self p_getMotionDataWithtype:index withNumber:2];
+    }
 }
 
-- (void)p_getMotionDataWithtype:(NSInteger)index motionType:(RUNMotionType)motionType {
-//    NSMutableArray *barData = [NSMutableArray array];
-//    NSArray *dates = [self p_getDateWithIndex:index];
-//    NSArray *cacheDate = self.dateCache[index];
-//    int countX = 0;
-//    if (index == 0) {
-//        countX = 24;
-//    } else if (index == 1) {
-//        countX = 7;
-//    } else if (index == 2) {
-//        countX = 30;
-//    } else {
-//        countX = 12;
-//    }
-//    [self.healthManager getHealthCountFromDate:dates[0] toDate:dates[1] type:index motionType:motionType resultHandle:^(NSArray *datas, double mintue) {
-//        if (dates != nil) {
-//            int count = 0;
-//            for (int index = 0; index < countX; index++) {
-//                if (count >= datas.count) {
-//                    [barData addObject:@"0"];
-//                    continue;
-//                }
-//                
-//                NSNumber *value = [datas[count] objectForKey:cacheDate[index]];
-//                if (value == nil) {
-//                    [barData addObject:@"0"];
-//                } else {
-//                    [barData addObject:[NSString stringWithFormat:@"%@", value]];
-//                    _lastWeight = [value doubleValue];
-//                    count++;
-//                }
-//            }
-//        } else {
-//            [barData addObject:@"0"];
-//        }
-//        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.barChart removeFromSuperview];
-//            NSArray *array = [self p_getAverAndTotalWithArray:barData];
-//            self.barChart.dataArray = barData;
-//            self.aver.text = [NSString stringWithFormat:@"%.0f %@", [array[1] doubleValue], self.unit];
-//            self.total.text = [NSString stringWithFormat:@"%.0f %@", [array[0] doubleValue], self.unit];
-//            if (motionType == RUNDistanceType || motionType == RUNEnergyType) {
-//                self.aver.text = [NSString stringWithFormat:@"%.1f %@", [array[1] doubleValue] / 1000, self.unit];
-//                self.total.text = [NSString stringWithFormat:@"%.1f %@", [array[0] doubleValue] / 1000, self.unit];
-//            } else if (motionType == RUNWeightType) {
-//                self.aver.text = [NSString stringWithFormat:@"%.1f %@", _lastWeight, self.unit];
-//                self.total.text = [NSString stringWithFormat:@"%.1f", _lastWeight / pow([self.userModel.height doubleValue] / 100, 2)];
-//            }
-//            [self.dataCache replaceObjectAtIndex:index withObject:barData];
-//            [self p_setChartView];
-//        });
-//    }];
+- (void)p_getMotionDataWithtype:(NSInteger)index withNumber:(NSInteger)number {
+    NSMutableArray *barData = [NSMutableArray array];
+    NSDateFormatter *dataFormatter = [[NSDateFormatter alloc] init];
+    NSInteger delive = 86400;
+    dataFormatter.dateFormat = @"yyyy-MM-dd";
+    if (index == 3) {
+        dataFormatter.dateFormat = @"yyyy-MM";
+        delive = 86400 * 30;
+    }
+    NSArray *dates = [self p_getDateWithIndex:index];
+    NSArray *datas = [self.dataBase queryWithDataFromDate:dates[0] toDate:dates[1]];
+    int countX = [self p_getCountX:index];
+    NSDate *currentDate = [NSDate date];
+    
+    for (int idx = 0; idx < countX; idx++) {
+        [barData addObject:@"0"];
+    }
+    if (index == 0 && ![self.title isEqualToString:@"体重"]) {
+        for (NSString *obj in datas) {
+            NSArray *array = [obj componentsSeparatedByString:@"$"];
+            NSString *dateStr = [array firstObject];
+            dataFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+            NSDate *date = [dataFormatter dateFromString:dateStr];
+            dataFormatter.dateFormat = @"HH";
+            NSString *hourStr = [dataFormatter stringFromDate:date];
+            [barData replaceObjectAtIndex:[hourStr integerValue] withObject:array[number]];
+        }
+    } else {
+        NSArray *strs = nil;
+        NSString *preStr = nil;
+        NSString *nextStr = nil;
+        double sum = 0;
+        NSDate *preDate = nil;
+        for (NSInteger idx = (NSInteger)datas.count - 1; idx >= 0; idx--) {
+            strs = [datas[idx] componentsSeparatedByString:@"$"];
+            nextStr = [[[strs firstObject] componentsSeparatedByString:@" "] firstObject];
+            if (index == 3) {
+                nextStr = [nextStr substringWithRange:NSMakeRange(0, nextStr.length - 3)];
+            }
+            if (idx == (datas.count - 1)) {
+                preStr = [[[strs firstObject] componentsSeparatedByString:@" "] firstObject];
+                if (index == 3) {
+                    preStr = [preStr substringWithRange:NSMakeRange(0, preStr.length - 3)];
+                }
+            }
+            if (![nextStr isEqualToString:preStr]) {
+                preDate = [dataFormatter dateFromString:preStr];
+                NSInteger days = [currentDate timeIntervalSinceDate:preDate] / delive;
+                [barData replaceObjectAtIndex:(countX - days - 1) withObject:[NSString stringWithFormat:@"%.1f", sum]];
+                preStr = [[[strs firstObject] componentsSeparatedByString:@" "] firstObject];
+                if (index == 3) {
+                    preStr = [preStr substringWithRange:NSMakeRange(0, preStr.length - 3)];
+                }
+                sum = 0;
+            }
+            sum += [strs[number] doubleValue];
+            
+            if (idx == 0) {
+                preDate = [dataFormatter dateFromString:preStr];
+                NSInteger days = [currentDate timeIntervalSinceDate:preDate] / delive;
+                [barData replaceObjectAtIndex:(countX - days - 1) withObject:[NSString stringWithFormat:@"%.1f", sum]];
+            }
+        }
+    }
+    
+    [self.dataCache replaceObjectAtIndex:index withObject:barData];
+    [self p_updateViewDataWithIndex:index];
+}
+
+- (int)p_getCountX:(NSInteger)index {
+    int countX = 0;
+    if (index == 0) {
+        countX = 24;
+    } else if (index == 1) {
+        countX = 7;
+    } else if (index == 2) {
+        countX = 30;
+    } else if (index == 3) {
+        countX = 12;
+    }
+    return countX;
+}
+
+- (void)p_updateViewDataWithIndex:(NSInteger)index {
+    [self.barChart removeFromSuperview];
+    NSArray *array = [self p_getAverAndTotalWithArray:self.dataCache[index]];
+    self.barChart.dataArray = self.dataCache[index];
+    self.aver.text = [NSString stringWithFormat:@"%.0f %@", [array[1] doubleValue], self.unit];
+    self.total.text = [NSString stringWithFormat:@"%.0f %@", [array[0] doubleValue], self.unit];
+    if ([self.title isEqualToString:@"公里"] ) {
+        self.aver.text = [NSString stringWithFormat:@"%.1f %@", [array[1] doubleValue] / 1000, self.unit];
+        self.total.text = [NSString stringWithFormat:@"%.1f %@", [array[0] doubleValue] / 1000, self.unit];
+    } else if ([self.title isEqualToString:@"体重"]) {
+//        self.aver.text = [NSString stringWithFormat:@"%.1f %@", _lastWeight, self.unit];
+//        self.total.text = [NSString stringWithFormat:@"%.1f", _lastWeight / pow([self.userModel.height doubleValue] / 100, 2)];
+    }
+    [self p_setChartView];
+
 }
 
 - (NSArray *)p_getAllData {
@@ -355,7 +371,7 @@ static CGFloat const lineChartLineWidth = 6.f;
     }
     
     NSArray *strs = nil;
-    NSString *preStr = [[[strs firstObject] componentsSeparatedByString:@" "] firstObject];
+    NSString *preStr =nil;
     NSString *nextStr = nil;
     double sum = 0;
     for (int index = 0; index < originDatas.count; index++) {
@@ -470,13 +486,6 @@ static CGFloat const lineChartLineWidth = 6.f;
     return _total;
 }
 
-- (RUNHealthDataManager *)healthManager {
-    if (!_healthManager) {
-        _healthManager = [[RUNHealthDataManager alloc] init];
-    }
-    return _healthManager;
-}
-
 - (YXLBaseChart *)barChart {
     if (!_barChart) {
         if (self.chartType == RUNChartBar) {
@@ -537,23 +546,6 @@ static CGFloat const lineChartLineWidth = 6.f;
         _dataBase = [[RUNDataBase alloc] init];
     }
     return _dataBase;
-}
-
-- (RUNMotionType)motionType {
-    if (!_motionType) {
-        if ([self.title isEqualToString:@"步数"]) {
-            _motionType = RUNStepType;
-        } else if ([self.title isEqualToString:@"体重"]) {
-            _motionType = RUNWeightType;
-        } else if ([self.title isEqualToString:@"公里"]) {
-            _motionType = RUNDistanceType;
-        }else if ([self.title isEqualToString:@"楼层"]) {
-            _motionType = RUNClimbedType;
-        } else if ([self.title isEqualToString:@"卡路里"]) {
-            _motionType = RUNEnergyType;
-        }
-    }
-    return _motionType;
 }
 
 @end

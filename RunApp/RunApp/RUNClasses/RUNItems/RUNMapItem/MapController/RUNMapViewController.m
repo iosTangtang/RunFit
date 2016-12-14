@@ -231,7 +231,6 @@
     if (self.lineArray.count <= 0) {
         message = @"无法保存数据,是否继续?";
         yesAction = [UIAlertAction actionWithTitle:@"继续" style:UIAlertActionStyleCancel handler:nil];
-        
     } else {
         [self.timer invalidate];
         [self.cmPedometer stopPedometerUpdates];
