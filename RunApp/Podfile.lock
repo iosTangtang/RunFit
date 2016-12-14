@@ -1,5 +1,10 @@
 PODS:
   - BmobSDK (1.6.5)
+  - FMDB (2.5):
+    - FMDB/standard (= 2.5)
+  - FMDB/common (2.5)
+  - FMDB/standard (2.5):
+    - FMDB/common
   - Masonry (0.6.3)
   - MJRefresh (2.4.12)
   - SFHFKeychainUtils (0.0.1)
@@ -8,6 +13,7 @@ PODS:
 
 DEPENDENCIES:
   - BmobSDK (~> 1.6.5)
+  - FMDB (~> 2.5)
   - Masonry (~> 0.6.3)
   - MJRefresh (~> 2.4.12)
   - SFHFKeychainUtils (~> 0.0.1)
@@ -16,6 +22,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   BmobSDK: 9928a9135a3a7823c6d8bd2bcd9baffeb8e6289a
+  FMDB: 96e8f1bcc1329e269330f99770ad4285d9003e52
   Masonry: ff105a956abcd19a618b2028b121cb638d7a8e2f
   MJRefresh: ca8e9589895977df32d379d46e6b8a5450b3ff44
   SFHFKeychainUtils: 9576b411a79a058f4d5381ace6f3242b9a62e664

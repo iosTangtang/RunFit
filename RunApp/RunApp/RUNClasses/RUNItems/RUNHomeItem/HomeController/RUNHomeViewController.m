@@ -20,8 +20,7 @@
 #import "RUNWeightViewController.h"
 #import "RUNTimeManager.h"
 #import "RUNHealthDataManager.h"
-#import "RUNUserModel.h"
-#import <CoreMotion/CoreMotion.h>
+#import "RUNDataBase.h"
 
 static CGFloat const animationDuration = 1.f;
 
@@ -31,7 +30,6 @@ static CGFloat const animationDuration = 1.f;
     NSString *_stepCount;
     NSDate  *_stepDate;
     CGFloat _activityTime;
-    CGFloat _oriEnergy;
     NSInteger  _count;
     NSMutableArray *_barDatas;
     BOOL _isInWeek;
@@ -51,6 +49,7 @@ static CGFloat const animationDuration = 1.f;
 @property (nonatomic, strong) RUNTextView                       *timeLabel;
 @property (nonatomic, strong) RUNTextView                       *disLabel;
 @property (nonatomic, assign) BOOL                              isSuccess;
+@property (nonatomic, strong) RUNDataBase                       *dataBase;
 
 @end
 
@@ -58,7 +57,6 @@ static CGFloat const animationDuration = 1.f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.view.backgroundColor = [UIColor whiteColor];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_refreshMessage) name:RUNHEADIMAGENOTIFICATION object:nil];
@@ -113,6 +111,19 @@ static CGFloat const animationDuration = 1.f;
                 [UIColor colorWithRed:245 / 255.0 green:166 / 255.0 blue:35 / 255.0 alpha:1],
                 [UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1]];
     self.healthManager = [[RUNHealthDataManager alloc] init];
+    
+    [self.dataBase updateDataBaseWithHandle:^(BOOL isUpdate, NSInteger count) {
+        NSDate *date = [NSDate date];
+        NSDate *fromDate = [date dateByAddingTimeInterval:86400];
+        NSArray *datas = [self.dataBase queryWithDataFromDate:date toDate:fromDate];
+        if (datas.count > 0 && isUpdate) {
+            NSString *dateStr = [datas firstObject];
+            NSArray *dateArray = [dateStr componentsSeparatedByString:@"$"];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+            [[NSUserDefaults standardUserDefaults] setObject:[dateFormatter dateFromString:dateArray[0]] forKey:@"oldDate"];
+        }
+    }];
 }
 
 #pragma mark - Navigation Item
@@ -260,7 +271,6 @@ static CGFloat const animationDuration = 1.f;
     [self.cmPedometer startPedometerUpdatesFromDate:[self stepDate] withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (_count == 0) {
-                _oriEnergy = [self.userModel.weight doubleValue] * ([pedometerData.distance doubleValue] / 1000) * 1.036;
                 _activityTime = [pedometerData.averageActivePace doubleValue] / 60 * [pedometerData.distance doubleValue];
                 _count++;
             }
@@ -272,16 +282,6 @@ static CGFloat const animationDuration = 1.f;
             self.timeLabel.mainTitle = [NSString stringWithFormat:@"%.0f", timeValue];
             self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] *
                                         ([pedometerData.distance doubleValue] / 1000) * 1.036];
-            if (_count > 0) {
-                [self.healthManager saveEnergyWithValue:[self.kcalLabel.mainTitle doubleValue] - _oriEnergy handle:nil];
-            }
-//            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] * timeValue / 60 *
-//                                        (25 / (400 / ([pedometerData.distance doubleValue] / timeValue)))];
-//            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", 0.43 * [self.userModel.height doubleValue] +
-//                                        0.57 * [self.userModel.weight doubleValue] +
-//                                        0.26 * ([pedometerData.numberOfSteps doubleValue] / timeValue) +
-//                                        1.51 * timeValue - 108];
-            
             
             [self.disLabel setLabelAnimation];
             [self.timeLabel setLabelAnimation];
@@ -509,6 +509,13 @@ static CGFloat const animationDuration = 1.f;
         _stepDate = [dateFormatter dateFromString:[dateFormatter stringFromDate:toDate]];
     }
     return _stepDate;
+}
+
+- (RUNDataBase *)dataBase {
+    if (!_dataBase) {
+        _dataBase = [[RUNDataBase alloc] init];
+    }
+    return _dataBase;
 }
 
 - (CMPedometer *)cmPedometer {

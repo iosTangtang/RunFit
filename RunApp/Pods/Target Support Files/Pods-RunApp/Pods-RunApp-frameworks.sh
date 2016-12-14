@@ -84,6 +84,7 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-RunApp/FMDB.framework"
   install_framework "Pods-RunApp/MJRefresh.framework"
   install_framework "Pods-RunApp/Masonry.framework"
   install_framework "Pods-RunApp/SFHFKeychainUtils.framework"
@@ -91,6 +92,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-RunApp/UICountingLabel.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-RunApp/FMDB.framework"
   install_framework "Pods-RunApp/MJRefresh.framework"
   install_framework "Pods-RunApp/Masonry.framework"
   install_framework "Pods-RunApp/SFHFKeychainUtils.framework"

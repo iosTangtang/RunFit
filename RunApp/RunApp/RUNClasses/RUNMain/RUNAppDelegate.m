@@ -9,7 +9,6 @@
 #import "RUNAppDelegate.h"
 #import "RUNTabBarViewController.h"
 #import "RUNNavigationViewController.h"
-#import "RUNLoginViewController.h"
 #import "MMPDeepSleepPreventer.h"
 
 @interface RUNAppDelegate ()
@@ -25,10 +24,6 @@
     RUNTabBarViewController *tabVC = [[RUNTabBarViewController alloc] init];
     tabVC.isRoot = YES;
     self.window.rootViewController = tabVC;
-    
-//    RUNLoginViewController *login = [[RUNLoginViewController alloc] init];
-//    RUNNavigationViewController *nav = [[RUNNavigationViewController alloc] initWithRootViewController:login];
-//    self.window.rootViewController = nav;
     
     [self.window makeKeyWindow];
     
@@ -58,7 +53,10 @@
 
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+//    BOOL isNoChange = [[NSUserDefaults standardUserDefaults] boolForKey:@"NO_CHANGE_OLD"];
+//    if (!isNoChange) {
+//        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"oldDate"];
+//    }
 }
 
 

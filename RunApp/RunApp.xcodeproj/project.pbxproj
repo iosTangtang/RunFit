@@ -78,6 +78,8 @@
 		66DC82591DFD400D009432DB /* NSString+Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DC82581DFD400D009432DB /* NSString+Hash.m */; };
 		66F6E61A1DFE4C68004CC9EE /* UITextField+Check.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F6E6191DFE4C68004CC9EE /* UITextField+Check.m */; };
 		66F6E61D1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F6E61C1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.m */; };
+		66F6E6601DFF993F004CC9EE /* RUNDataBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F6E65F1DFF993F004CC9EE /* RUNDataBaseManager.m */; };
+		66F6E6631DFFCDA3004CC9EE /* RUNDataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F6E6621DFFCDA3004CC9EE /* RUNDataBase.m */; };
 		F5D304D459C13C777157AED5 /* Pods_RunApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF3E40822659E5F42A1D5E2C /* Pods_RunApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -234,6 +236,10 @@
 		66F6E6191DFE4C68004CC9EE /* UITextField+Check.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Check.m"; sourceTree = "<group>"; };
 		66F6E61B1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNHeadAndUserNameViewController.h; sourceTree = "<group>"; };
 		66F6E61C1DFE5659004CC9EE /* RUNHeadAndUserNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNHeadAndUserNameViewController.m; sourceTree = "<group>"; };
+		66F6E65E1DFF993F004CC9EE /* RUNDataBaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNDataBaseManager.h; sourceTree = "<group>"; };
+		66F6E65F1DFF993F004CC9EE /* RUNDataBaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNDataBaseManager.m; sourceTree = "<group>"; };
+		66F6E6611DFFCDA3004CC9EE /* RUNDataBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNDataBase.h; sourceTree = "<group>"; };
+		66F6E6621DFFCDA3004CC9EE /* RUNDataBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNDataBase.m; sourceTree = "<group>"; };
 		6C9B1A89F85AE1870431A140 /* Pods-RunApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-RunApp/Pods-RunApp.release.xcconfig"; sourceTree = "<group>"; };
 		EF3E40822659E5F42A1D5E2C /* Pods_RunApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -290,6 +296,7 @@
 		66085DB21DCF39CF00F3E867 /* RUNItems */ = {
 			isa = PBXGroup;
 			children = (
+				66F6E65D1DFF9920004CC9EE /* RUNDataBase */,
 				665FD63E1DE45326006FB220 /* RUNLoginItem */,
 				66085DBC1DCF3B7E00F3E867 /* RUNHomeItem */,
 				66085DBD1DCF3B9800F3E867 /* RUNAnalazyItem */,
@@ -424,6 +431,8 @@
 			children = (
 				66DC82411DF1B30E009432DB /* RUNHealthDataManager.h */,
 				66DC82421DF1B30E009432DB /* RUNHealthDataManager.m */,
+				66F6E6611DFFCDA3004CC9EE /* RUNDataBase.h */,
+				66F6E6621DFFCDA3004CC9EE /* RUNDataBase.m */,
 			);
 			path = HomeModel;
 			sourceTree = "<group>";
@@ -770,6 +779,15 @@
 			path = MMPDeepSleepPreventer;
 			sourceTree = "<group>";
 		};
+		66F6E65D1DFF9920004CC9EE /* RUNDataBase */ = {
+			isa = PBXGroup;
+			children = (
+				66F6E65E1DFF993F004CC9EE /* RUNDataBaseManager.h */,
+				66F6E65F1DFF993F004CC9EE /* RUNDataBaseManager.m */,
+			);
+			path = RUNDataBase;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -980,6 +998,8 @@
 				66162E541DDA031D002AEC37 /* RunUserTableViewCell.m in Sources */,
 				66162DFF1DD82449002AEC37 /* RUNCalendarView.m in Sources */,
 				66162D921DD489A6002AEC37 /* YXLColumChart.m in Sources */,
+				66F6E6631DFFCDA3004CC9EE /* RUNDataBase.m in Sources */,
+				66F6E6601DFF993F004CC9EE /* RUNDataBaseManager.m in Sources */,
 				66162E591DDA15A9002AEC37 /* RUNPickViewController.m in Sources */,
 				66162E651DDC6740002AEC37 /* RUNAllDataViewController.m in Sources */,
 				665FD63D1DE41F1E006FB220 /* RUNTimeManager.m in Sources */,
