@@ -129,6 +129,7 @@ static float progress = 0.0f;
     if(progress < 1.0f){
         [self performSelector:@selector(increaseProgress) withObject:nil afterDelay:0.1f];
     } else {
+        [SVProgressHUD showSuccessWithStatus:@"同步成功"];
         [self performSelector:@selector(dismiss) withObject:nil afterDelay:0.4f];
     }
 }

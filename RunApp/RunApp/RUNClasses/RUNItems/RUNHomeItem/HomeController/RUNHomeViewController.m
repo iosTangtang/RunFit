@@ -19,7 +19,6 @@
 #import "UIViewController+ScreenShot.h"
 #import "RUNWeightViewController.h"
 #import "RUNTimeManager.h"
-#import "RUNHealthDataManager.h"
 #import "RUNDataBase.h"
 
 static CGFloat const animationDuration = 1.f;
@@ -32,23 +31,17 @@ static CGFloat const animationDuration = 1.f;
     CGFloat _activityTime;
     NSInteger  _count;
     NSMutableArray *_barDatas;
-    BOOL _isInWeek;
-    double _stepSum;
-    double _energySum;
-    double _disSum;
 }
 
 @property (nonatomic, strong) RUNCircleView                     *circleView;
 @property (nonatomic, strong) YXLBaseChart                      *barChart;
 @property (nonatomic, strong) RUNTimeManager                    *timeManager;
-@property (nonatomic, strong) RUNHealthDataManager              *healthManager;
 @property (nonatomic, strong) NSDate                            *currentDate;
 @property (nonatomic, strong) RUNUserModel                      *userModel;
 @property (nonatomic, strong) CMPedometer                       *cmPedometer;
 @property (nonatomic, strong) RUNTextView                       *kcalLabel;
 @property (nonatomic, strong) RUNTextView                       *timeLabel;
 @property (nonatomic, strong) RUNTextView                       *disLabel;
-@property (nonatomic, assign) BOOL                              isSuccess;
 @property (nonatomic, strong) RUNDataBase                       *dataBase;
 
 @end
@@ -66,20 +59,9 @@ static CGFloat const animationDuration = 1.f;
     [self p_drawCircle];
     [self p_addMessageText];
     [self p_addBarChart];
-    [self p_setBarDataWithNowDate:[NSDate date] isChange:NO];
     [self p_addButton];
-    
-    if (![CMPedometer isStepCountingAvailable] || ![CMPedometer isDistanceAvailable] || ![CMPedometer isPaceAvailable]) {
-        NSLog(@"CMPedometer Error");
-    }
-    
-    __weak typeof(self) weakSelf = self;
-    [self.healthManager getAuthorizationWithHandle:^(BOOL isSuccess) {
-        NSDate *current = [weakSelf.timeManager run_getDateFromString:[weakSelf.timeManager run_getCurrentDate] withFormatter:@"yyyy年MM月dd日"];
-        weakSelf.isSuccess = isSuccess;
-        [weakSelf p_setBarDataWithNowDate:current isChange:NO];
-    }];
-    
+
+    [self p_updateDataBase];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -110,20 +92,6 @@ static CGFloat const animationDuration = 1.f;
     _colors = @[[UIColor colorWithRed:234 / 255.0 green:98 / 255.0 blue:86 / 255.0 alpha:1],
                 [UIColor colorWithRed:245 / 255.0 green:166 / 255.0 blue:35 / 255.0 alpha:1],
                 [UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1]];
-    self.healthManager = [[RUNHealthDataManager alloc] init];
-    
-    [self.dataBase updateDataBaseWithHandle:^(BOOL isUpdate, NSInteger count) {
-        NSDate *date = [NSDate date];
-        NSDate *fromDate = [date dateByAddingTimeInterval:86400];
-        NSArray *datas = [self.dataBase queryWithDataFromDate:date toDate:fromDate];
-        if (datas.count > 0 && isUpdate) {
-            NSString *dateStr = [datas firstObject];
-            NSArray *dateArray = [dateStr componentsSeparatedByString:@"$"];
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
-            [[NSUserDefaults standardUserDefaults] setObject:[dateFormatter dateFromString:dateArray[0]] forKey:@"oldDate"];
-        }
-    }];
 }
 
 #pragma mark - Navigation Item
@@ -234,9 +202,7 @@ static CGFloat const animationDuration = 1.f;
     [shotScreenButton setTitle:@"SHARE" forState:UIControlStateNormal];
     shotScreenButton.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17.f];
     [shotScreenButton setTitleColor:[UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1] forState:UIControlStateNormal];
-    
     [shotScreenButton addTarget:self action:@selector(shotScreenButton:) forControlEvents:UIControlEventTouchUpInside];
-    
     [self.view addSubview:shotScreenButton];
     
     CGFloat offset = (ViewHeight - 48 - (45 + ViewHeight / 10.0 * 3 + ViewWidth / 2.1 + ViewHeight / 16.0) - 64) / 2.0;
@@ -254,7 +220,6 @@ static CGFloat const animationDuration = 1.f;
     runButton.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17.f];
     [runButton setTitleColor:[UIColor colorWithRed:15 / 255.0 green:203 / 255.0 blue:239 / 255.0 alpha:1] forState:UIControlStateNormal];
     [runButton addTarget:self action:@selector(runButton:) forControlEvents:UIControlEventTouchUpInside];
-    
     [self.view addSubview:runButton];
     
     [runButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -262,6 +227,28 @@ static CGFloat const animationDuration = 1.f;
         make.right.equalTo(self.view.right).offset(-(ViewWidth / 4.0 - ViewWidth / 10.0));
         make.width.equalTo(ViewWidth / 5.0);
         make.height.equalTo(25);
+    }];
+}
+
+#pragma mark - Update Data Base
+- (void)p_updateDataBase {
+    if (![CMPedometer isStepCountingAvailable] || ![CMPedometer isDistanceAvailable] || ![CMPedometer isPaceAvailable]) {
+        NSLog(@"CMPedometer Error");
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    [self.dataBase updateDataBaseWithHandle:^(BOOL isUpdate, NSInteger count) {
+        NSDate *date = [NSDate date];
+        NSDate *toDate = [date dateByAddingTimeInterval:86400];
+        NSArray *datas = [weakSelf.dataBase queryWithDataFromDate:date toDate:toDate];
+        if (datas.count > 0 && isUpdate) {
+            NSString *dateStr = [datas firstObject];
+            NSArray *dateArray = [dateStr componentsSeparatedByString:@"$"];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+            [[NSUserDefaults standardUserDefaults] setObject:[dateFormatter dateFromString:dateArray[0]] forKey:@"oldDate"];
+        }
+        [weakSelf p_fixDatas:datas];
     }];
 }
 
@@ -290,92 +277,27 @@ static CGFloat const animationDuration = 1.f;
     }];
 }
 
-#pragma mark - Set Bar Data
-- (void)p_setBarDataWithNowDate:(NSDate *)nowDate isChange:(BOOL)isChange {
-    if (!self.isSuccess) {
-        return ;
-    }
-    
-    NSDate *nowDay = nowDate;
-    NSDate *nextDay = [nowDate dateByAddingTimeInterval:86400];
-    
+#pragma mark - Update Bar Data
+- (void)p_fixDatas:(NSArray *)datas {
     _barDatas = nil;
     _barDatas = [NSMutableArray array];
-    
-    [self p_getHealthData:RUNStepType fromDate:nowDay toDate:nextDay isChange:isChange];
-    if (isChange) {
-        [self p_getHealthData:RUNDistanceType fromDate:nowDay toDate:nextDay isChange:YES];
+    for (int index = 0; index < 24; index++) {
+        [_barDatas addObject:@"0"];
     }
-    
-}
-
-#pragma mark - Get Health Data
-- (void)p_getHealthData:(RUNMotionType)motionType fromDate:(NSDate *)nowDay toDate:(NSDate *)nextDay isChange:(BOOL)isChange {
-    [self.healthManager getHealthCountFromDate:nowDay toDate:nextDay type:RUNDateDayType motionType:motionType resultHandle:^(NSArray *datas, double mintue) {
-        double sum = 0;
-        if (datas != nil) {
-            if (motionType == RUNStepType) {
-                for (int index = 0; index < 24; index++) {
-                    [_barDatas addObject:@"0"];
-                }
-            }
-            for (NSDictionary *obj in datas) {
-                NSArray *keys = [obj allKeys];
-                if (motionType == RUNStepType) {
-                    NSInteger dataCount = [keys[0] integerValue];
-                    [_barDatas replaceObjectAtIndex:dataCount withObject:[obj objectForKey:keys[0]]];
-                }
-                sum += [[obj objectForKey:keys[0]] doubleValue];
-            }
-            
-        } else {
-            if (motionType == RUNStepType) {
-                [_barDatas addObject:@"0"];
-            }
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (isChange) {
-                [self p_updateView:motionType sum:sum];
-            }
-            if (_isInWeek) {
-                [self p_updateView:RUNStepType sum:sum];
-            }
-            if (motionType == RUNStepType && isChange) {
-               self.timeLabel.mainTitle = [NSString stringWithFormat:@"%.0f", mintue];
-                [self.timeLabel setLabelAnimation];
-            }
-            [self.barChart removeFromSuperview];
-            [self p_addBarChart];
-        });
-    }];
-}
-
-#pragma mark - Update View
-- (void)p_updateView:(RUNMotionType)motionType sum:(double)sum {
-    switch (motionType) {
-        case RUNStepType: {
-            _stepSum = sum;
-            self.circleView.nowStep = [NSString stringWithFormat:@"%.0f", _stepSum];
-        }
-            break;
-        case RUNEnergyType: {
-            _energySum = sum;
-            
-        }
-            break;
-        case RUNDistanceType: {
-            _disSum = sum;
-            self.disLabel.mainTitle = [NSString stringWithFormat:@"%.1f", _disSum / 1000];
-            [self.disLabel setLabelAnimation];
-            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f", [self.userModel.weight doubleValue] *
-                                                                        (_disSum / 1000) * 1.036];
-            [self.kcalLabel setLabelAnimation];
-        }
-            break;
-        default:
-            break;
+    for (NSString *obj in datas) {
+        NSArray *array = [obj componentsSeparatedByString:@"$"];
+        NSString *dateStr = [array firstObject];
+        NSDateFormatter *dataFormatter = [[NSDateFormatter alloc] init];
+        dataFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        NSDate *date = [dataFormatter dateFromString:dateStr];
+        dataFormatter.dateFormat = @"HH";
+        NSString *hourStr = [dataFormatter stringFromDate:date];
+        [_barDatas replaceObjectAtIndex:[hourStr integerValue] withObject:array[1]];
     }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.barChart removeFromSuperview];
+        [self p_addBarChart];
+    });
 }
 
 #pragma mark - Bar Item Action
@@ -412,41 +334,39 @@ static CGFloat const animationDuration = 1.f;
 
 #pragma mark - Change Data
 - (void)p_changeDataWithDate:(NSDate *)nowDate {
-    _isInWeek = NO;
     _count = 0;
     NSDate *current = [self.timeManager run_getDateFromString:[self.timeManager run_getCurrentDate] withFormatter:@"yyyy年MM月dd日"];
-    NSDate *earlierWeakDate = [current dateByAddingTimeInterval:- 86400 * 7];
+    NSDate *toDate = [nowDate dateByAddingTimeInterval:86400];
+    NSArray *datas = [self.dataBase queryWithDataFromDate:nowDate toDate:toDate];
+    
     if (![nowDate isEqualToDate:current]) {
         [self.cmPedometer stopPedometerUpdates];
-        if ([[nowDate earlierDate:earlierWeakDate] isEqualToDate:earlierWeakDate]) {
-            _isInWeek = YES;
-            NSDate *toDate = [nowDate dateByAddingTimeInterval:86400];
-            [self p_getStepCountFromDate:nowDate toDate:toDate isChange:NO];
-        } else {
-            [self p_setBarDataWithNowDate:nowDate isChange:YES];
-        }
+        [self p_detailDataWithCircleView:datas];
     } else {
-        [self p_setBarDataWithNowDate:nowDate isChange:NO];
         [self p_startUpdateCount];
     }
+    [self p_fixDatas:datas];
+    
 }
 
-#pragma mark - Get Step Count
-- (void)p_getStepCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate isChange:(BOOL)isChange {
-    [self.cmPedometer queryPedometerDataFromDate:fromDate toDate:toDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            CGFloat timeValue = [pedometerData.averageActivePace doubleValue] / 60 * [pedometerData.distance doubleValue];
-            self.disLabel.mainTitle = [NSString stringWithFormat:@"%.1f", [pedometerData.distance doubleValue] / 1000];
-            self.timeLabel.mainTitle = [NSString stringWithFormat:@"%.0f", timeValue];
-            self.kcalLabel.mainTitle = [NSString stringWithFormat:@"%.0f",[self.userModel.weight doubleValue] *
-                                                                        ([pedometerData.distance doubleValue] / 1000) * 1.036];
-            
-            [self.disLabel setLabelAnimation];
-            [self.timeLabel setLabelAnimation];
-            [self.kcalLabel setLabelAnimation];
-            [self p_setBarDataWithNowDate:fromDate isChange:NO];
-        });
-    }];
+- (void)p_detailDataWithCircleView:(NSArray *)datas {
+    NSMutableArray *messArray = [NSMutableArray arrayWithArray:@[@"0", @"0", @"0", @""]];
+    for (NSString *obj in datas) {
+        NSArray *array = [obj componentsSeparatedByString:@"$"];
+        [messArray replaceObjectAtIndex:0 withObject:[NSString stringWithFormat:@"%.0f", [array[1] doubleValue] + [messArray[0] doubleValue]]];
+        [messArray replaceObjectAtIndex:1 withObject:[NSString stringWithFormat:@"%.0f", [array[2] doubleValue] + [messArray[1] doubleValue]]];
+        [messArray replaceObjectAtIndex:2 withObject:[NSString stringWithFormat:@"%.0f", [array[3] doubleValue] + [messArray[2] doubleValue]]];
+        [messArray replaceObjectAtIndex:3 withObject:[NSString stringWithFormat:@"%.1f", [array[4] doubleValue] + [messArray[3] doubleValue]]];
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.circleView.nowStep = messArray[0];
+        self.kcalLabel.mainTitle = messArray[1];
+        self.timeLabel.mainTitle = messArray[2];
+        self.disLabel.mainTitle = [NSString stringWithFormat:@"%.1f", [messArray[3] doubleValue] / 1000];
+        [self.disLabel setLabelAnimation];
+        [self.timeLabel setLabelAnimation];
+        [self.kcalLabel setLabelAnimation];
+    });
 }
 
 #pragma mark - NSNotification Action

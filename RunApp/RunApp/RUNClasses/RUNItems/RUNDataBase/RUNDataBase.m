@@ -103,7 +103,11 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy-MM-dd";
     NSString *fromStr = [dateFormatter stringFromDate:fromDate];
-    NSString *selectSQL = [NSString stringWithFormat:@"select timeDate, step, energy, duration, distance, floor from user_data where timeDate like '%%%@%%'", fromStr];
+    if (fromDate == nil) {
+        fromStr = @"";
+    }
+    NSString *toStr = [dateFormatter stringFromDate:toDate];
+    NSString *selectSQL = [NSString stringWithFormat:@"select timeDate, step, energy, duration, distance, floor from user_data where timeDate between '%@' and '%@'", fromStr, toStr];
     FMResultSet *resultSet = [self.dataBase executeQuery:selectSQL];
     while ([resultSet next]) {
         NSString *result = [NSString stringWithFormat:@"%@$%f$%f$%f$%f$%f", [resultSet stringForColumn:@"timeDate"],
