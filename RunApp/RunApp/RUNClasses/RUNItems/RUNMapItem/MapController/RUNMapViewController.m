@@ -182,7 +182,6 @@
     }];
     
     UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"继续" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
         [SVProgressHUD setFont:[UIFont systemFontOfSize:20.f]];
         [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
         for (int index = 0; index < 4; index ++) {
@@ -199,7 +198,6 @@
             [weakSelf p_start:selected];
             [weakSelf p_reloadSVP];
         });
-        
     }];
     
     [alert addAction:noAction];
@@ -248,15 +246,13 @@
                     hisMapVC.lineDatas = self.lineArray;
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                     dateFormatter.dateFormat = @"yyyy年MM月dd日 HH:MM:ss";
-                    hisMapVC.dateTitle = [dateFormatter stringFromDate:model.date];
+                    hisMapVC.dateTitle = model.date;
                     [weakSelf.navigationController pushViewController:hisMapVC animated:YES];
                 } else {
                     [SVProgressHUD showErrorWithStatus:@"保存失败!"];
                 }
             }];
-            
         }];
-        
     }
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message
@@ -354,14 +350,16 @@
 
 #pragma mark - Set Model
 - (RUNHistoryModel *)p_setHistoryModel {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
     RUNHistoryModel *model = [[RUNHistoryModel alloc] init];
-    model.type = (!_selected) == 0 ? @"步行/跑步" : @"骑行";
-    model.date = [NSDate date];
-    model.value = self.stopView.datas[1];
+    model.type = (!_selected) == 0 ? @"run" : @"bike";
+    model.date = [dateFormatter stringFromDate:[NSDate date]];
+    model.value = [self.stopView.datas[1] doubleValue];
     model.duration = self.stopView.datas[0];
-    model.kcal = self.stopView.datas[2];
-    model.speed = (!_selected) == 1 ? self.stopView.datas[3] : @"0";
-    model.step = (!_selected) == 0 ? self.stopView.datas[3] : @"0";
+    model.kcal = [self.stopView.datas[2] doubleValue];
+    model.speed = (!_selected) == 1 ? [self.stopView.datas[3] doubleValue] : 0;
+    model.step = (!_selected) == 0 ? [self.stopView.datas[3] doubleValue] : 0;
     model.points = self.lineArray;
     return model;
 }

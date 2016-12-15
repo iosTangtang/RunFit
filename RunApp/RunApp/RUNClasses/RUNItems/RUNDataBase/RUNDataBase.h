@@ -12,12 +12,15 @@
 #import <CoreMotion/CoreMotion.h>
 
 typedef void(^RUNDataBaseHandle)(BOOL isUpdate, NSInteger count);
-typedef void(^RUNResultDataHandle)(NSArray *datas);
+typedef void(^RUNHistoryHandle)(BOOL isSuccess);
 
 @interface RUNDataBase : NSObject
 
-- (void)updateDataBaseWithHandle:(RUNDataBaseHandle)handle;
+- (void)insertDataBaseWithHandle:(RUNDataBaseHandle)handle;
+- (void)insertDataToHistoryWithData:(NSDictionary *)data handle:(RUNHistoryHandle)handle;
 
 - (NSMutableArray *)queryWithDataFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
+- (NSMutableArray *)queryDataWithLimitNumber:(NSInteger)number pagesNumber:(NSInteger)pageNumber;
+- (NSMutableArray *)queryWeightData;
 
 @end

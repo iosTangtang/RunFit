@@ -12,7 +12,6 @@
 #import "RUNTimeManager.h"
 #import "SVProgressHUD.h"
 #import "RUNUserModel.h"
-#import "RUNHealthDataManager.h"
 #import "RUNHistoryModel.h"
 
 static NSString *const identifity = @"RUNWeightViewController";
@@ -47,54 +46,6 @@ static NSString *const identifity = @"RUNWeightViewController";
                                                              target:self
                                                              action:@selector(p_overAction:)];
     self.navigationItem.rightBarButtonItem = right;
-}
-
-#pragma mark - Over Action
-- (void)p_overAction:(UIBarButtonItem *)barButton {
-    RUNTimeManager *manager = [[RUNTimeManager alloc] init];
-    if (!self.weightText || !self.dateText) {
-        [self.navigationController popViewControllerAnimated:YES];
-        return;
-    }
-    if (![self.dateText isEqualToString:[manager run_getCurrentDate]] ||
-        ![self.timeText isEqualToString:[manager run_getCurrentDateWithFormatter:@"a HH:mm"]]) {
-        [self.navigationController popViewControllerAnimated:YES];
-        return;
-    }
-    [SVProgressHUD showWithStatus:@"保存中.."];
-    self.userModel.weight = self.weightText;
-    [self.userModel saveData];
-    [self p_saveData];
-}
-
-#pragma mark - Save Method
-- (void)p_saveData {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"yyyy年MM月dd日 HH:mm";
-    NSString *timeStr = [NSString stringWithFormat:@"%@ %@", self.dateText, [[self.timeText componentsSeparatedByString:@" "] lastObject]];
-    NSDate *timeDate = [dateFormatter dateFromString:timeStr];
-    RUNHealthDataManager *manager = [[RUNHealthDataManager alloc] init];
-    double value = [[[self.weightText componentsSeparatedByString:@"k"] firstObject] doubleValue];
-    __weak typeof(self) weakSelf = self;
-    [manager saveWeightWithValue:value withDate:timeDate handle:^(BOOL isSuccess, NSError *error) {
-        if (isSuccess) {
-            RUNHistoryModel *model = [[RUNHistoryModel alloc] init];
-            model.type = @"体重";
-            model.date = timeDate; 
-            model.duration = @"0";
-            model.value = weakSelf.weightText;
-            model.speed = @"0";
-            model.step = @"0";
-            model.kcal = @"0";
-            model.points = @[@"0"];
-            [model saveDataWithHandle:nil];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
-                [[NSNotificationCenter defaultCenter] postNotificationName:RUNUSERNOTIFICATION object:nil];
-                [self.navigationController popViewControllerAnimated:YES];
-            });
-        }
-    }];
 }
 
 #pragma mark - Set TableView
@@ -188,6 +139,54 @@ static NSString *const identifity = @"RUNWeightViewController";
         [self.values replaceObjectAtIndex:row withObject:self.timeText];
     }
     [self.tableView reloadData];
+}
+
+#pragma mark - Over Action
+- (void)p_overAction:(UIBarButtonItem *)barButton {
+    RUNTimeManager *manager = [[RUNTimeManager alloc] init];
+    if (!self.weightText || !self.dateText) {
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
+    if (![self.dateText isEqualToString:[manager run_getCurrentDate]] ||
+        ![self.timeText isEqualToString:[manager run_getCurrentDateWithFormatter:@"a HH:mm"]]) {
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
+    [SVProgressHUD showWithStatus:@"保存中.."];
+    self.userModel.weight = self.weightText;
+    [self.userModel saveData];
+    [self p_saveData];
+}
+
+#pragma mark - Save Method
+- (void)p_saveData {
+    NSString *timeStr = [NSString stringWithFormat:@"%@ %@", self.dateText, [[self.timeText componentsSeparatedByString:@" "] lastObject]];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy年MM月dd日 HH:mm";
+    NSDate *time = [dateFormatter dateFromString:timeStr];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    timeStr = [dateFormatter stringFromDate:time];
+    double value = [[[self.weightText componentsSeparatedByString:@"k"] firstObject] doubleValue];
+    RUNHistoryModel *model = [[RUNHistoryModel alloc] init];
+    model.type = @"humanWeight";
+    model.date = timeStr;
+    model.duration = @"0";
+    model.value = value;
+    model.speed = 0;
+    model.step = 0;
+    model.kcal = 0;
+    model.points = @[@"0"];
+    __weak typeof(self) weakSelf = self;
+    [model saveDataWithHandle:^(BOOL isSucceed) {
+        if (isSucceed) {
+            [SVProgressHUD showSuccessWithStatus:@"保存成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RUNUSERNOTIFICATION object:nil];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"保存失败"];
+        }
+    }];
 }
 
 #pragma mark - Set Method

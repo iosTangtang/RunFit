@@ -164,8 +164,8 @@ static CGFloat  const animationDuration = 0.35f;
         }
         else {
             NSInteger day = indexPath.row - firstWeekDay + 1;
-            cell.dayLabel.text = [NSString stringWithFormat:@"%ld", day];
-            NSString *str = [NSString stringWithFormat:@"%.2ld", day];
+            cell.dayLabel.text = [NSString stringWithFormat:@"%zd", day];
+            NSString *str = [NSString stringWithFormat:@"%.2zd", day];
             NSString *dateStr = [NSString stringWithFormat:@"%@%@日", [self p_stringFromDate:self.currentDate], str];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             formatter.dateFormat = @"yyyy年MM月dd日";

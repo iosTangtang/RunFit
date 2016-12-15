@@ -11,7 +11,6 @@
 #import "RUNPickViewController.h"
 #import "SVProgressHUD.h"
 #import "RUNUserModel.h"
-#import "RUNHealthDataManager.h"
 #import "RUNHistoryModel.h"
 
 static NSString *const kNormalCell = @"RUNUserNormalCell";
@@ -191,27 +190,26 @@ static NSString *const kNormalCell = @"RUNUserNormalCell";
 
 #pragma mark - Save Method
 - (void)p_saveData {
-    NSDate *timeDate = [NSDate date];
-    RUNHealthDataManager *manager = [[RUNHealthDataManager alloc] init];
-    double value = [self.datas[1] doubleValue];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    NSString *timeDate = [dateFormatter stringFromDate:[NSDate date]];
     __weak typeof(self) weakSelf = self;
-    [manager saveWeightWithValue:value withDate:timeDate handle:^(BOOL isSuccess, NSError *error) {
-        if (isSuccess) {
-            RUNHistoryModel *model = [[RUNHistoryModel alloc] init];
-            model.type = @"体重";
-            model.date = timeDate;
-            model.duration = @"0";
-            model.value = weakSelf.datas[1];
-            model.speed = @"0";
-            model.step = @"0";
-            model.kcal = @"0";
-            model.points = @[@"0"];
-            [model saveDataWithHandle:nil];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
-                [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
-                [self.navigationController popViewControllerAnimated:YES];
-            });
+    RUNHistoryModel *model = [[RUNHistoryModel alloc] init];
+    model.type = @"humanWeight";
+    model.date = timeDate;
+    model.duration = @"0";
+    model.value = [weakSelf.datas[1] doubleValue];
+    model.speed = 0;
+    model.step = 0;
+    model.kcal = 0;
+    model.points = @[@"0"];
+    [model saveDataWithHandle:^(BOOL isSucceed) {
+        if (isSucceed) {
+            [SVProgressHUD showSuccessWithStatus:@"保存成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"保存失败"];
         }
     }];
 }

@@ -133,8 +133,8 @@
         return;
     }
     self.iCount++;
-    self.refreshButton.titleLabel.text = [NSString stringWithFormat:@"重新发送(%lds)", 60 - self.iCount] ;
-    [self.refreshButton setTitle:[NSString stringWithFormat:@"重新发送(%lds)", 60 - self.iCount] forState:UIControlStateDisabled];
+    self.refreshButton.titleLabel.text = [NSString stringWithFormat:@"重新发送(%zds)", 60 - self.iCount] ;
+    [self.refreshButton setTitle:[NSString stringWithFormat:@"重新发送(%zds)", 60 - self.iCount] forState:UIControlStateDisabled];
 }
 
 #pragma mark - UITextField

@@ -179,7 +179,7 @@
         return;
     }
     RUNTextView *label = self.labelArray[3];
-    label.title = [NSString stringWithFormat:@"%ld", target];
+    label.title = [NSString stringWithFormat:@"%zd", target];
 }
 
 @end

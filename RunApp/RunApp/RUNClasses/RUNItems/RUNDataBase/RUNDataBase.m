@@ -26,12 +26,12 @@
     return self;
 }
 
-#pragma mark - Update
-- (void)updateDataBaseWithHandle:(RUNDataBaseHandle)handle {
-    [self p_launchDataBaseWithHandle:handle];
+#pragma mark - Insert
+- (void)insertDataBaseWithHandle:(RUNDataBaseHandle)handle {
+    [self p_insertDataBaseWithHandle:handle];
 }
 
-- (void)p_launchDataBaseWithHandle:(RUNDataBaseHandle)handle {
+- (void)p_insertDataBaseWithHandle:(RUNDataBaseHandle)handle {
     NSDate *oldDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"oldDate"];
     NSDate *currentDate = [NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -97,6 +97,23 @@
     }
 }
 
+- (void)insertDataToHistoryWithData:(NSDictionary *)data handle:(RUNHistoryHandle)handle {
+    NSData *pointsDataUrl = [NSKeyedArchiver archivedDataWithRootObject:data[@"points"]];
+    [self.dataBase beginTransaction];
+    BOOL isRollBack = NO;
+    NSString *time = [NSString stringWithFormat:@"%@", data[@"date"]];
+    if (![self.dataBase executeUpdate:@"insert into user_history(type, timeDate, value, duration, kcal, speed, step, points) values (?,?,?,?,?,?,?,?)", data[@"type"], time, data[@"value"], data[@"duration"], data[@"kcal"], data[@"speed"], data[@"step"], pointsDataUrl])
+    {
+        isRollBack = YES;
+        [self.dataBase rollback];
+        handle(NO);
+    } else {
+       handle(YES);
+    }
+    [self.dataBase commit];
+    
+}
+
 #pragma mark - Query
 - (NSMutableArray *)queryWithDataFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate{
     NSMutableArray *datas = [NSMutableArray array];
@@ -118,6 +135,47 @@
                                                                             [resultSet doubleForColumn:@"floor"]];
         [datas addObject:result];
     }
+    return datas;
+}
+
+- (NSMutableArray *)queryDataWithLimitNumber:(NSInteger)number pagesNumber:(NSInteger)pageNumber {
+    NSMutableArray *datas = [NSMutableArray array];
+    NSString *querySQL = [NSString stringWithFormat:@"select type, timeDate, value, duration, kcal, speed, step, points from user_history limit %zd,%zd", number, pageNumber];
+    FMResultSet *resultSet = [self.dataBase executeQuery:querySQL];
+    NSArray *points = nil;
+    while ([resultSet next]) {
+        NSString *weightStr = [resultSet stringForColumn:@"type"];
+        if (![weightStr isEqualToString:@"humanWeight"]) {
+            points = [NSKeyedUnarchiver unarchiveObjectWithData:[resultSet dataForColumn:@"points"]];
+        }
+        if (points == nil) {
+            points = [NSArray array];
+        }
+        NSDictionary *dic = @{@"type" : weightStr,
+                              @"date" : [resultSet stringForColumn:@"timeDate"],
+                              @"value" : @([resultSet doubleForColumn:@"value"]),
+                              @"duration" : [resultSet stringForColumn:@"duration"],
+                              @"kcal" : @([resultSet doubleForColumn:@"kcal"]),
+                              @"speed" : @([resultSet doubleForColumn:@"speed"]),
+                              @"step" : @([resultSet doubleForColumn:@"step"]),
+                              @"points" : points};
+        [datas addObject:dic];
+    }
+    
+    return datas;
+}
+
+- (NSMutableArray *)queryWeightData {
+    NSMutableArray *datas = [NSMutableArray array];
+    NSString *querySQL = [NSString stringWithFormat:@"select type, timeDate, value from user_history where type = 'humanWeight'"];
+    FMResultSet *resultSet = [self.dataBase executeQuery:querySQL];
+    
+    while ([resultSet next]) {
+        NSString *result = [NSString stringWithFormat:@"%@$%@$%f", [resultSet stringForColumn:@"type"], [resultSet stringForColumn:@"timeDate"],
+                                                                    [resultSet doubleForColumn:@"value"]];
+        [datas addObject:result];
+    }
+    
     return datas;
 }
 
@@ -143,7 +201,7 @@
             return ;
         }
         
-        NSString *createSql2 = [NSString stringWithFormat:@"create table if not exists user_history (id integer primary key,type text,timeDate text,value double default 0,duration double default 0,kcal double default 0,speed double default 0,step double default 0,points blob)"];
+        NSString *createSql2 = [NSString stringWithFormat:@"create table if not exists user_history (id integer primary key,type text,timeDate text,value double default 0,duration text,kcal double default 0,speed double default 0,step double default 0,points blob)"];
         if (![dataBase executeUpdate:createSql2]) {
             NSLog(@"Create Table User_History Error");
             return ;

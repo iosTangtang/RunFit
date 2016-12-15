@@ -102,7 +102,7 @@ static NSString * const kYearsCell = @"kChoiceCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewControllerAnimated:YES completion:^{
-        NSDictionary *dic = @{@"row" : [NSString stringWithFormat:@"%ld", indexPath.row]};
+        NSDictionary *dic = @{@"row" : [NSString stringWithFormat:@"%zd", indexPath.row]};
         [[NSNotificationCenter defaultCenter] postNotificationName:RUNFUNCNOTIFICATION object:nil userInfo:dic];
     }];
 }

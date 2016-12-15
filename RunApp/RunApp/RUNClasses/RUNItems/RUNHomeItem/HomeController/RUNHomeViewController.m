@@ -237,7 +237,7 @@ static CGFloat const animationDuration = 1.f;
     }
     
     __weak typeof(self) weakSelf = self;
-    [self.dataBase updateDataBaseWithHandle:^(BOOL isUpdate, NSInteger count) {
+    [self.dataBase insertDataBaseWithHandle:^(BOOL isUpdate, NSInteger count) {
         NSDate *date = [NSDate date];
         NSDate *toDate = [date dateByAddingTimeInterval:86400];
         NSArray *datas = [weakSelf.dataBase queryWithDataFromDate:date toDate:toDate];

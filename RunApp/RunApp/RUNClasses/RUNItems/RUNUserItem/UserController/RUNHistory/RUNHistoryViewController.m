@@ -11,35 +11,25 @@
 #import "RUNHistoryModel.h"
 #import "RUNHistoryMapViewController.h"
 #import "SVProgressHUD.h"
+#import "RUNDataBase.h"
 #import "MJRefresh.h"
 
 static NSString *const  kRUNIdentifity = @"RUNHistoryCell";
 static NSString *const  kWeightIdentifity = @"RUNWeightCell";
+static NSInteger const  kPageNumber = 20;
 
-@interface RUNHistoryViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface RUNHistoryViewController () <UITableViewDelegate, UITableViewDataSource> {
+    NSInteger _nowNumber;
+}
 
 @property (nonatomic, strong)   UITableView             *tableView;
 @property (nonatomic, strong)   NSMutableArray          *filePaths;
 @property (nonatomic, strong)   NSMutableArray          *datas;
-@property (nonatomic, strong)   NSDirectoryEnumerator   *dirEnum;
+@property (nonatomic, strong)   RUNDataBase             *dataBase;
 
 @end
 
 @implementation RUNHistoryViewController
-
-- (NSMutableArray *)datas {
-    if (!_datas) {
-        _datas = [NSMutableArray array];
-    }
-    return _datas;
-}
-
-- (NSMutableArray *)filePaths {
-    if (!_filePaths) {
-        _filePaths = [NSMutableArray array];
-    }
-    return _filePaths;
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -62,19 +52,16 @@ static NSString *const  kWeightIdentifity = @"RUNWeightCell";
 #pragma mark - Load File Data
 - (void)p_loadFileData {
     [SVProgressHUD showWithStatus:@"读取数据中"];
-    NSString *filePath = [self p_getFilePath];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    self.dirEnum = [fileManager enumeratorAtPath:filePath];
-    NSString *path = nil;
-    int index = 0;
-    while (((path = [self.dirEnum nextObject]) != nil) && index < 20) {
-        NSString *strPath = [NSString stringWithFormat:@"%@/%@", filePath, path];
-        [self.filePaths addObject:strPath];
+    _nowNumber = 0;
+    
+    NSArray *dataArray = [self.dataBase queryDataWithLimitNumber:_nowNumber pagesNumber:kPageNumber];
+    for (NSDictionary *dic in dataArray) {
         RUNHistoryModel *model = [[RUNHistoryModel alloc] init];
-        [model loadDataWithFilePath:strPath];
+        [model dicToModel:dic];
         [self.datas addObject:model];
-        index++;
     }
+    _nowNumber = kPageNumber + 1;
+    
     [SVProgressHUD dismiss];
     [self p_setupTableView];
 }
@@ -98,17 +85,13 @@ static NSString *const  kWeightIdentifity = @"RUNWeightCell";
     }];
     
     self.tableView.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        NSString *filePath = [self p_getFilePath];
-        NSString *path = nil;
-        int index = 0;
-        while (((path = [self.dirEnum nextObject]) != nil) && index < 20) {
-            NSString *strPath = [NSString stringWithFormat:@"%@/%@", filePath, path];
-            [self.filePaths addObject:strPath];
+        NSArray *array = [self.dataBase queryDataWithLimitNumber:_nowNumber pagesNumber:kPageNumber];
+        for (NSDictionary *dic in array) {
             RUNHistoryModel *model = [[RUNHistoryModel alloc] init];
-            [model loadDataWithFilePath:strPath];
+            [model dicToModel:dic];
             [self.datas addObject:model];
-            index++;
         }
+        _nowNumber = _nowNumber + 1;
         [self.tableView reloadData];
         [self.tableView.footer endRefreshing];
     }];
@@ -138,9 +121,9 @@ static NSString *const  kWeightIdentifity = @"RUNWeightCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     RUNHistoryTableViewCell *cell = nil;
     RUNHistoryModel *model = self.datas[indexPath.row];
-    if (![model.type isEqualToString:@"体重"]) {
+    if (![model.type isEqualToString:@"humanWeight"]) {
         cell = [RUNHistoryTableViewCell cellWith:tableView identifity:kRUNIdentifity];
-        cell.runLabel.text = model.type;
+        cell.runLabel.text = [NSString stringWithFormat:@"%.1f 公里", model.value];
         cell.durationLabel.text = [NSString stringWithFormat:@"%@ 分钟", model.duration];
         NSArray *array = [model.duration componentsSeparatedByString:@":"];
         if (array.count > 1) {
@@ -148,20 +131,18 @@ static NSString *const  kWeightIdentifity = @"RUNWeightCell";
             cell.durationLabel.text = [NSString stringWithFormat:@"%.1f 分钟", duration];
         }
         
-        cell.kcalLabel.text = [NSString stringWithFormat:@"%@ 大卡", model.kcal];
-        cell.numbersLabel.text = [NSString stringWithFormat:@"%@ 步", model.step];
-        if ([model.type isEqualToString:@"骑行"]) {
-            cell.numbersLabel.text = [NSString stringWithFormat:@"%@ s/m", model.speed];
+        cell.kcalLabel.text = [NSString stringWithFormat:@"%.0f 大卡", model.kcal];
+        cell.numbersLabel.text = [NSString stringWithFormat:@"%.0f 步", model.step];
+        if ([model.type isEqualToString:@"bike"]) {
+            cell.numbersLabel.text = [NSString stringWithFormat:@"%.1f s/m", model.speed];
         }
         
     } else {
         cell = [RUNHistoryTableViewCell cellWith:tableView identifity:kWeightIdentifity];
-        cell.runLabel.text = [NSString stringWithFormat:@"%@", model.value];
+        cell.runLabel.text = [NSString stringWithFormat:@"%.1f kg", model.value];
     }
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"yyyy年MM月dd日 HH:mm:ss";
-    cell.timeLabel.text = [dateFormatter stringFromDate:model.date];
+    cell.timeLabel.text = model.date;
     [cell setSeparatorInset:UIEdgeInsetsZero];
     
     return cell;
@@ -170,7 +151,7 @@ static NSString *const  kWeightIdentifity = @"RUNWeightCell";
 #pragma mark - TableView Delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     RUNHistoryModel *model = self.datas[indexPath.row];
-    if (![model.type isEqualToString:@"体重"]) {
+    if (![model.type isEqualToString:@"humanWeight"]) {
         return 136.5;
     }
     return 70.f;
@@ -179,19 +160,23 @@ static NSString *const  kWeightIdentifity = @"RUNWeightCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     RUNHistoryModel *model = self.datas[indexPath.row];
-    if ([model.type isEqualToString:@"体重"]) {
+    if ([model.type isEqualToString:@"humanWeight"]) {
         return ;
     }
     RUNHistoryMapViewController *hisMapVC = [[RUNHistoryMapViewController alloc] init];
     hisMapVC.isToRoot = NO;
-    hisMapVC.isRun = ([model.type isEqualToString:@"骑行"] == 0) ? YES : NO;
-    hisMapVC.datas = @[model.duration, model.value, model.kcal, model.step];
-    if ([model.type isEqualToString:@"骑行"]) {
-        hisMapVC.datas = @[model.duration, model.value, model.kcal, model.speed];
+    hisMapVC.isRun = ([model.type isEqualToString:@"bike"] == 0) ? YES : NO;
+    hisMapVC.datas = @[model.duration, [NSString stringWithFormat:@"%.0f", model.value],
+                                        [NSString stringWithFormat:@"%.0f", model.kcal],
+                                        [NSString stringWithFormat:@"%.0f", model.step]];
+    if ([model.type isEqualToString:@"bike"]) {
+        hisMapVC.datas = @[model.duration, [NSString stringWithFormat:@"%.0f", model.value],
+                                            [NSString stringWithFormat:@"%.0f", model.kcal],
+                                            [NSString stringWithFormat:@"%.1f", model.speed]];
     }
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy年MM月dd日 HH:MM:ss";
-    hisMapVC.dateTitle = [dateFormatter stringFromDate:model.date];
+    hisMapVC.dateTitle = model.date;
     hisMapVC.lineDatas = model.points;
     [self.navigationController pushViewController:hisMapVC animated:YES];
 }
@@ -231,11 +216,25 @@ static NSString *const  kWeightIdentifity = @"RUNWeightCell";
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (NSString *)p_getFilePath {
-    NSArray *cachePathArray = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cachePath = cachePathArray[0];
-    NSString *filePath = [cachePath stringByAppendingPathComponent:@"RunFit"];
-    return filePath;
+- (NSMutableArray *)datas {
+    if (!_datas) {
+        _datas = [NSMutableArray array];
+    }
+    return _datas;
+}
+
+- (NSMutableArray *)filePaths {
+    if (!_filePaths) {
+        _filePaths = [NSMutableArray array];
+    }
+    return _filePaths;
+}
+
+- (RUNDataBase *)dataBase {
+    if (!_dataBase) {
+        _dataBase = [[RUNDataBase alloc] init];
+    }
+    return _dataBase;
 }
 
 @end

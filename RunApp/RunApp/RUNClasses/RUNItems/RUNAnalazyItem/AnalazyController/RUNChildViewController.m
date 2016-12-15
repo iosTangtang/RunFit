@@ -42,7 +42,6 @@ static CGFloat const lineChartLineWidth = 6.f;
     // 初始化数据
     [self dateCache];
     [self dateXCache];
-    
     [self p_setupSegmented];
     [self p_dataOperationWithIndex:0];
     [self p_setChartView];

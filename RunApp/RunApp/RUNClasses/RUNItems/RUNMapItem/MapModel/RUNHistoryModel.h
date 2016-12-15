@@ -13,15 +13,15 @@ typedef void(^RUNHistoryData)(BOOL isSucceed);
 @interface RUNHistoryModel : NSObject
 
 @property (nonatomic, copy)     NSString    *type;
-@property (nonatomic, strong)   NSDate      *date;
-@property (nonatomic, copy)     NSString    *value;
+@property (nonatomic, strong)   NSString    *date;
+@property (nonatomic, assign)   double      value;
 @property (nonatomic, copy)     NSString    *duration;
-@property (nonatomic, copy)     NSString    *kcal;
-@property (nonatomic, copy)     NSString    *speed;
-@property (nonatomic, copy)     NSString    *step;
+@property (nonatomic, assign)   double      kcal;
+@property (nonatomic, assign)   double      speed;
+@property (nonatomic, assign)   double      step;
 @property (nonatomic, copy)     NSArray     *points;
 
 - (void)saveDataWithHandle:(RUNHistoryData)handle;
-- (void)loadDataWithFilePath:(NSString *)filePath;
+- (void)dicToModel:(NSDictionary *)dic;
 
 @end
