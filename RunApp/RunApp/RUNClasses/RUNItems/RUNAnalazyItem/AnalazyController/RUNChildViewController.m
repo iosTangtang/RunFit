@@ -249,7 +249,7 @@ static CGFloat const lineChartLineWidth = 6.f;
     if ([self.title isEqualToString:@"步数"]) {
         [self p_getMotionDataWithtype:index withNumber:1];
     } else if ([self.title isEqualToString:@"体重"]) {
-//        [self p_getMotionDataWithtype:index withNumber:6];
+        [self p_getMotionDataWithtype:index withNumber:2];
     } else if ([self.title isEqualToString:@"公里"]) {
         [self p_getMotionDataWithtype:index withNumber:4];
     }else if ([self.title isEqualToString:@"楼层"]) {
@@ -269,7 +269,12 @@ static CGFloat const lineChartLineWidth = 6.f;
         delive = 86400 * 30;
     }
     NSArray *dates = [self p_getDateWithIndex:index];
-    NSArray *datas = [self.dataBase queryWithDataFromDate:dates[0] toDate:dates[1]];
+    NSArray *datas = nil;
+    if ([self.title isEqualToString:@"体重"]) {
+        datas = [self.dataBase queryWeightDataFromDate:dates[0] toDate:dates[1]];
+    } else {
+        datas = [self.dataBase queryWithDataFromDate:dates[0] toDate:dates[1]];
+    }
     int countX = [self p_getCountX:index];
     NSDate *currentDate = [NSDate date];
     
@@ -286,13 +291,15 @@ static CGFloat const lineChartLineWidth = 6.f;
             NSString *hourStr = [dataFormatter stringFromDate:date];
             [barData replaceObjectAtIndex:[hourStr integerValue] withObject:array[number]];
         }
+    } else if ((index == 0) && [self.title isEqualToString:@"体重"]) {
+        ;
     } else {
         NSArray *strs = nil;
         NSString *preStr = nil;
         NSString *nextStr = nil;
         double sum = 0;
         NSDate *preDate = nil;
-        for (NSInteger idx = (NSInteger)datas.count - 1; idx >= 0; idx--) {
+        for (int idx = 0; idx < datas.count; idx++) {
             strs = [datas[idx] componentsSeparatedByString:@"$"];
             nextStr = [[[strs firstObject] componentsSeparatedByString:@" "] firstObject];
             if (index == 3) {
@@ -314,9 +321,13 @@ static CGFloat const lineChartLineWidth = 6.f;
                 }
                 sum = 0;
             }
-            sum += [strs[number] doubleValue];
+            if ([self.title isEqualToString:@"体重"]) {
+                sum = [strs[number] doubleValue];
+            } else {
+               sum += [strs[number] doubleValue];
+            }
             
-            if (idx == 0) {
+            if (idx == (datas.count - 1)) {
                 preDate = [dataFormatter dateFromString:preStr];
                 NSInteger days = [currentDate timeIntervalSinceDate:preDate] / delive;
                 [barData replaceObjectAtIndex:(countX - days - 1) withObject:[NSString stringWithFormat:@"%.1f", sum]];
@@ -352,8 +363,9 @@ static CGFloat const lineChartLineWidth = 6.f;
         self.aver.text = [NSString stringWithFormat:@"%.1f %@", [array[1] doubleValue] / 1000, self.unit];
         self.total.text = [NSString stringWithFormat:@"%.1f %@", [array[0] doubleValue] / 1000, self.unit];
     } else if ([self.title isEqualToString:@"体重"]) {
-//        self.aver.text = [NSString stringWithFormat:@"%.1f %@", _lastWeight, self.unit];
-//        self.total.text = [NSString stringWithFormat:@"%.1f", _lastWeight / pow([self.userModel.height doubleValue] / 100, 2)];
+        _lastWeight = [[self.dataCache[index] lastObject] doubleValue];
+        self.aver.text = [NSString stringWithFormat:@"%.1f %@", _lastWeight, self.unit];
+        self.total.text = [NSString stringWithFormat:@"%.1f", _lastWeight / pow([self.userModel.height doubleValue] / 100, 2)];
     }
     [self p_setChartView];
 
@@ -362,7 +374,13 @@ static CGFloat const lineChartLineWidth = 6.f;
 - (NSArray *)p_getAllData {
     NSDate *nowDate = [NSDate date];
     NSDate *toDate = [nowDate dateByAddingTimeInterval:86400];
-    NSArray *originDatas = [self.dataBase queryWithDataFromDate:nil toDate:toDate];
+    NSArray *originDatas = nil;
+    if ([self.title isEqualToString:@"体重"]) {
+        originDatas = [self.dataBase queryWeightDataFromDate:nil toDate:toDate];
+    } else {
+        originDatas = [self.dataBase queryWithDataFromDate:nil toDate:toDate];
+    }
+    
     NSMutableArray *detailDatas = [NSMutableArray array];
     
     if (originDatas.count <= 0) {
@@ -387,6 +405,8 @@ static CGFloat const lineChartLineWidth = 6.f;
         
         if ([self.title isEqualToString:@"步数"]) {
             sum += [strs[1] doubleValue];
+        } else if ([self.title isEqualToString:@"体重"]) {
+            sum = [strs[2] doubleValue];
         } else if ([self.title isEqualToString:@"公里"]) {
             sum += [strs[4] doubleValue];
         }else if ([self.title isEqualToString:@"楼层"]) {

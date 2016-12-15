@@ -21,6 +21,6 @@ typedef void(^RUNHistoryHandle)(BOOL isSuccess);
 
 - (NSMutableArray *)queryWithDataFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
 - (NSMutableArray *)queryDataWithLimitNumber:(NSInteger)number pagesNumber:(NSInteger)pageNumber;
-- (NSMutableArray *)queryWeightData;
+- (NSMutableArray *)queryWeightDataFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
 
 @end

@@ -115,7 +115,7 @@
 }
 
 #pragma mark - Query
-- (NSMutableArray *)queryWithDataFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate{
+- (NSMutableArray *)queryWithDataFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate {
     NSMutableArray *datas = [NSMutableArray array];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy-MM-dd";
@@ -165,13 +165,20 @@
     return datas;
 }
 
-- (NSMutableArray *)queryWeightData {
+- (NSMutableArray *)queryWeightDataFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate {
     NSMutableArray *datas = [NSMutableArray array];
-    NSString *querySQL = [NSString stringWithFormat:@"select type, timeDate, value from user_history where type = 'humanWeight'"];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd";
+    NSString *fromStr = [dateFormatter stringFromDate:fromDate];
+    if (fromDate == nil) {
+        fromStr = @"";
+    }
+    NSString *toStr = [dateFormatter stringFromDate:toDate];
+    NSString *querySQL = [NSString stringWithFormat:@"select type, timeDate, value from user_history where type = 'humanWeight' and timeDate between '%@' and '%@'", fromStr, toStr];
     FMResultSet *resultSet = [self.dataBase executeQuery:querySQL];
     
     while ([resultSet next]) {
-        NSString *result = [NSString stringWithFormat:@"%@$%@$%f", [resultSet stringForColumn:@"type"], [resultSet stringForColumn:@"timeDate"],
+        NSString *result = [NSString stringWithFormat:@"%@$%@$%f", [resultSet stringForColumn:@"timeDate"], [resultSet stringForColumn:@"type"],
                                                                     [resultSet doubleForColumn:@"value"]];
         [datas addObject:result];
     }
