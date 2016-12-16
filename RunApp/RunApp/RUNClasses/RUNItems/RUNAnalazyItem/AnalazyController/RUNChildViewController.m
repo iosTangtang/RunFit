@@ -329,7 +329,8 @@ static CGFloat const lineChartLineWidth = 6.f;
             
             if (idx == (datas.count - 1)) {
                 preDate = [dataFormatter dateFromString:preStr];
-                NSInteger days = [currentDate timeIntervalSinceDate:preDate] / delive;
+                NSDate *lastDate = [dataFormatter dateFromString:[dataFormatter stringFromDate:currentDate]];
+                NSInteger days = [lastDate timeIntervalSinceDate:preDate] / delive;
                 [barData replaceObjectAtIndex:(countX - days - 1) withObject:[NSString stringWithFormat:@"%.1f", sum]];
             }
         }
@@ -363,7 +364,12 @@ static CGFloat const lineChartLineWidth = 6.f;
         self.aver.text = [NSString stringWithFormat:@"%.1f %@", [array[1] doubleValue] / 1000, self.unit];
         self.total.text = [NSString stringWithFormat:@"%.1f %@", [array[0] doubleValue] / 1000, self.unit];
     } else if ([self.title isEqualToString:@"体重"]) {
-        _lastWeight = [[self.dataCache[index] lastObject] doubleValue];
+        for (NSString *obj in self.dataCache[index]) {
+            double value = [obj doubleValue];
+            if (value > 0) {
+                _lastWeight = value;
+            }
+        }
         self.aver.text = [NSString stringWithFormat:@"%.1f %@", _lastWeight, self.unit];
         self.total.text = [NSString stringWithFormat:@"%.1f", _lastWeight / pow([self.userModel.height doubleValue] / 100, 2)];
     }

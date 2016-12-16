@@ -121,11 +121,8 @@ static NSString *const kNameCell = @"RUNUserNameCell";
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"选取图片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
         imgpickVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-        
         imgpickVC.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-        
         [self presentViewController:imgpickVC animated:YES completion:^{}];
     }];
     
@@ -134,8 +131,7 @@ static NSString *const kNameCell = @"RUNUserNameCell";
         [self presentViewController:imgpickVC animated:YES completion:^{}];
     }];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     
     // 判断是否支持相机
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {

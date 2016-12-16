@@ -55,13 +55,11 @@
 
 - (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
                                                                             presentingController:(UIViewController *)presenting
-                                                                                sourceController:(UIViewController *)source
-{
+                                                                                sourceController:(UIViewController *)source {
     return [RUNTransitionAnimation transitionWithTransitionType:RUNPresentTrasitionPresent animationType:RUNAnimationUpToDown];
 }
 
-- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
-{
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
     return [RUNTransitionAnimation transitionWithTransitionType:RUNPresentTrasitionDismiss animationType:RUNAnimationUpToDown];
 }
 

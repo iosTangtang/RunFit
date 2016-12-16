@@ -31,6 +31,7 @@ static CGFloat const animationDuration = 1.f;
     CGFloat _activityTime;
     NSInteger  _count;
     NSMutableArray *_barDatas;
+    BOOL _isStartUpdate;
 }
 
 @property (nonatomic, strong) RUNCircleView                     *circleView;
@@ -261,6 +262,7 @@ static CGFloat const animationDuration = 1.f;
                 _activityTime = [pedometerData.averageActivePace doubleValue] / 60 * [pedometerData.distance doubleValue];
                 _count++;
             }
+            _isStartUpdate = YES;
             CGFloat time = [pedometerData.averageActivePace doubleValue] / 60 * [pedometerData.distance doubleValue];
             CGFloat timeValue = (time != _activityTime) ? time + _activityTime : time;
             _stepCount = [pedometerData.numberOfSteps stringValue];
@@ -332,6 +334,7 @@ static CGFloat const animationDuration = 1.f;
     [self.navigationController pushViewController:mapVC animated:YES];
 }
 
+
 #pragma mark - Change Data
 - (void)p_changeDataWithDate:(NSDate *)nowDate {
     _count = 0;
@@ -341,15 +344,19 @@ static CGFloat const animationDuration = 1.f;
     
     if (![nowDate isEqualToDate:current]) {
         [self.cmPedometer stopPedometerUpdates];
-        [self p_detailDataWithCircleView:datas];
+        [self p_detailDataWithCircleView:datas isCurrentData:NO];
     } else {
+        [self p_detailDataWithCircleView:datas isCurrentData:YES];
         [self p_startUpdateCount];
     }
     [self p_fixDatas:datas];
     
 }
 
-- (void)p_detailDataWithCircleView:(NSArray *)datas {
+- (void)p_detailDataWithCircleView:(NSArray *)datas isCurrentData:(BOOL)isCurrent {
+    if ((isCurrent == YES) && (_isStartUpdate == YES)) {
+        return ;
+    }
     NSMutableArray *messArray = [NSMutableArray arrayWithArray:@[@"0", @"0", @"0", @""]];
     for (NSString *obj in datas) {
         NSArray *array = [obj componentsSeparatedByString:@"$"];
@@ -358,15 +365,13 @@ static CGFloat const animationDuration = 1.f;
         [messArray replaceObjectAtIndex:2 withObject:[NSString stringWithFormat:@"%.0f", [array[3] doubleValue] + [messArray[2] doubleValue]]];
         [messArray replaceObjectAtIndex:3 withObject:[NSString stringWithFormat:@"%.1f", [array[4] doubleValue] + [messArray[3] doubleValue]]];
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.circleView.nowStep = messArray[0];
-        self.kcalLabel.mainTitle = messArray[1];
-        self.timeLabel.mainTitle = messArray[2];
-        self.disLabel.mainTitle = [NSString stringWithFormat:@"%.1f", [messArray[3] doubleValue] / 1000];
-        [self.disLabel setLabelAnimation];
-        [self.timeLabel setLabelAnimation];
-        [self.kcalLabel setLabelAnimation];
-    });
+    self.circleView.nowStep = messArray[0];
+    self.kcalLabel.mainTitle = messArray[1];
+    self.timeLabel.mainTitle = messArray[2];
+    self.disLabel.mainTitle = [NSString stringWithFormat:@"%.1f", [messArray[3] doubleValue] / 1000];
+    [self.disLabel setLabelAnimation];
+    [self.timeLabel setLabelAnimation];
+    [self.kcalLabel setLabelAnimation];
 }
 
 #pragma mark - NSNotification Action

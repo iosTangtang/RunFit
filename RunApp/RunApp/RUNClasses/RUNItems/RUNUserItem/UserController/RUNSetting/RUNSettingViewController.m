@@ -142,7 +142,6 @@ static NSString *const  kCellIdentifity = @"RUNSETTINGNORMAL";
                 break;
         }
     }
-    
 }
 
 #pragma mark - User Exit Action 

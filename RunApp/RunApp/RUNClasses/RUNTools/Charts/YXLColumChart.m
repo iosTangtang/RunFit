@@ -210,7 +210,7 @@
     
     int noMessageCount = 0;
     for (int index = 0; index < self.dataArray.count; index++) {
-        CGFloat arc = [self.dataArray[index] intValue];
+        CGFloat arc = [self.dataArray[index] doubleValue];
         if (arc <= 0) {
             noMessageCount++;
             continue;
