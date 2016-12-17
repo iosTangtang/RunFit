@@ -10,6 +10,7 @@
 #import "RunUserTableViewCell.h"
 #import "RUNUserModel.h"
 #import "SVProgressHUD.h"
+#import "UIImageView+WebCache.h"
 #import <BmobSDK/BmobSDK.h>
 
 static NSString *const kImageCell = @"RUNUserHeadCell";
@@ -75,13 +76,9 @@ static NSString *const kNameCell = @"RUNUserNameCell";
     RunUserTableViewCell *cell = nil;
     
     if (indexPath.row == 0) {
-        NSData *imageData = [NSData dataWithContentsOfFile:[self p_getfilePath]];
-        UIImage *image = [UIImage imageWithData:imageData];
-        if (image == nil) {
-            image = [UIImage imageNamed:@"Oval 3"];
-        }
+        BmobFile *file = (BmobFile *)[[BmobUser currentUser] objectForKey:@"headImage"];
         cell = [RunUserTableViewCell cellWith:tableView identifity:kImageCell];
-        cell.userHeadImage.image = image;
+        [cell.userHeadImage sd_setImageWithURL:[NSURL URLWithString:file.url] placeholderImage:[UIImage imageNamed:@"Oval 3"]];
     } else if(indexPath.row == 1) {
         cell = [RunUserTableViewCell cellWith:tableView identifity:kNameCell];
         self.textField = cell.nameTextField;
