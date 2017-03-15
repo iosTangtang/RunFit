@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -135,7 +135,9 @@
                 <outlet property="durationLabel" destination="mVc-25-WHO" id="T8Y-pm-Bc1"/>
                 <outlet property="kcalLabel" destination="ZOy-4W-2bm" id="3z5-xi-cCU"/>
                 <outlet property="numbersLabel" destination="9UM-hj-QeY" id="cYJ-U3-GHU"/>
-                <outlet property="runLabel" destination="e0Z-Qx-FGf" id="Va5-n3-k5k"/>
+                <outlet property="runLabel" destination="e0Z-Qx-FGf" id="8FH-am-NBf"/>
+                <outlet property="runTitle" destination="IhR-fR-sXK" id="jqu-ms-ltg"/>
+                <outlet property="stepOrSpeed" destination="uvE-vq-Wlh" id="GER-Xe-4bY"/>
                 <outlet property="timeLabel" destination="QYU-nl-VnE" id="SCa-9Y-9tl"/>
             </connections>
             <point key="canvasLocation" x="34" y="100.5"/>

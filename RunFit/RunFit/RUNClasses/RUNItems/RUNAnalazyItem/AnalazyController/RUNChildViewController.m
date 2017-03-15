@@ -364,14 +364,19 @@ static CGFloat const lineChartLineWidth = 6.f;
         self.aver.text = [NSString stringWithFormat:@"%.1f %@", [array[1] doubleValue] / 1000, self.unit];
         self.total.text = [NSString stringWithFormat:@"%.1f %@", [array[0] doubleValue] / 1000, self.unit];
     } else if ([self.title isEqualToString:@"体重"]) {
-        for (NSString *obj in self.dataCache[index]) {
-            double value = [obj doubleValue];
-            if (value > 0) {
-                _lastWeight = value;
+        if (index == 0) {
+            self.aver.text = [NSString stringWithFormat:@"%@ %@", @"0.0", self.unit];
+            self.total.text = [NSString stringWithFormat:@"%@", @"0.0"];
+        } else {
+            for (NSString *obj in self.dataCache[index]) {
+                double value = [obj doubleValue];
+                if (value > 0) {
+                    _lastWeight = value;
+                }
             }
+            self.aver.text = [NSString stringWithFormat:@"%.1f %@", _lastWeight, self.unit];
+            self.total.text = [NSString stringWithFormat:@"%.1f", _lastWeight / pow([self.userModel.height doubleValue] / 100, 2)];
         }
-        self.aver.text = [NSString stringWithFormat:@"%.1f %@", _lastWeight, self.unit];
-        self.total.text = [NSString stringWithFormat:@"%.1f", _lastWeight / pow([self.userModel.height doubleValue] / 100, 2)];
     }
     [self p_setChartView];
 

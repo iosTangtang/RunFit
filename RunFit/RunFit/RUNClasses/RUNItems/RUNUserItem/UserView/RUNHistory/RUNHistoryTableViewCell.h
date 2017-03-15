@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *kcalLabel;
 @property (weak, nonatomic) IBOutlet UILabel *numbersLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *runTitle;
+@property (weak, nonatomic) IBOutlet UILabel *stepOrSpeed;
 
 + (instancetype)cellWith:(UITableView *)tableView identifity:(NSString *)identifity;
 

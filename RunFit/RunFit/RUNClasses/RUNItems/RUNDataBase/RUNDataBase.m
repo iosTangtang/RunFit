@@ -91,7 +91,6 @@
                     }
                 }
             }
-            
         }];
         currentDate = [currentDate dateByAddingTimeInterval:-3600];
     }
@@ -140,7 +139,7 @@
 
 - (NSMutableArray *)queryDataWithLimitNumber:(NSInteger)number pagesNumber:(NSInteger)pageNumber {
     NSMutableArray *datas = [NSMutableArray array];
-    NSString *querySQL = [NSString stringWithFormat:@"select type, timeDate, value, duration, kcal, speed, step, points from user_history limit %zd,%zd", number, pageNumber];
+    NSString *querySQL = [NSString stringWithFormat:@"select id, type, timeDate, value, duration, kcal, speed, step, points from user_history limit %zd,%zd", number, pageNumber];
     FMResultSet *resultSet = [self.dataBase executeQuery:querySQL];
     NSArray *points = nil;
     while ([resultSet next]) {
@@ -151,7 +150,8 @@
         if (points == nil) {
             points = [NSArray array];
         }
-        NSDictionary *dic = @{@"type" : weightStr,
+        NSDictionary *dic = @{@"id" : [resultSet stringForColumn:@"id"],
+                              @"type" : weightStr,
                               @"date" : [resultSet stringForColumn:@"timeDate"],
                               @"value" : @([resultSet doubleForColumn:@"value"]),
                               @"duration" : [resultSet stringForColumn:@"duration"],
@@ -215,6 +215,12 @@
         }
     }
     self.dataBase = dataBase;
+}
+
+#pragma mark - Delete Data
+- (BOOL)deleteFromHistoryWithId:(NSInteger)id {
+    NSString *deleteSql = [NSString stringWithFormat:@"delete from user_history where id = %zd", id];
+    return [self.dataBase executeUpdate:deleteSql];
 }
 
 #pragma mark - Lazy Load

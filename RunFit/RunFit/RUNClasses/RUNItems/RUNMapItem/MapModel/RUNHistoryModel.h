@@ -12,8 +12,9 @@ typedef void(^RUNHistoryData)(BOOL isSucceed);
 
 @interface RUNHistoryModel : NSObject
 
+@property (nonatomic, copy)     NSString    *id;
 @property (nonatomic, copy)     NSString    *type;
-@property (nonatomic, strong)   NSString    *date;
+@property (nonatomic, copy)     NSString    *date;
 @property (nonatomic, assign)   double      value;
 @property (nonatomic, copy)     NSString    *duration;
 @property (nonatomic, assign)   double      kcal;

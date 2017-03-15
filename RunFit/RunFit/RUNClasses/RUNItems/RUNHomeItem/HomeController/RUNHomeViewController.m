@@ -52,17 +52,15 @@ static CGFloat const animationDuration = 1.f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_refreshMessage) name:RUNHEADIMAGENOTIFICATION object:nil];
     
+    [self p_updateDataBase];
     [self p_initilaze];
     [self p_setNavigation];
     [self p_drawCircle];
     [self p_addMessageText];
     [self p_addBarChart];
     [self p_addButton];
-
-    [self p_updateDataBase];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -81,7 +79,6 @@ static CGFloat const animationDuration = 1.f;
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
 }
 
 #pragma mark - Init
@@ -248,6 +245,7 @@ static CGFloat const animationDuration = 1.f;
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
             [[NSUserDefaults standardUserDefaults] setObject:[dateFormatter dateFromString:dateArray[0]] forKey:@"oldDate"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         }
         [weakSelf p_fixDatas:datas];
     }];
@@ -275,6 +273,10 @@ static CGFloat const animationDuration = 1.f;
             [self.disLabel setLabelAnimation];
             [self.timeLabel setLabelAnimation];
             [self.kcalLabel setLabelAnimation];
+        });
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
         });
     }];
 }

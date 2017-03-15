@@ -76,9 +76,11 @@ static NSString *const kNameCell = @"RUNUserNameCell";
     RunUserTableViewCell *cell = nil;
     
     if (indexPath.row == 0) {
-        BmobFile *file = (BmobFile *)[[BmobUser currentUser] objectForKey:@"headImage"];
+
         cell = [RunUserTableViewCell cellWith:tableView identifity:kImageCell];
+        BmobFile *file = (BmobFile *)[[BmobUser currentUser] objectForKey:@"headImage"];
         [cell.userHeadImage sd_setImageWithURL:[NSURL URLWithString:file.url] placeholderImage:[UIImage imageNamed:@"Oval 3"]];
+        
     } else if(indexPath.row == 1) {
         cell = [RunUserTableViewCell cellWith:tableView identifity:kNameCell];
         self.textField = cell.nameTextField;
@@ -108,7 +110,6 @@ static NSString *const kNameCell = @"RUNUserNameCell";
             [self.textField becomeFirstResponder];
         }
     }
-    
 }
 
 #pragma mark - Camera Operation
@@ -160,32 +161,38 @@ static NSString *const kNameCell = @"RUNUserNameCell";
     
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    [SVProgressHUD showWithStatus:@"保存中.."];
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     
     NSData *imgData = UIImageJPEGRepresentation(image, 0.5);
     NSString *filePath = [self p_getfilePath];
     [imgData writeToFile:filePath atomically:YES];
     
-    SEL selectorToCall = @selector(image:didFinishSavingWithError:contextInfo:);
-    
-    UIImageWriteToSavedPhotosAlbum(image, self, selectorToCall, NULL);
+    [SVProgressHUD showWithStatus:@"保存中.."];
+    BmobUser *user = [BmobUser currentUser];
+    BmobFile *file = [[BmobFile alloc] initWithFilePath:filePath];
+    [file saveInBackground:^(BOOL isSuccessful, NSError *error) {
+        if (isSuccessful) {
+            [user setObject:file forKey:@"headImage"];
+            [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+                if (isSuccessful) {
+                    self.userModel.name = self.textField.text;
+                    [self.userModel saveData];
+                    [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
+                    [self.tableView reloadData];
+
+                } else {
+                    [SVProgressHUD showErrorWithStatus:@"上传头像失败"];
+                }
+            }];
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"上传头像失败"];
+        }
+    }];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
-    if (error == nil){
-        [SVProgressHUD showSuccessWithStatus:@"保存成功!"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
-        [self.tableView reloadData];
-        
-    } else {
-        NSLog(@"An error happened while saving the image. error = %@", error);
-        [SVProgressHUD showErrorWithStatus:@"保存失败!"];
-    }
 }
 
 #pragma mark - Over Action
@@ -197,7 +204,6 @@ static NSString *const kNameCell = @"RUNUserNameCell";
     [file saveInBackground:^(BOOL isSuccessful, NSError *error) {
         if (isSuccessful) {
             [user setUsername:self.textField.text];
-            [user setObject:file forKey:@"headImage"];
             [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                 if (isSuccessful) {
                     self.userModel.name = self.textField.text;
@@ -210,7 +216,7 @@ static NSString *const kNameCell = @"RUNUserNameCell";
                 }
             }];
         } else {
-            [SVProgressHUD showErrorWithStatus:@"上传头像失败"];
+            [SVProgressHUD showErrorWithStatus:@"保存失败"];
         }
     }];
 }

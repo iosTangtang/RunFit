@@ -91,7 +91,7 @@
     self.sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.sendButton setTitle:@"提交" forState:UIControlStateNormal];
     [self.sendButton setTintColor:[UIColor whiteColor]];
-    self.sendButton.backgroundColor = [UIColor colorWithRed:61 / 255.0 green:118 / 255.0 blue:203 / 255.0 alpha:0.7];
+    self.sendButton.backgroundColor = [UIColor colorWithRed:93 / 255.0 green:201 / 255.0 blue:241 / 255.0 alpha:1];
     [self.sendButton addTarget:self action:@selector(sendMailButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     self.sendButton.layer.cornerRadius = 5.f;
     [self.view addSubview:self.sendButton];

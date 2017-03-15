@@ -23,7 +23,6 @@ static NSInteger const  kPageNumber = 20;
 }
 
 @property (nonatomic, strong)   UITableView             *tableView;
-@property (nonatomic, strong)   NSMutableArray          *filePaths;
 @property (nonatomic, strong)   NSMutableArray          *datas;
 @property (nonatomic, strong)   RUNDataBase             *dataBase;
 
@@ -133,8 +132,12 @@ static NSInteger const  kPageNumber = 20;
         
         cell.kcalLabel.text = [NSString stringWithFormat:@"%.0f 大卡", model.kcal];
         cell.numbersLabel.text = [NSString stringWithFormat:@"%.0f 步", model.step];
+        cell.runTitle.text = @"步行/跑步  - ";
+        cell.stepOrSpeed.text = @"步数           -";
         if ([model.type isEqualToString:@"bike"]) {
             cell.numbersLabel.text = [NSString stringWithFormat:@"%.1f s/m", model.speed];
+            cell.runTitle.text = @"骑行           -";
+            cell.stepOrSpeed.text = @"速度           -";
         }
         
     } else {
@@ -194,19 +197,19 @@ static NSInteger const  kPageNumber = 20;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"是否删除？"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"是" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        NSError *error = nil;
-        NSString *filePath = weakSelf.filePaths[indexPath.row];
-        [weakSelf.filePaths removeObjectAtIndex:indexPath.row];
-        [weakSelf.datas removeObjectAtIndex:indexPath.row];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        [fileManager removeItemAtPath:filePath error:&error];
-        NSArray *deleteItems = @[indexPath];
-        [weakSelf.tableView deleteRowsAtIndexPaths:deleteItems withRowAnimation:UITableViewRowAnimationMiddle];
-        if (weakSelf.datas.count == 0) {
-            [weakSelf.tableView removeFromSuperview];
-            [weakSelf p_setNoMessageView];
+        RUNHistoryModel *model = weakSelf.datas[indexPath.row];
+        BOOL result = [weakSelf.dataBase deleteFromHistoryWithId:[model.id integerValue]];
+        if (result) {
+            [weakSelf.datas removeObjectAtIndex:indexPath.row];
+            NSArray *deleteItems = @[indexPath];
+            [weakSelf.tableView deleteRowsAtIndexPaths:deleteItems withRowAnimation:UITableViewRowAnimationMiddle];
+            if (weakSelf.datas.count == 0) {
+                [weakSelf.tableView removeFromSuperview];
+                [weakSelf p_setNoMessageView];
+            }
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"删除失败"];
         }
-        
     }];
     [alert addAction:yesAction];
     
@@ -221,13 +224,6 @@ static NSInteger const  kPageNumber = 20;
         _datas = [NSMutableArray array];
     }
     return _datas;
-}
-
-- (NSMutableArray *)filePaths {
-    if (!_filePaths) {
-        _filePaths = [NSMutableArray array];
-    }
-    return _filePaths;
 }
 
 - (RUNDataBase *)dataBase {

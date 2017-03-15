@@ -167,7 +167,7 @@
 
 - (void)p_showGPSSignal:(NSInteger)selected {
     if (self.currlocation.horizontalAccuracy < 25 && self.currlocation.horizontalAccuracy > 0) {
-        [self p_start:selected];
+        [self p_startAnimation:selected];
         return;
     }
     __weak typeof(self) weakSelf = self;
@@ -182,27 +182,31 @@
     }];
     
     UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"继续" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [SVProgressHUD setFont:[UIFont systemFontOfSize:20.f]];
-        [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
-        for (int index = 0; index < 4; index ++) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(index * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                if (index == 3) {
-                    [SVProgressHUD showImage:nil status:@"Start!"];
-                } else {
-                    [SVProgressHUD showImage:nil status:[NSString stringWithFormat:@"%d", 3 - index]];
-                }
-            });
-        }
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf p_start:selected];
-            [weakSelf p_reloadSVP];
-        });
+        [weakSelf p_startAnimation:selected];
     }];
     
     [alert addAction:noAction];
     [alert addAction:yesAction];
     
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)p_startAnimation:(NSInteger)selected {
+    [SVProgressHUD setFont:[UIFont systemFontOfSize:20.f]];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+    for (int index = 0; index < 4; index ++) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(index * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (index == 3) {
+                [SVProgressHUD showImage:nil status:@"Start!"];
+            } else {
+                [SVProgressHUD showImage:nil status:[NSString stringWithFormat:@"%d", 3 - index]];
+            }
+        });
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self p_start:selected];
+        [self p_reloadSVP];
+    });
 }
 
 - (void)p_start:(NSInteger)selected {

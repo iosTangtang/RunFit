@@ -41,6 +41,7 @@
 }
 
 - (void)dicToModel:(NSDictionary *)dic {
+    self.id = dic[@"id"];
     self.type = dic[@"type"];
     self.date = dic[@"date"];
     self.value = [dic[@"value"] doubleValue];

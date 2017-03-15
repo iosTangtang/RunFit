@@ -119,7 +119,12 @@
             [self.passWordAgain resignFirstResponder];
             [self.navigationController popToRootViewControllerAnimated:YES];
         } else {
-            [SVProgressHUD showErrorWithStatus:@"修改密码失败,请检查网络设置"];
+            if (error.code == 207) {
+                [SVProgressHUD showErrorWithStatus:@"验证码出错"];
+            } else {
+                [SVProgressHUD showErrorWithStatus:@"修改密码失败,请检查网络设置"];
+            }
+            
         }
     }];
 }
@@ -137,7 +142,12 @@
             [self.passWordAgain resignFirstResponder];
             [self.navigationController popToRootViewControllerAnimated:YES];
         } else {
-            [SVProgressHUD showErrorWithStatus:@"注册失败,请检查网络设置"];
+            if (error.code == 209) {
+                [SVProgressHUD showErrorWithStatus:@"注册失败,手机号码已存在"];
+            } else {
+                [SVProgressHUD showErrorWithStatus:@"注册失败,请检查网络设置"];
+            }
+            
         }
     }];
 }
