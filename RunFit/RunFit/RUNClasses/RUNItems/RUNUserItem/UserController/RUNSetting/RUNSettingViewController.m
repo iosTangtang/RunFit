@@ -11,6 +11,8 @@
 #import "RUNFAQViewController.h"
 #import "RUNFeedBackViewController.h"
 #import "RUNUserModel.h"
+#import "RUNCloudDataBase.h"
+#import "SVProgressHUD.h"
 
 static NSString *const  kIdentifity = @"RUNSETTING";
 static NSString *const  kCellIdentifity = @"RUNSETTINGNORMAL";
@@ -146,7 +148,6 @@ static NSString *const  kCellIdentifity = @"RUNSETTINGNORMAL";
 
 #pragma mark - User Exit Action 
 - (void)p_userExit {
-    __weak typeof(self) weakSelf = self;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"是否退出？"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"是" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
@@ -155,8 +156,25 @@ static NSString *const  kCellIdentifity = @"RUNSETTINGNORMAL";
         } else {
             _count++;
         }
-        [weakSelf.tableView reloadData];
-        [weakSelf p_changStatus];
+        
+        RUNCloudDataBase *cloudDB = [[RUNCloudDataBase alloc] init];
+        [cloudDB updateToCloudWithBlock:^(BOOL isSuccessful, int status, NSError *error) {
+            if (isSuccessful && status == 0) {
+                [SVProgressHUD showSuccessWithStatus:@"同步成功!"];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.tableView reloadData];
+                    [self p_changStatus];
+                });
+            } else if (isSuccessful && status == 1) {
+                [SVProgressHUD showInfoWithStatus:@"数据已是最新，无需再次同步。"];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.tableView reloadData];
+                    [self p_changStatus];
+                });
+            } else {
+                [SVProgressHUD showErrorWithStatus:@"同步失败，请检查网络设置。"];
+            }
+        }];
     }];
     [alert addAction:yesAction];
     
@@ -167,12 +185,14 @@ static NSString *const  kCellIdentifity = @"RUNSETTINGNORMAL";
 }
 
 - (void)p_changStatus {
+    
     RUNUserModel *userModel = [[RUNUserModel alloc] init];
     [userModel loadData];
     userModel.isLogin = @"NO";
     userModel.name = nil;
     [userModel saveLoginStatus];
     [userModel saveData];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
 }
 

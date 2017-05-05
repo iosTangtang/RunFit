@@ -87,7 +87,7 @@
 		66B93BB71E05518C00937051 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66B93BB61E05518C00937051 /* MobileCoreServices.framework */; };
 		66B93BB91E05519300937051 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66B93BB81E05519300937051 /* CoreGraphics.framework */; };
 		66B93BBD1E0551A100937051 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66B93BBC1E0551A100937051 /* CoreLocation.framework */; };
-		66B93BBF1E0551A900937051 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66B93BBE1E0551A900937051 /* MapKit.framework */; };
+		66EE44401EB703D700CF94AF /* RUNCloudDataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EE443F1EB703D700CF94AF /* RUNCloudDataBase.m */; };
 		ECFC45EEE1336934FEC66257 /* Pods_RunFit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3471F1929226EE55C8794FA8 /* Pods_RunFit.framework */; };
 /* End PBXBuildFile section */
 
@@ -255,8 +255,9 @@
 		66B93BB81E05519300937051 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		66B93BBA1E05519B00937051 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		66B93BBC1E0551A100937051 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		66B93BBE1E0551A900937051 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		66B93BC01E05545300937051 /* RunFit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunFit.entitlements; sourceTree = "<group>"; };
+		66EE443E1EB703D700CF94AF /* RUNCloudDataBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUNCloudDataBase.h; sourceTree = "<group>"; };
+		66EE443F1EB703D700CF94AF /* RUNCloudDataBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUNCloudDataBase.m; sourceTree = "<group>"; };
 		763CC2746C98C45AFCF0ED5F /* Pods-RunFit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunFit.release.xcconfig"; path = "Pods/Target Support Files/Pods-RunFit/Pods-RunFit.release.xcconfig"; sourceTree = "<group>"; };
 		88C521CAC6EE3532CBCE608D /* Pods-RunFit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunFit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RunFit/Pods-RunFit.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -266,7 +267,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66B93BBF1E0551A900937051 /* MapKit.framework in Frameworks */,
 				66B93BBD1E0551A100937051 /* CoreLocation.framework in Frameworks */,
 				66B93BB91E05519300937051 /* CoreGraphics.framework in Frameworks */,
 				66B93BB71E05518C00937051 /* MobileCoreServices.framework in Frameworks */,
@@ -443,6 +443,8 @@
 			children = (
 				66B93AD81E05501900937051 /* RUNDataBase.h */,
 				66B93AD91E05501900937051 /* RUNDataBase.m */,
+				66EE443E1EB703D700CF94AF /* RUNCloudDataBase.h */,
+				66EE443F1EB703D700CF94AF /* RUNCloudDataBase.m */,
 			);
 			path = RUNDataBase;
 			sourceTree = "<group>";
@@ -813,7 +815,6 @@
 		66B93BA91E05516000937051 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				66B93BBE1E0551A900937051 /* MapKit.framework */,
 				66B93BBC1E0551A100937051 /* CoreLocation.framework */,
 				66B93BBA1E05519B00937051 /* Security.framework */,
 				66B93BB81E05519300937051 /* CoreGraphics.framework */,
@@ -913,6 +914,9 @@
 						SystemCapabilities = {
 							com.apple.Keychain = {
 								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 0;
 							};
 						};
 					};
@@ -1090,6 +1094,7 @@
 				66B93B951E05501900937051 /* RunUserTableViewCell.m in Sources */,
 				66B93B861E05501900937051 /* RUNFAQViewController.m in Sources */,
 				66B93B971E05501900937051 /* RUNUserHeadView.m in Sources */,
+				66EE44401EB703D700CF94AF /* RUNCloudDataBase.m in Sources */,
 				66B93B691E05501900937051 /* RUNAllDataViewController.m in Sources */,
 				66B93B771E05501900937051 /* RUNCheckCodeViewController.m in Sources */,
 				66B93B9D1E05501900937051 /* YXLBaseChart.m in Sources */,

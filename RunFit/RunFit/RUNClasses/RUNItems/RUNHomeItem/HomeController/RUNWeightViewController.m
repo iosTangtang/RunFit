@@ -13,6 +13,7 @@
 #import "SVProgressHUD.h"
 #import "RUNUserModel.h"
 #import "RUNHistoryModel.h"
+#import <BmobSDK/BmobSDK.h>
 
 static NSString *const identifity = @"RUNWeightViewController";
 
@@ -127,7 +128,6 @@ static NSString *const identifity = @"RUNWeightViewController";
 
 #pragma mark - RUNPickerView Delegate
 - (void)pickText:(NSString *)text withRow:(NSUInteger)row {
-    NSLog(@"%lu", (unsigned long)row);
     if (row == 2) {
         self.weightText = text;
         [self.values replaceObjectAtIndex:row withObject:self.weightText];
@@ -154,9 +154,17 @@ static NSString *const identifity = @"RUNWeightViewController";
         return;
     }
     [SVProgressHUD showWithStatus:@"保存中.."];
-    self.userModel.weight = self.weightText;
-    [self.userModel saveData];
-    [self p_saveData];
+    BmobUser *user = [BmobUser currentUser];
+    [user setObject:self.weightText forKey:@"weight"];
+    [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+        if (isSuccessful) {
+            self.userModel.weight = self.weightText;
+            [self.userModel saveData];
+            [self p_saveData];
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"保存失败"];
+        }
+    }];
 }
 
 #pragma mark - Save Method

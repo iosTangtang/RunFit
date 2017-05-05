@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 #import "RUNUserModel.h"
 #import "RUNHistoryModel.h"
+#import <BmobSDK/BmobSDK.h>
 
 static NSString *const kNormalCell = @"RUNUserNormalCell";
 
@@ -180,12 +181,24 @@ static NSString *const kNormalCell = @"RUNUserNormalCell";
 #pragma mark - Over Action
 - (void)p_overAction:(UIBarButtonItem *)barButton {
     [SVProgressHUD showWithStatus:@"保存中.."];
-    self.userModel.sex = self.datas[0];
-    self.userModel.weight = self.datas[1];
-    self.userModel.height = self.datas[2];
-    self.userModel.tag = self.datas[3];
-    [self.userModel saveData];
-    [self p_saveData];
+    BmobUser *user = [BmobUser currentUser];
+    [user setObject:self.datas[0] forKey:@"sex"];
+    [user setObject:self.datas[1] forKey:@"weight"];
+    [user setObject:self.datas[2] forKey:@"height"];
+    [user setObject:self.datas[3] forKey:@"tag"];
+    [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+        if (isSuccessful) {
+            self.userModel.sex = self.datas[0];
+            self.userModel.weight = self.datas[1];
+            self.userModel.height = self.datas[2];
+            self.userModel.tag = self.datas[3];
+            [self.userModel saveData];
+            [self p_saveData];
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"保存失败"];
+        }
+    }];
+    
 }
 
 #pragma mark - Save Method

@@ -17,12 +17,15 @@ typedef void(^RUNHistoryHandle)(BOOL isSuccess);
 @interface RUNDataBase : NSObject
 
 - (void)insertDataBaseWithHandle:(RUNDataBaseHandle)handle;
+- (void)insertDataToUserDataWithData:(NSDictionary *)data handle:(RUNHistoryHandle)handle;
 - (void)insertDataToHistoryWithData:(NSDictionary *)data handle:(RUNHistoryHandle)handle;
 
 - (NSMutableArray *)queryWithDataFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
+- (NSMutableArray *)queryWithHistoryFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
 - (NSMutableArray *)queryDataWithLimitNumber:(NSInteger)number pagesNumber:(NSInteger)pageNumber;
 - (NSMutableArray *)queryWeightDataFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
 
 - (BOOL)deleteFromHistoryWithId:(NSInteger)id;
+- (BOOL)deleteFromDataWithTimeDate:(NSString *)timeDate;
 
 @end

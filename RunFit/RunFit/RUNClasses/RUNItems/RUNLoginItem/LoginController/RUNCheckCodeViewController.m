@@ -38,7 +38,6 @@
                                                 selector:@selector(p_scrollTimer)
                                                 userInfo:nil
                                                  repeats:YES];
-    
 }
 
 - (void)didReceiveMemoryWarning {

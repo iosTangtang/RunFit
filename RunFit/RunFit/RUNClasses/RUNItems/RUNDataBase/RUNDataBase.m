@@ -96,6 +96,21 @@
     }
 }
 
+- (void)insertDataToUserDataWithData:(NSDictionary *)data handle:(RUNHistoryHandle)handle {
+    [self.dataBase beginTransaction];
+    BOOL isRollBack = NO;
+    if (![self.dataBase executeUpdate:@"insert into user_data(timeDate, step, energy, duration, distance, floor) values (?, ?, ?, ?, ?, ?)", data[@"timeDate"], data[@"step"], data[@"energy"], data[@"duration"], data[@"distance"], data[@"floor"]])
+    {
+        isRollBack = YES;
+        [self.dataBase rollback];
+        handle(NO);
+    } else {
+        handle(YES);
+    }
+    [self.dataBase commit];
+    
+}
+
 - (void)insertDataToHistoryWithData:(NSDictionary *)data handle:(RUNHistoryHandle)handle {
     NSData *pointsDataUrl = [NSKeyedArchiver archivedDataWithRootObject:data[@"points"]];
     [self.dataBase beginTransaction];
@@ -117,13 +132,13 @@
 - (NSMutableArray *)queryWithDataFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate {
     NSMutableArray *datas = [NSMutableArray array];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"yyyy-MM-dd";
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
     NSString *fromStr = [dateFormatter stringFromDate:fromDate];
     if (fromDate == nil) {
         fromStr = @"";
     }
     NSString *toStr = [dateFormatter stringFromDate:toDate];
-    NSString *selectSQL = [NSString stringWithFormat:@"select timeDate, step, energy, duration, distance, floor from user_data where timeDate between '%@' and '%@'", fromStr, toStr];
+    NSString *selectSQL = [NSString stringWithFormat:@"select timeDate, step, energy, duration, distance, floor from user_data where timeDate between '%@' and '%@' order by timeDate DESC", fromStr, toStr];
     FMResultSet *resultSet = [self.dataBase executeQuery:selectSQL];
     while ([resultSet next]) {
         NSString *result = [NSString stringWithFormat:@"%@$%f$%f$%f$%f$%f", [resultSet stringForColumn:@"timeDate"],
@@ -133,6 +148,40 @@
                                                                             [resultSet doubleForColumn:@"distance"],
                                                                             [resultSet doubleForColumn:@"floor"]];
         [datas addObject:result];
+    }
+    return datas;
+}
+
+- (NSMutableArray *)queryWithHistoryFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate {
+    NSMutableArray *datas = [NSMutableArray array];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    NSString *fromStr = [dateFormatter stringFromDate:fromDate];
+    if (fromDate == nil) {
+        fromStr = @"";
+    }
+    NSString *toStr = [dateFormatter stringFromDate:toDate];
+    NSString *selectSQL = [NSString stringWithFormat:@"select id, type, timeDate, value, duration, kcal, speed, step, points from user_history where timeDate between '%@' and '%@' order by timeDate DESC", fromStr, toStr];
+    FMResultSet *resultSet = [self.dataBase executeQuery:selectSQL];
+    NSArray *points = nil;
+    while ([resultSet next]) {
+        NSString *weightStr = [resultSet stringForColumn:@"type"];
+        if (![weightStr isEqualToString:@"humanWeight"]) {
+            points = [NSKeyedUnarchiver unarchiveObjectWithData:[resultSet dataForColumn:@"points"]];
+        }
+        if (points == nil) {
+            points = [NSArray array];
+        }
+        NSDictionary *dic = @{@"id" : [resultSet stringForColumn:@"id"],
+                              @"type" : weightStr,
+                              @"date" : [resultSet stringForColumn:@"timeDate"],
+                              @"value" : @([resultSet doubleForColumn:@"value"]),
+                              @"duration" : [resultSet stringForColumn:@"duration"],
+                              @"kcal" : @([resultSet doubleForColumn:@"kcal"]),
+                              @"speed" : @([resultSet doubleForColumn:@"speed"]),
+                              @"step" : @([resultSet doubleForColumn:@"step"]),
+                              @"points" : points};
+        [datas addObject:dic];
     }
     return datas;
 }
@@ -220,6 +269,11 @@
 #pragma mark - Delete Data
 - (BOOL)deleteFromHistoryWithId:(NSInteger)id {
     NSString *deleteSql = [NSString stringWithFormat:@"delete from user_history where id = %zd", id];
+    return [self.dataBase executeUpdate:deleteSql];
+}
+
+- (BOOL)deleteFromDataWithTimeDate:(NSString *)timeDate {
+    NSString *deleteSql = [NSString stringWithFormat:@"delete from user_data where timeDate = '%@'", timeDate];
     return [self.dataBase executeUpdate:deleteSql];
 }
 

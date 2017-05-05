@@ -44,7 +44,6 @@
 
 #pragma mark - RUNCalendarDelegate
 - (void)dayMessage:(NSString *)dayMessage {
-    NSLog(@"%@", dayMessage);
     self.calendarBlock(dayMessage);
     [self dismissViewControllerAnimated:YES completion:nil];
 }

@@ -164,6 +164,10 @@
             [model loadData];
             model.isLogin = @"YES";
             model.name = user.username;
+            model.weight = [user objectForKey:@"weight"];
+            model.sex = [user objectForKey:@"sex"];
+            model.height = [user objectForKey:@"height"];
+            model.tag = [user objectForKey:@"tag"];
             [model saveLoginStatus];
             [model saveData];
             [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];

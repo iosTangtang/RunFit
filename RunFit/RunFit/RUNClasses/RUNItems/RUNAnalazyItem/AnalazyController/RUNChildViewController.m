@@ -47,6 +47,8 @@ static CGFloat const lineChartLineWidth = 6.f;
     [self p_setChartView];
     [self p_setAllDataButton];
     [self p_label];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_refreshMessage) name:RUNREFRESHNOTIFICATION object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -493,6 +495,19 @@ static CGFloat const lineChartLineWidth = 6.f;
         }
     }
     return array;
+}
+
+#pragma mark refresh
+- (void)p_refreshMessage {
+    if (_dateXCache == nil || _dateCache == nil) {
+        return ;
+    }
+    self.dataCache = [NSMutableArray arrayWithArray:@[@[@"0"], @[@"0"], @[@"0"], @[@"0"]]];
+    if (self.segmented == nil) {
+        [self p_dataOperationWithIndex:0];
+    } else {
+        [self p_dataOperationWithIndex:self.segmented.selectedSegmentIndex];
+    }
 }
 
 #pragma mark - Lazy Load

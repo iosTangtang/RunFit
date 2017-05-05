@@ -7,24 +7,16 @@
 //
 
 #import "RUNLockViewController.h"
+#import "RUNCloudDataBase.h"
 #import "SVProgressHUD.h"
 
 @interface RUNLockViewController ()
 
 @property (nonatomic, strong)   UILabel *messageLabel;
-@property (nonatomic, copy)     NSArray *messages;
 
 @end
 
 @implementation RUNLockViewController
-
-- (NSArray *)messages {
-    if (!_messages) {
-        _messages = @[@"        现在您的数据是应用为您统计的，开启同步后将同步健康中的数据到应用中，该应用记录的数据也将写入健康中。",
-                      @"        现在您的数据是读取健康应用的数据，该应用将同步健康中的数据，关闭后无法同步，请谨慎选择。"];
-    }
-    return _messages;
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -109,34 +101,30 @@
 }
 
 #pragma mark - Button Action
-static float progress = 0.0f;
 - (void)p_upButtonAction:(UIButton *)button {
-    progress = 0.0f;
-    [SVProgressHUD showProgress:0 status:@"同步中"];
-    [self performSelector:@selector(increaseProgress) withObject:nil afterDelay:0.1f];
+    RUNCloudDataBase *cloudDB = [[RUNCloudDataBase alloc] init];
+    [cloudDB updateToCloudWithBlock:^(BOOL isSuccessful, int status, NSError *error) {
+        if (isSuccessful && status == 0) {
+            [SVProgressHUD showSuccessWithStatus:@"同步成功!"];
+        } else if (isSuccessful && status == 1) {
+            [SVProgressHUD showInfoWithStatus:@"数据已是最新，无需再次同步。"];
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"同步失败，请检查网络设置。"];
+        }
+    }];
 }
 
 - (void)p_downButtonAction:(UIButton *)button {
-    progress = 0.0f;
-    [SVProgressHUD showProgress:0 status:@"同步中"];
-    [self performSelector:@selector(increaseProgress) withObject:nil afterDelay:0.1f];
+    RUNCloudDataBase *cloudDB = [[RUNCloudDataBase alloc] init];
+    [cloudDB downToLocateWithBlock:^(BOOL isSuccessful, int status, NSError *error) {
+        if (isSuccessful) {
+            [SVProgressHUD showSuccessWithStatus:@"同步成功!"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RUNHEADIMAGENOTIFICATION object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RUNREFRESHNOTIFICATION object:nil];
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"同步失败，请检查网络设置。"];
+        }
+    }];
 }
-
-- (void)increaseProgress {
-    progress += 0.05f;
-    [SVProgressHUD showProgress:progress status:@"同步中"];
-    
-    if(progress < 1.0f){
-        [self performSelector:@selector(increaseProgress) withObject:nil afterDelay:0.1f];
-    } else {
-        [SVProgressHUD showSuccessWithStatus:@"同步成功"];
-        [self performSelector:@selector(dismiss) withObject:nil afterDelay:0.4f];
-    }
-}
-
-- (void)dismiss {
-    [SVProgressHUD dismiss];
-}
-
 
 @end

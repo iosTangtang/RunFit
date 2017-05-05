@@ -238,6 +238,13 @@ static CGFloat const animationDuration = 1.f;
     [self.dataBase insertDataBaseWithHandle:^(BOOL isUpdate, NSInteger count) {
         NSDate *date = [NSDate date];
         NSDate *toDate = [date dateByAddingTimeInterval:86400];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"yyyy-MM-dd";
+        NSString *fromStr = [[dateFormatter stringFromDate:date] stringByAppendingString:@" 00:00:00"];
+        NSString *toStr = [[dateFormatter stringFromDate:toDate] stringByAppendingString:@" 00:00:00"];
+        dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        date = [dateFormatter dateFromString:fromStr];
+        toDate = [dateFormatter dateFromString:toStr];
         NSArray *datas = [weakSelf.dataBase queryWithDataFromDate:date toDate:toDate];
         if (datas.count > 0 && isUpdate) {
             NSString *dateStr = [datas firstObject];
@@ -275,9 +282,6 @@ static CGFloat const animationDuration = 1.f;
             [self.kcalLabel setLabelAnimation];
         });
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-        });
     }];
 }
 
